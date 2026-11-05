@@ -71,10 +71,18 @@
   const results=get('politicsSearchResults');
   const meta=get('politicsSearchMeta');
   const closeButton=get('politicsSearchClose');
-  if(!input||!popup||!results||!meta||!closeButton)return Object.freeze({squish,fold,matches,excerpt});
+  const moreButton=get('politicsSearchMore');
+  if(!input||!popup||!results||!meta||!closeButton||!moreButton)
+    return Object.freeze({squish,fold,matches,excerpt});
 
   let records=null,selected=null,debounce=null,searchRevision=0;
-  let matchesForQuery=[],shown=0,previousMarks=[];
+  let matchesForQuery=[],shown=0,previousMarks=[],activeIndex=-1;
+  let suppressFocusRender=false;
+  function restoreInputFocus(){
+    suppressFocusRender=true;
+    input.focus({preventScroll:true});
+    suppressFocusRender=false;
+  }
   const PAGE_SIZE=35;
   const HIGHLIGHT_NAME='politics-search-term';
   function make(tag,className,value){
@@ -148,6 +156,27 @@
     cancelPending();
     popup.hidden=true;
     input.setAttribute('aria-expanded','false');
+    input.removeAttribute('aria-activedescendant');
+    activeIndex=-1;
+  }
+  function setActive(index){
+    const options=[...results.querySelectorAll('[role="option"]')];
+    const previous=options[activeIndex];
+    if(previous){
+      previous.setAttribute('aria-selected','false');
+      previous.classList.remove('p-search-option-active');
+    }
+    if(index<0||index>=options.length){
+      activeIndex=-1;
+      input.removeAttribute('aria-activedescendant');
+      return;
+    }
+    activeIndex=index;
+    const option=options[index];
+    option.setAttribute('aria-selected','true');
+    option.classList.add('p-search-option-active');
+    input.setAttribute('aria-activedescendant',option.id);
+    option.scrollIntoView({block:'nearest',behavior:'instant'});
   }
   function clearHighlights(){
     if(window.CSS?.highlights)CSS.highlights.delete(HIGHLIGHT_NAME);
@@ -234,7 +263,6 @@
   function appendNextPage(){
     // An incremental results list has no 65-result ceiling. A button provides
     // deliberate access to the complete corpus in manageable batches.
-    results.querySelector('.p-search-load-more')?.remove();
     const query=squish(input.value);
     const limit=Math.min(matchesForQuery.length,shown+PAGE_SIZE);
     const fragment=document.createDocumentFragment();
@@ -242,6 +270,10 @@
       const record=matchesForQuery[i];
       const button=make('button','p-search-result');
       button.type='button';
+      button.id='politics-search-result-'+i;
+      button.setAttribute('role','option');
+      button.setAttribute('aria-selected','false');
+      button.tabIndex=-1;
       const locationLabel=(record.chapter?'Ch. '+record.chapter+' · ':'')+
         record.chapterTitle;
       button.appendChild(make('span','p-search-result-heading',locationLabel));
@@ -254,30 +286,19 @@
       button.addEventListener('keydown',event=>{
         if(event.key==='ArrowDown'||event.key==='ArrowUp'){
           event.preventDefault();
-          const buttons=[...results.querySelectorAll('.p-search-result')];
-          const index=buttons.indexOf(button);
-          const next=(index+(event.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length;
-          buttons[next]?.focus();
+          restoreInputFocus();
+          setActive(i+(event.key==='ArrowDown'?1:-1));
         }else if(event.key==='Escape'){
-          event.preventDefault();hide();input.focus();
+          event.preventDefault();hide();restoreInputFocus();
         }
       });
       fragment.appendChild(button);
     }
     results.appendChild(fragment);
     shown=limit;
-    if(matchesForQuery.length>shown){
-      const more=make('button','p-search-load-more',
-        'Show more results · '+shown+' of '+matchesForQuery.length);
-      more.type='button';
-      more.addEventListener('click',()=>{
-        const firstNew=shown;
-        appendNextPage();
-        // Focus the first newly revealed result, not an earlier page.
-        results.querySelectorAll('.p-search-result')[firstNew]?.focus();
-      });
-      results.appendChild(more);
-    }
+    moreButton.hidden=shown>=matchesForQuery.length;
+    if(!moreButton.hidden)
+      moreButton.textContent='Show more results · '+shown+' of '+matchesForQuery.length;
     meta.textContent=matchesForQuery.length
       ?'Showing '+shown+' of '+matchesForQuery.length+' matching passages'
       :'No matching passages';
@@ -288,8 +309,10 @@
     }
     const query=squish(input.value);
     results.replaceChildren();
+    moreButton.hidden=true;
     matchesForQuery=[];
     shown=0;
+    setActive(-1);
     if(!query){hide();meta.textContent='Search the complete notes';return;}
     for(const record of buildIndex()){
       if(matches(record.searchText,query))matchesForQuery.push(record);
@@ -318,27 +341,49 @@
       if(revision===searchRevision)render();
     },90);
   });
-  input.addEventListener('focus',()=>{if(input.value.trim())render();});
+  input.addEventListener('focus',()=>{
+    if(!suppressFocusRender&&input.value.trim()&&popup.hidden)render();
+  });
   input.addEventListener('keydown',event=>{
-    if(event.key==='Escape'){event.preventDefault();hide();input.blur();}
-    if(event.key==='ArrowDown'&& !popup.hidden){
+    if(event.key==='Escape'){
+      event.preventDefault();hide();return; // Keep keyboard focus in search.
+    }
+    if(['ArrowDown','ArrowUp'].includes(event.key)){
       event.preventDefault();
-      results.querySelector('.p-search-result')?.focus();
+      if(popup.hidden)render();
+      if(!matchesForQuery.length)return;
+      if(event.key==='ArrowDown'&&activeIndex===shown-1&&shown<matchesForQuery.length)
+        appendNextPage();
+      const next=event.key==='ArrowDown'
+        ?(activeIndex+1)%shown:(activeIndex<1?shown-1:activeIndex-1);
+      setActive(next);
+    }
+    if(!popup.hidden&&(event.key==='Home'||event.key==='End')){
+      event.preventDefault();
+      setActive(event.key==='Home'?0:shown-1);
     }
     if(event.key==='Enter'){
       event.preventDefault();
       if(popup.hidden)render();
-      results.querySelector('.p-search-result')?.click();
+      const options=results.querySelectorAll('[role="option"]');
+      options[activeIndex<0?0:activeIndex]?.click();
     }
   });
-  closeButton.addEventListener('click',()=>hide());
+  moreButton.addEventListener('click',()=>{
+    const firstNew=shown;
+    appendNextPage();
+    restoreInputFocus();
+    setActive(firstNew);
+  });
+  closeButton.addEventListener('click',()=>{hide();restoreInputFocus();});
   document.addEventListener('pointerdown',event=>{
     if(!popup.hidden && !popup.contains(event.target)&&
        !input.contains(event.target))hide();
   });
   window.addEventListener('politics:drawer-open',hide);
   document.addEventListener('keydown',event=>{
-    if(event.key==='/'&&!event.ctrlKey&&!event.metaKey&&!event.altKey&&
+    if(!document.body.classList.contains('politics-nav-open')&&
+      event.key==='/'&&!event.ctrlKey&&!event.metaKey&&!event.altKey&&
       !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)&&
       !document.activeElement?.isContentEditable){
       event.preventDefault();input.focus();input.select();

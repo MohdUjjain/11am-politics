@@ -74,6 +74,14 @@ def main():
     assert 'background:#fff!important;' in (ROOT/'index.html').read_text(encoding='utf-8')
     assert 'politicsFullSearch' in doc.ids and 'politicsSearchPopover' in doc.ids
     assert 'politicsSearchResults' in doc.ids
+    assert 'politicsSearchMore' in doc.ids and 'politicsCompactChapter' in doc.ids
+    assert 'politicsMainContent' in doc.ids
+    assert 'role="combobox"' in (ROOT/'index.html').read_text(encoding='utf-8')
+    assert 'role="listbox"' in (ROOT/'index.html').read_text(encoding='utf-8')
+    assert 'aria-activedescendant' in search
+    assert 'safe-area-inset-top' in nav_style
+    assert 'scroll-behavior:auto!important' in nav_style
+    assert 'backgroundInertState' in nav
     assert 'politicsNavSearch' not in doc.ids
     assert 'politicsTabIndex' in doc.ids and 'politicsTabTools' in doc.ids
     assert 'politicsPanelIndex' in doc.ids and 'politicsPanelTools' in doc.ids

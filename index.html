@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Politics: The Complete Premium Study Notes &amp; Revision Guide</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -427,6 +427,7 @@ th,td{padding:7px 9px}
 <link rel="stylesheet" href="./navigation.css">
 </head>
 <body>
+<a class="p-skip-link" href="#ch01">Skip to the study chapters</a>
 <!-- Screen-only book navigation. The printed study guide is unchanged. -->
 <header id="politicsReadingHeader" aria-label="Reading progress">
   <div class="p-reading-row">
@@ -434,10 +435,12 @@ th,td{padding:7px 9px}
     <div class="p-top-search" role="search">
       <label class="p-visually-hidden" for="politicsFullSearch">Search all Politics notes</label>
       <span class="p-top-search-icon" aria-hidden="true">⌕</span>
-      <input id="politicsFullSearch" type="search" placeholder="Search all notes…" autocomplete="off"
-             aria-controls="politicsSearchResults" aria-expanded="false">
+      <input id="politicsFullSearch" type="search" role="combobox" placeholder="Search all notes…" autocomplete="off"
+             aria-autocomplete="list" aria-haspopup="listbox" aria-controls="politicsSearchResults"
+             aria-describedby="politicsSearchMeta" aria-expanded="false">
     </div>
     <span id="politicsReadingLabel">Complete Study Guide</span>
+    <span id="politicsCompactChapter" class="p-compact-chapter" aria-hidden="true">Guide</span>
     <div class="p-chapter-indicator">
       <span class="p-chapter-indicator-label">CHAPTER</span>
       <div id="politicsChapterProgress" class="p-chapter-ring" role="progressbar"
@@ -452,7 +455,9 @@ th,td{padding:7px 9px}
       <span id="politicsSearchMeta" role="status" aria-live="polite">Search chapters, definitions, examples and exam material</span>
       <button id="politicsSearchClose" type="button" aria-label="Close search results">×</button>
     </div>
-    <div id="politicsSearchResults" class="p-search-results"></div>
+    <div id="politicsSearchResults" class="p-search-results"
+         role="listbox" aria-label="Matching note passages"></div>
+    <button id="politicsSearchMore" class="p-search-load-more" type="button" hidden></button>
   </div>
   <div class="p-reading-track"><div id="politicsReadingFill" role="progressbar" aria-label="Progress through the study guide" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>
 </header>
@@ -501,7 +506,7 @@ th,td{padding:7px 9px}
   </div>
 </aside>
 
-<div class="shell">
+<main class="shell" id="politicsMainContent">
 
 <!-- ============================================================ COVER ============================================================ -->
 <section class="cover" id="book-cover">
@@ -4266,7 +4271,7 @@ th,td{padding:7px 9px}
   <p class="toc-intro"><strong>Suggested revision sequence:</strong> Chapters 1–4 (Foundations) → Chapters 5–8 (Structures &amp; Society) → Chapters 9–17 (Institutions, Actors &amp; Process) → Chapters 18–20 (Global Politics &amp; Synthesis). Chapters 8 and 20 share material on social capital and dealignment — revise them back-to-back for reinforcement.</p>
 </section>
 
-</div>
+</main>
 <aside class="offline-panel" aria-label="Offline reading and installation">
 <button id="offlineToggle" class="offline-toggle" type="button" aria-controls="offlineDetails" aria-expanded="false">⏳ Saving offline…</button>
 <div class="offline-details" id="offlineDetails" hidden>

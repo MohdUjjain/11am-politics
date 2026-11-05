@@ -28,6 +28,25 @@ const source=readFileSync(new URL('../search.js',import.meta.url),'utf8');
 assert.match(html,/id="politicsFullSearch"/);
 assert.match(html,/id="politicsSearchPopover"/);
 assert.match(html,/id="politicsSearchResults"/);
+assert.match(html,/id="politicsSearchMore"/);
+assert.match(html,/role="combobox"/);
+assert.match(html,/role="listbox"/);
+assert.match(html,/aria-autocomplete="list"/);
+assert.match(html,/id="politicsCompactChapter"/);
+assert.match(html,/class="p-skip-link"/);
+assert.match(html,/<main class="shell" id="politicsMainContent">/);
+assert.ok(source.includes('aria-activedescendant')&&source.includes("role','option'"),
+  'Search options are announced through an active-descendant combobox');
+assert.ok(source.includes('restoreInputFocus()')&&!source.includes('input.blur()'),
+  'Closing results must preserve keyboard search focus');
+assert.ok(nav.includes('backgroundInertState.set')&&nav.includes('backgroundInertState.clear()'),
+  'Modal background needs reversible inert handling');
+assert.ok(nav.includes("compactChapter.textContent='Ch. '"),
+  'Small-screen readers must retain chapter identity');
+assert.ok(css.includes('safe-area-inset-top')&&css.includes('safe-area-inset-bottom'),
+  'Fixed controls must respect display cutouts and home indicators');
+assert.ok(css.includes('scroll-behavior:auto!important'),
+  'Reduced-motion preference must disable smooth scrolling');
 assert.match(html,/role="search"/);
 assert.match(html,/id="politicsTabIndex" role="tab" aria-selected="true"/);
 assert.match(html,/id="politicsTabTools" role="tab" aria-selected="false"/);
@@ -49,7 +68,7 @@ assert.ok(source.includes("'section.chapter'")||source.includes("'section.chapte
   'Search must index every chapter');
 assert.ok(source.includes('function cancelPending()')&&source.includes('searchRevision'),
   'Pending searches must be invalidated on closing, selecting and new queries');
-assert.ok(source.includes('const PAGE_SIZE=35')&&source.includes('p-search-load-more')&&
+assert.ok(source.includes('const PAGE_SIZE=35')&&source.includes("get('politicsSearchMore')")&&
   source.includes('appendNextPage()'),
   'All results must be reachable through incremental paging');
 assert.ok(!source.includes('MAX_VISIBLE=65'),'Old hard ceiling must be removed');

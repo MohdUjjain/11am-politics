@@ -27,6 +27,10 @@
   const readingFill=get('politicsReadingFill');
   const chapterProgress=get('politicsChapterProgress');
   const chapterPercent=get('politicsChapterPercent');
+  const compactChapter=get('politicsCompactChapter');
+  const backgroundElements=[...document.body.children]
+    .filter(el=>el!==panel&&el!==backdrop&&el.tagName!=='SCRIPT');
+  const backgroundInertState=new Map();
   const continueCard=get('politicsContinuePrompt');
   const continueDescription=get('politicsContinueDescription');
   const continueButton=get('politicsContinueButton');
@@ -69,6 +73,8 @@
   function openChapter(ch,open,remember){
     ch.element.classList.toggle('expanded',open);
     ch.button.setAttribute('aria-expanded',String(open));
+    ch.button.setAttribute('aria-label',
+      (open?'Collapse':'Expand')+' sections for chapter '+ch.number+': '+ch.title);
     ch.children.hidden=!open;
     if(remember!==false)ch.manualOpen=open;
   }
@@ -266,6 +272,13 @@
     restoreFocus=document.activeElement;
     isOpen=true;
     panel.inert=false;panel.setAttribute('aria-hidden','false');
+    // A focus trap alone cannot isolate a modal from screen-reader navigation.
+    // Remember other components' existing inert states and restore them later.
+    backgroundInertState.clear();
+    for(const el of backgroundElements){
+      backgroundInertState.set(el,el.inert);
+      el.inert=true;
+    }
     panel.classList.add('open');
     backdrop.hidden=false;
     trigger.classList.add('is-hidden');
@@ -280,12 +293,19 @@
     isOpen=false;
     panel.classList.remove('open');
     panel.inert=true;panel.setAttribute('aria-hidden','true');
+    for(const [el,wasInert] of backgroundInertState)
+      if(el.isConnected)el.inert=wasInert;
+    backgroundInertState.clear();
     backdrop.hidden=true;
     trigger.classList.remove('is-hidden');
     trigger.setAttribute('aria-expanded','false');
     document.body.classList.remove('politics-nav-open');
     document.removeEventListener('keydown',onKeys);
-    if(returnFocus!==false&&restoreFocus&&restoreFocus.isConnected)restoreFocus.focus();
+    if(returnFocus!==false){
+      const target=restoreFocus?.isConnected&&!restoreFocus.inert
+        ?restoreFocus:trigger;
+      target?.focus({preventScroll:true});
+    }
   }
 
   function savedCheckpoint(){
@@ -407,6 +427,7 @@
   function updateChapterProgress(ch){
     if(!chapterProgress||!chapterPercent)return;
     if(!ch){
+      if(compactChapter)compactChapter.textContent='Guide';
       chapterProgress.style.setProperty('--p-chapter-angle','0%');
       chapterProgress.style.setProperty('--p-chapter-color','#C6C0B0');
       chapterProgress.setAttribute('aria-valuenow','0');
@@ -414,6 +435,7 @@
       chapterPercent.textContent='—';
       return;
     }
+    if(compactChapter)compactChapter.textContent='Ch. '+ch.number;
     const m=metrics(ch,ch.id);
     const readingPoint=window.scrollY+window.innerHeight*.36;
     const pct=Math.round(position.fraction(readingPoint,m.chapterStart,m.chapterEnd)*100);
@@ -494,7 +516,7 @@
   tabIndex.addEventListener('keydown',onTabKeys);
   tabTools.addEventListener('keydown',onTabKeys);
   printButton.addEventListener('click',()=>{
-    close(false);
+    close(true);
     requestAnimationFrame(()=>window.print());
   });
   summaryToggle.addEventListener('change',()=>{

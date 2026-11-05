@@ -90,3 +90,15 @@ The thin **whole-book rail** remains the same book-blue (`#1F5F8B`) across every
 The print CSS now has a deliberate high-contrast, paper-white treatment for chapter banners, table headings, revision title badges, and printed table-of-contents numbers. This prevents white text from disappearing when browsers omit background graphics. The screen version keeps all of the original colored chapter styling. Printing continues to include the complete study guide and revision material even when that material has been hidden on screen.
 
 GitHub Actions now includes a Chromium browser regression covering incremental search results, term highlighting, dismissal races, chapter-rail color, and **PDF rendering with both background graphics disabled and enabled**. Run locally with `python tests/test_browser_batch_a.py` after installing the Python `playwright` and `pypdf` packages and the Chromium browser.
+
+## Batch B — mobile and accessibility refinement
+
+The sticky parchment header adapts at 600px with a compact **Ch. NN** identity beside the chapter progress circle; on narrower devices it hides the large brand to give search room. Search text uses a 16px mobile font to avoid unintended iOS zoom, and fixed reader controls respect `safe-area-inset-*` via `viewport-fit=cover`. Key touch targets, including drawer close, search close, chapter chevrons, index links and tab controls, are at least 44px high (or 44px square for compact controls).
+
+The drawer is a fully isolated modal while open: outside content is temporarily set `inert`, with its previous state restored when the drawer closes, keyboard focus kept in the drawer, and focus returned to the original trigger. Print closes the drawer and restores focus first. Chapter chevrons update accessible Expand/Collapse labels.
+
+Search now implements a labelled **combobox/listbox** with `aria-activedescendant`, `aria-selected` and live match counts. Arrow keys navigate options while focus remains on the search input; Enter opens a passage, Escape dismisses without blurring, and **Show more** is outside the listbox and returns focus correctly. The `/` shortcut cannot steal focus from the open drawer.
+
+A visible-on-focus skip link jumps directly to the study chapters, with a semantic `main` landmark. Reduced-motion preferences disable smooth document scrolling and UI transitions. Two bright chapter banners (**13 and 14**) use darker screen-only upper gradients and fully opaque kicker text to improve white-on-color contrast. All original academic chapter content and print-specific styling remain unchanged.
+
+Chromium regression now checks 320px, 390px, 600px and desktop, chapter identity, touch target geometry, modal focus isolation, search ARIA keyboard behavior, print focus, reduced motion and chapter banner contrast.
