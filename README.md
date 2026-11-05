@@ -56,3 +56,13 @@ A floating **Contents** button opens a screen-only, accessible sidebar. Its six 
 Section links follow the stable `#ch01-sec01` convention, and revision links use `#ch01-rev01`. The original chapter URLs `#ch01`–`#ch20` still work. Changes to the notes must preserve these IDs, or update relevant anchors deliberately.
 
 The navigation lives in `navigation.js` and `navigation.css`, both included in the complete offline shell. The drawer and reading header are excluded from print; the original cover, table of contents and study guide remain printable.
+
+## On-device reading checkpoint and two progress indicators
+
+The thin **book progress rail** spans the complete document. The separate **circular chapter indicator** displays progress within the active chapter, using that chapter's accent color. The sticky header has a parchment background, dark ink text, and the book's blue progress rail.
+
+The browser saves `chapterId`, `anchorId`, a **fraction of the current section**, a **fraction of the chapter**, and a timestamp in `localStorage` under `11am-politics:reading-position-v2`. The last section ID from earlier installed releases is automatically migrated. Saving occurs during reading and on page visibility changes / page closure, without syncing or tracking. Cached editions do not clear local storage. If a heading is missing in a newer edition, the chapter fraction is used as a fallback.
+
+On a subsequent visit to the cover without a direct `#section` URL, a **Continue reading?** card offers **Continue reading** or **Not now**. No automatic scroll jump is performed. The drawer's **Continue** button offers the same explicit action. A direct bookmarked section URL still opens that section normally.
+
+Local storage may be lost if the device or browser clears site data, evicts browser storage, or launches in a private browsing session. Position restoration is approximate after typography changes or major content edits; the chapter and section identities remain the primary anchors.

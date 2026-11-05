@@ -28,8 +28,11 @@ jobs:
         run: python tests/verify_publication.py
       - name: Parse standalone navigation and offline JavaScript
         run: |
+          node --check reading-position.js
           node --check navigation.js
           node --check offline.js
           node --check service-worker.js
+      - name: Test durable reading checkpoints and edition migration
+        run: node tests/test_reading_position.mjs
       - name: Simulate cached reopening and interrupted updates
         run: node tests/test_service_worker.mjs

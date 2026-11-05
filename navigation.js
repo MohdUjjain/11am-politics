@@ -2,7 +2,8 @@
    Reads the original course headings; never rewrites study text or print pages. */
 (function(){
   'use strict';
-  const KEY='11am-politics:last-reading';
+  const position=window.PoliticsReadingPosition;
+  if(!position){console.warn('Reading-position helper unavailable');return;}
   const get=id=>document.getElementById(id);
   const panel=get('politicsNavPanel');
   const trigger=get('politicsNavFab');
@@ -15,6 +16,12 @@
   const resume=get('politicsNavResume');
   const readingLabel=get('politicsReadingLabel');
   const readingFill=get('politicsReadingFill');
+  const chapterProgress=get('politicsChapterProgress');
+  const chapterPercent=get('politicsChapterPercent');
+  const continueCard=get('politicsContinuePrompt');
+  const continueDescription=get('politicsContinueDescription');
+  const continueButton=get('politicsContinueButton');
+  const continueDismiss=get('politicsContinueDismiss');
   if(!panel||!trigger||!tree||!input)return;
 
   const groups=[];
@@ -26,7 +33,12 @@
   let isOpen=false;
   let restoreFocus=null;
   let scheduled=false;
-  let lastSavedId='';
+  let lastStoredPosition=position.read(localStorage);
+  let lastWriteAt=0;
+  let lastWriteAnchor='';
+  let lastWriteFraction=-1;
+  let suspendCapture=false;
+  let resumePromptDismissed=false;
 
   function create(tag,className,text){
     const e=document.createElement(tag);
@@ -246,25 +258,135 @@
     if(returnFocus!==false&&restoreFocus&&restoreFocus.isConnected)restoreFocus.focus();
   }
 
-  function lastReading(){
-    try{
-      const id=localStorage.getItem(KEY);
-      return id&&byTarget.has(id)?id:'';
-    }catch{return '';}
+  function savedCheckpoint(){
+    const data=position.read(localStorage)||lastStoredPosition;
+    if(!data)return null;
+    const chapter=chapters.find(c=>c.id===data.chapterId);
+    if(!chapter)return null;
+    // An updated edition may have moved or removed individual headings.
+    const anchor=byTarget.has(data.anchorId)?data.anchorId:chapter.id;
+    return {...data,chapter,anchorId:anchor};
+  }
+  function savedDescription(saved){
+    const entry=get(saved.anchorId);
+    const name=entry&&entry.id!==saved.chapterId
+      ? entry.textContent.trim().replace(/\s+/g,' ').slice(0,75)
+      : saved.chapter.title;
+    return 'Chapter '+saved.chapter.number+' · '+name+
+      ' · approximately '+Math.round(saved.chapterFraction*100)+'% through the chapter';
   }
   function refreshResume(){
-    const id=lastReading();
-    resume.hidden=!id;
-    if(id){
-      const ch=byTarget.get(id);
-      resume.textContent='Resume reading · Ch. '+ch.number+' — '+ch.title;
+    const saved=savedCheckpoint();
+    resume.hidden=!saved;
+    if(saved)resume.textContent='Continue · Ch. '+saved.chapter.number+
+      ' ('+Math.round(saved.chapterFraction*100)+'%)';
+    if(saved&&continueDescription)continueDescription.textContent=savedDescription(saved);
+  }
+  function showContinuePrompt(){
+    if(!continueCard||resumePromptDismissed||location.hash||
+      window.scrollY>90)return;
+    const saved=savedCheckpoint();
+    if(!saved)return;
+    refreshResume();
+    continueCard.hidden=false;
+  }
+  function hideContinuePrompt(){
+    if(continueCard)continueCard.hidden=true;
+  }
+  function metrics(ch,anchorId){
+    const topOf=el=>el.getBoundingClientRect().top+window.scrollY;
+    const chapterStart=topOf(ch.section);
+    const following=chapters[Number(ch.number)]?.section;
+    const chapterEnd=following?topOf(following):topOf(ch.section)+ch.section.offsetHeight;
+    const headingList=[ch.section,...ch.sections,...ch.revisions];
+    const anchor=headingList.find(el=>el.id===anchorId)||ch.section;
+    const index=headingList.indexOf(anchor);
+    const next=headingList[index+1];
+    const anchorStart=topOf(anchor);
+    const anchorEnd=next?topOf(next):chapterEnd;
+    return {chapterStart,chapterEnd,anchorStart,anchorEnd};
+  }
+  function checkpoint(ch,anchorId,readingPoint){
+    const m=metrics(ch,anchorId);
+    return position.normalize({
+      chapterId:ch.id,anchorId,
+      anchorFraction:position.fraction(readingPoint,m.anchorStart,m.anchorEnd),
+      chapterFraction:position.fraction(readingPoint,m.chapterStart,m.chapterEnd),
+      savedAt:Date.now()
+    });
+  }
+  function persistReading(force){
+    if(suspendCapture||!selectedId)return;
+    const chapter=byTarget.get(selectedId);
+    if(!chapter)return;
+    const now=Date.now();
+    const at=window.scrollY+window.innerHeight*.36;
+    const saved=checkpoint(chapter,selectedId,at);
+    // Persist exact section changes immediately, otherwise throttle scroll writes.
+    if(!force&&saved.anchorId===lastWriteAnchor&&
+       now-lastWriteAt<1200&&
+       Math.abs(saved.chapterFraction-lastWriteFraction)<.025)return;
+    if(position.write(localStorage,saved)){
+      lastStoredPosition=saved;
+      lastWriteAt=now;
+      lastWriteAnchor=saved.anchorId;
+      lastWriteFraction=saved.chapterFraction;
+      refreshResume();
     }
   }
-  function savePosition(id){
-    if(!id||id===lastSavedId||!byTarget.has(id))return;
-    lastSavedId=id;
-    try{localStorage.setItem(KEY,id);}catch{/* Browsers may disable storage. */}
-    refreshResume();
+  function continueReading(){
+    const saved=savedCheckpoint();
+    if(!saved)return;
+    close(false);
+    hideContinuePrompt();
+    resumePromptDismissed=true;
+    const ch=saved.chapter;
+    const target=get(saved.anchorId);
+    const m=metrics(ch,saved.anchorId);
+    const focusOffset=window.innerHeight*.36;
+    const useAnchor=!!target&&saved.anchorId!==ch.id;
+    const desired=useAnchor
+      ? position.coordinate(m.anchorStart,m.anchorEnd,saved.anchorFraction,focusOffset)
+      : position.coordinate(m.chapterStart,m.chapterEnd,saved.chapterFraction,focusOffset);
+    suspendCapture=true;
+    // Browser-native hash navigation would lose the saved offset.
+    // Change the shareable URL without triggering an automatic anchor jump.
+    if(window.history&&history.replaceState){
+      history.replaceState(null,'','#'+saved.anchorId);
+    }
+    const original=document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior='auto';
+    window.scrollTo({top:desired,behavior:'instant'});
+    requestAnimationFrame(()=>{
+      document.documentElement.style.scrollBehavior=original;
+      suspendCapture=false;
+      requestUpdate();
+      const section=get(saved.anchorId);
+      if(section){
+        if(!section.hasAttribute('tabindex'))section.setAttribute('tabindex','-1');
+        section.focus({preventScroll:true});
+      }
+    });
+  }
+  function updateChapterProgress(ch){
+    if(!chapterProgress||!chapterPercent)return;
+    if(!ch){
+      chapterProgress.style.setProperty('--p-chapter-angle','0%');
+      chapterProgress.style.setProperty('--p-chapter-color','#C6C0B0');
+      chapterProgress.setAttribute('aria-valuenow','0');
+      chapterProgress.setAttribute('aria-valuetext','Not currently in a chapter');
+      chapterPercent.textContent='—';
+      return;
+    }
+    const m=metrics(ch,ch.id);
+    const readingPoint=window.scrollY+window.innerHeight*.36;
+    const pct=Math.round(position.fraction(readingPoint,m.chapterStart,m.chapterEnd)*100);
+    chapterProgress.style.setProperty('--p-chapter-angle',pct+'%');
+    chapterProgress.style.setProperty('--p-chapter-color',ch.color);
+    chapterProgress.setAttribute('aria-valuenow',String(pct));
+    chapterProgress.setAttribute('aria-valuetext',
+      'Chapter '+ch.number+': '+pct+' percent complete');
+    chapterPercent.textContent=pct+'%';
   }
   function markActive(id){
     if(id===selectedId)return;
@@ -282,7 +404,7 @@
     status.textContent='Now reading: '+label;
     readingLabel.textContent=label;
     readingFill.style.backgroundColor=ch.color;
-    savePosition(id);
+  
   }
   function updateReading(){
     scheduled=false;
@@ -302,6 +424,7 @@
         ? 'Table of Contents':'Cover · Complete Study Guide';
       status.textContent='Explore 20 chapters and their revision material';
       markActive('');
+      updateChapterProgress(null);
       return;
     }
     let id=ch.id;
@@ -310,6 +433,9 @@
       else break;
     }
     markActive(id);
+    updateChapterProgress(ch);
+    persistReading(false);
+    if(continueCard&&!continueCard.hidden)hideContinuePrompt();
   }
   function requestUpdate(){
     if(!scheduled){scheduled=true;requestAnimationFrame(updateReading);}
@@ -334,13 +460,18 @@
     close(false);
     if(target)focusAnchor(target);
   });
-  resume.addEventListener('click',()=>{
-    const id=lastReading(),target=id&&get(id);
-    if(!target)return;
-    close(false);
-    if(location.hash==='#'+id)target.scrollIntoView({block:'start'});
-    else location.hash=id;
-    focusAnchor(target);
+  resume.addEventListener('click',continueReading);
+  if(continueButton)continueButton.addEventListener('click',continueReading);
+  if(continueDismiss)continueDismiss.addEventListener('click',()=>{
+    resumePromptDismissed=true;
+    hideContinuePrompt();
+  });
+  // Keep the reader at the cover on a later visit until they choose Continue.
+  window.addEventListener('load',()=>requestAnimationFrame(showContinuePrompt));
+  window.addEventListener('pageshow',()=>requestAnimationFrame(showContinuePrompt));
+  window.addEventListener('pagehide',()=>persistReading(true));
+  document.addEventListener('visibilitychange',()=>{
+    if(document.visibilityState==='hidden')persistReading(true);
   });
   window.addEventListener('scroll',requestUpdate,{passive:true});
   window.addEventListener('resize',requestUpdate);

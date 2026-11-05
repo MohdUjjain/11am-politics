@@ -8,7 +8,7 @@
  const install=document.getElementById('offlineInstall');
  const reload=document.getElementById('offlineReload');
  const CACHE_PREFIX='11am-politics-reader-';
- const ESSENTIALS=['./index.html','./manifest.webmanifest','./offline.js','./navigation.js','./navigation.css','./icons/icon-192.png','./icons/icon-512.png','./favicon-16.png','./favicon-32.png','./og-image.png','./404.html','./sitemap.xml'];
+ const ESSENTIALS=['./index.html','./manifest.webmanifest','./offline.js','./reading-position.js','./navigation.js','./navigation.css','./icons/icon-192.png','./icons/icon-512.png','./favicon-16.png','./favicon-32.png','./og-image.png','./404.html','./sitemap.xml'];
  let installPrompt=null,registration=null,updated=false,lastChecked=0;
  let previousController=!!navigator.serviceWorker?.controller;
  function setStatus(label,explanation){if(!updated)toggle.textContent=label;message.textContent=explanation;}

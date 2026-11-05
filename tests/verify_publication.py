@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 URL = 'https://mohdujjain.github.io/11am-politics/'
 ASSETS = [
     'index.html','manifest.webmanifest','offline.js',
-    'navigation.js','navigation.css',
+    'reading-position.js','navigation.js','navigation.css',
     'icons/icon-192.png','icons/icon-512.png',
     'favicon-16.png','favicon-32.png',
     'og-image.png','404.html','sitemap.xml',
@@ -70,6 +70,17 @@ def main():
     assert any(link.get('rel')=='stylesheet' and link.get('href')=='./navigation.css' for link in doc.links)
     assert 'src="./navigation.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
     assert 'politicsReadingFill' in doc.ids and 'politicsNavPanel' in doc.ids
+    assert 'politicsChapterProgress' in doc.ids and 'politicsChapterPercent' in doc.ids
+    assert 'politicsContinuePrompt' in doc.ids and 'politicsContinueButton' in doc.ids
+    assert 'politicsContinueDismiss' in doc.ids and 'politicsContinueDescription' in doc.ids
+    assert 'role="progressbar"' in (ROOT/'index.html').read_text(encoding='utf-8')
+    assert 'src="./reading-position.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
+    assert (ROOT/'navigation.js').read_text(encoding='utf-8').find('window.PoliticsReadingPosition')>0
+    assert 'pagehide' in nav and 'visibilitychange' in nav
+    assert 'showContinuePrompt' in nav and 'continueReading' in nav
+    assert 'updateChapterProgress' in nav and 'suspendCapture' in nav
+    assert '.p-chapter-ring' in nav_style and '#politicsContinuePrompt' in nav_style
+    assert '#politicsContinuePrompt[hidden] {display:none!important;}' in nav_style
     assert all(anchor in doc.ids for anchor in doc.anchors), 'Broken chapter link'
     assert any(link.get('rel')=='canonical' and link.get('href')==URL for link in doc.links)
     assert any(link.get('rel')=='manifest' and link.get('href')=='./manifest.webmanifest' for link in doc.links)

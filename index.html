@@ -399,6 +399,14 @@ th,td{padding:7px 9px}
   <div class="p-reading-row">
     <strong class="p-reading-brand">11AM · POLITICS</strong>
     <span id="politicsReadingLabel">Complete Study Guide</span>
+    <div class="p-chapter-indicator">
+      <span class="p-chapter-indicator-label">CHAPTER</span>
+      <div id="politicsChapterProgress" class="p-chapter-ring" role="progressbar"
+           aria-label="Progress through current chapter" aria-valuemin="0"
+           aria-valuemax="100" aria-valuenow="0" aria-valuetext="Not currently in a chapter">
+        <span class="p-chapter-ring-center" id="politicsChapterPercent">—</span>
+      </div>
+    </div>
   </div>
   <div class="p-reading-track"><div id="politicsReadingFill" role="progressbar" aria-label="Progress through the study guide" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>
 </header>
@@ -445,6 +453,15 @@ th,td{padding:7px 9px}
   <div class="spine">
     <i style="background:hsl(200 55% 42%)"></i><i style="background:hsl(218 55% 42%)"></i><i style="background:hsl(236 55% 42%)"></i><i style="background:hsl(254 55% 42%)"></i><i style="background:hsl(272 55% 42%)"></i><i style="background:hsl(290 55% 42%)"></i><i style="background:hsl(308 55% 42%)"></i><i style="background:hsl(326 55% 42%)"></i><i style="background:hsl(344 55% 42%)"></i><i style="background:hsl(2 55% 42%)"></i><i style="background:hsl(20 55% 42%)"></i><i style="background:hsl(38 55% 42%)"></i><i style="background:hsl(56 55% 42%)"></i><i style="background:hsl(74 55% 38%)"></i><i style="background:hsl(92 55% 32%)"></i><i style="background:hsl(110 55% 32%)"></i><i style="background:hsl(128 55% 32%)"></i><i style="background:hsl(146 55% 32%)"></i><i style="background:hsl(164 55% 32%)"></i><i style="background:hsl(182 55% 34%)"></i>
   </div>
+  <section id="politicsContinuePrompt" class="p-resume-card" aria-label="Continue your previous reading" hidden>
+    <div class="p-resume-kicker">PICK UP WHERE YOU LEFT OFF</div>
+    <h2>Continue reading?</h2>
+    <p id="politicsContinueDescription">Your last chapter and section were saved on this device.</p>
+    <div class="p-resume-buttons">
+      <button type="button" id="politicsContinueButton">Continue reading</button>
+      <button type="button" id="politicsContinueDismiss">Not now</button>
+    </div>
+  </section>
 </section>
 
 <!-- ============================================================ LEGEND ============================================================ -->
@@ -4198,6 +4215,7 @@ th,td{padding:7px 9px}
 </div>
 </aside>
 <script src="./offline.js" defer></script>
+<script src="./reading-position.js" defer></script>
 <script src="./navigation.js" defer></script>
 </body>
 </html>
