@@ -59,19 +59,17 @@
     if(text!==undefined)e.textContent=text;
     return e;
   }
-  function openGroup(g,open,remember){
+  function openGroup(g,open){
     g.element.classList.toggle('expanded',open);
     g.button.setAttribute('aria-expanded',String(open));
     g.children.hidden=!open;
-    if(remember!==false)g.manualOpen=open;
   }
-  function openChapter(ch,open,remember){
+  function openChapter(ch,open){
     ch.element.classList.toggle('expanded',open);
     ch.button.setAttribute('aria-expanded',String(open));
     ch.button.setAttribute('aria-label',
       (open?'Collapse':'Expand')+' sections for chapter '+ch.number+': '+ch.title);
     ch.children.hidden=!open;
-    if(remember!==false)ch.manualOpen=open;
   }
   function makeLink(id,label,className){
     const a=create('a',className,label);
@@ -93,7 +91,6 @@
         group:label||'Chapters',
         sections:[...section.querySelectorAll('.content h2[id]')],
         revisions:[...section.querySelectorAll('.end-matter .em-title[id]')],
-        manualOpen:false,
         color:'hsl('+(section.style.getPropertyValue('--h').trim()||'200')+' 55% 38%)'
       };
       chapters.push(chapter);
@@ -116,10 +113,10 @@
         children.id='politics-nav-group-'+groups.length;
         heading.setAttribute('aria-controls',children.id);
         outer.append(heading,children);
-        g={name:ch.group,element:outer,button:heading,children,chapters:[],manualOpen:false};
+        g={name:ch.group,element:outer,button:heading,children,chapters:[]};
         groups.push(g);
         heading.addEventListener('click',()=>{
-          openGroup(g,!g.element.classList.contains('expanded'),true);
+          openGroup(g,!g.element.classList.contains('expanded'));
         });
         tree.appendChild(outer);
       }
@@ -161,15 +158,15 @@
       g.children.appendChild(outer);
       toggle.addEventListener('click',()=>{
         const willOpen=!ch.element.classList.contains('expanded');
-        if(willOpen)chapters.forEach(other=>{if(other!==ch)openChapter(other,false,true);});
-        openChapter(ch,willOpen,true);
+        if(willOpen)chapters.forEach(other=>{if(other!==ch)openChapter(other,false);});
+        openChapter(ch,willOpen);
       });
-      openChapter(ch,false,true);
+      openChapter(ch,false);
     });
     groups.forEach((g,index)=>{
       g.button.querySelector('.p-nav-group-count').textContent=
         g.chapters[0].number+'–'+g.chapters[g.chapters.length-1].number;
-      openGroup(g,index===0,true);
+      openGroup(g,index===0);
     });
     const finalLinks=create('div','p-nav-frontmatter p-nav-afterword');
     finalLinks.appendChild(makeLink('closing-note','Closing Note','p-nav-closing'));
@@ -192,8 +189,8 @@
     });
   }
   function expandAll(open){
-    groups.forEach(g=>openGroup(g,open,true));
-    chapters.forEach(ch=>openChapter(ch,open,true));
+    groups.forEach(g=>openGroup(g,open));
+    chapters.forEach(ch=>openChapter(ch,open));
   }
   function switchTab(which,focus){
     const index=which!=='tools';

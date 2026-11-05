@@ -51,8 +51,8 @@ assert.ok(helper.includes("LEGACY_KEY='11am-politics:show-chapter-summaries-v1'"
 assert.ok(!nav.includes("get('politicsNavResults')"));
 assert.ok(!nav.includes('function fold('));
 assert.ok(!nav.includes('chapterLinks'));
-assert.ok(!nav.includes('manualOpen')||nav.includes('manualOpen='),
-  'Only recognized interactive state is retained');
+assert.ok(!nav.includes('manualOpen'),
+  'No unused pre-search accordion state should remain');
 
 for(const name of [
   '--p-ui-surface','--p-ui-parchment','--p-ui-hover','--p-ui-selected',

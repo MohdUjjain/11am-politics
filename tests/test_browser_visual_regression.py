@@ -182,7 +182,8 @@ def run():
                 "revision": "rgb(32, 36, 44)",
                 "shown": "block",
             }, contrast
-            capture(page, "print-chapter-07")
+            print_image = capture(page, "print-chapter-07")
+            manifest.append({"state": "print-preview", "image": print_image})
             for background in (False, True):
                 pdf = page.pdf(print_background=background, prefer_css_page_size=True)
                 doc = PdfReader(io.BytesIO(pdf))
@@ -205,7 +206,7 @@ def run():
                         "captures": manifest}, indent=2) + "\n",
             encoding="utf-8"
         )
-        assert len([x for x in manifest if "image" in x]) == len(BREAKPOINTS)*len(STATES)
+        assert len([x for x in manifest if "image" in x]) == len(BREAKPOINTS)*len(STATES)+1
         print(f"PASS: {len(manifest)} captured visual/print artifacts")
     finally:
         server.shutdown()
