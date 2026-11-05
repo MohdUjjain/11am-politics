@@ -39,3 +39,12 @@ If editing app scripts/icons rather than just the text, change the `BOOK_CACHE` 
 ## Testing
 
 After Pages is enabled, visit the site online and wait for **Available offline**. On desktop, use Chrome DevTools → Application → Service Workers/Cache Storage, then switch Network to **Offline** and reload. On a phone, launch the installed app in airplane mode. If the browser doesn't offer installation, use its menu's **Add to Home Screen** option.
+
+## Publishing checklist
+- After editing any published file, run `python scripts/build.py` to regenerate the content-hashed service worker.
+- Validate with `python scripts/build.py --check`, `python tests/verify_publication.py` and `node tests/test_service_worker.mjs`.
+- Commit `index.html`, the regenerated `service-worker.js` and any changed public assets together; GitHub Pages publishes from `main` / `(root)`.
+- The GitHub Actions verification workflow reports problems but does not itself block a branch-based Pages deployment.
+- Open the site online, confirm `Available offline`, install it, then test reopening in airplane mode. After a new edition goes live, reopen online and use `Reload updated guide` when prompted.
+- Social sharing uses the public 1200×630 `og-image.png`, which some messaging apps may cache independently.
+- `robots.txt` at `/11am-politics/robots.txt` would not control crawlers at the origin root; the canonical URL and sitemap are the useful project-site metadata here.
