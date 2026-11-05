@@ -79,7 +79,11 @@ def main():
     assert "summaryVisibility.read(localStorage)" in nav
     assert "summaryVisibility.write(localStorage,showSummaries)" in nav
     assert 'politics-hide-chapter-summaries' in nav_style
-    assert '.em-title[id$="-rev01"]:target + p' in nav_style
+    assert 'body.politics-hide-chapter-summaries .chapter > .end-matter {' in nav_style
+    assert '.end-matter.politics-explicit-revision' in nav_style
+    assert 'summaryVisibility.isRevisionAnchor' in nav
+    assert 'syncLinkedRevision' in nav
+    assert 'Show End-of-Chapter Study Material' in (ROOT/'index.html').read_text(encoding='utf-8')
     assert len(re.findall(r'<div class="em-title" id="ch\d{2}-rev01">📋 Chapter Summary</div>\s*<p>', (ROOT/'index.html').read_text(encoding='utf-8'))) == 20
     assert 'role="progressbar"' in (ROOT/'index.html').read_text(encoding='utf-8')
     assert 'src="./reading-position.js"' in (ROOT/'index.html').read_text(encoding='utf-8')

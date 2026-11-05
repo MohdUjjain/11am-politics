@@ -194,13 +194,15 @@
           groupMatch||fold(ch.number+' '+ch.title+' chapter '+Number(ch.number)).includes(q)
         );
         let subMatches=0;
+        const linkedRevision=!!ch.section.querySelector('.end-matter.politics-explicit-revision');
+        const hideRevision=!showSummaries&&!linkedRevision;
+        const revisionLabel=ch.children.querySelector('.p-nav-revision-label');
+        if(revisionLabel)revisionLabel.hidden=hideRevision;
         ch.children.querySelectorAll('a.p-nav-entry').forEach(a=>{
-          // Hide only the Chapter Summary shortcut; other revision links stay.
-          // A direct #rev01 URL may still reveal its explicit target.
-          const hiddenSummary=!showSummaries&&
-            summaryVisibility.isSummaryAnchor(a.dataset.targetId)&&
-            location.hash!=='#'+a.dataset.targetId;
-          const matched=!hiddenSummary&&
+          // The same switch controls all revision shortcuts, not chapter sections.
+          const hiddenRevision=hideRevision&&
+            summaryVisibility.isRevisionAnchor(a.dataset.targetId);
+          const matched=!hiddenRevision&&
             (!searching||chapterMatch||fold(a.textContent).includes(q));
           a.hidden=!matched;
           if(searching&&matched&&!chapterMatch)subMatches++;
@@ -224,11 +226,28 @@
     groups.forEach(g=>openGroup(g,open,true));
     chapters.forEach(ch=>openChapter(ch,open,true));
   }
+  function syncLinkedRevision(){
+    document.querySelectorAll('.end-matter.politics-explicit-revision')
+      .forEach(el=>el.classList.remove('politics-explicit-revision'));
+    if(showSummaries)return;
+    let id='';
+    try{id=decodeURIComponent(location.hash.slice(1));}
+    catch{return;}
+    if(!summaryVisibility.isRevisionAnchor(id))return;
+    const target=get(id);
+    if(target)target.closest('.end-matter')?.classList.add('politics-explicit-revision');
+  }
   function applySummaryView(show,remember){
     showSummaries=!!show;
     summaryToggle.checked=showSummaries;
+    // A manual click to hide must hide everything even when the URL
+    // currently points into a revision section.
+    if(remember){
+      document.querySelectorAll('.end-matter.politics-explicit-revision')
+        .forEach(el=>el.classList.remove('politics-explicit-revision'));
+      summaryVisibility.write(localStorage,showSummaries);
+    }else syncLinkedRevision();
     document.body.classList.toggle('politics-hide-chapter-summaries',!showSummaries);
-    if(remember)summaryVisibility.write(localStorage,showSummaries);
     filter();
     refreshResume();
     requestUpdate();
@@ -285,10 +304,10 @@
     const chapter=chapters.find(c=>c.id===data.chapterId);
     if(!chapter)return null;
     // An updated edition may have moved or removed individual headings.
-    const hiddenSummary=!showSummaries&&
-      summaryVisibility.isSummaryAnchor(data.anchorId)&&
-      location.hash!=='#'+data.anchorId;
-    const anchor=byTarget.has(data.anchorId)&&!hiddenSummary
+    const hiddenRevision=!showSummaries&&
+      summaryVisibility.isRevisionAnchor(data.anchorId)&&
+      !get(data.anchorId)?.closest('.end-matter.politics-explicit-revision');
+    const anchor=byTarget.has(data.anchorId)&&!hiddenRevision
       ?data.anchorId:chapter.id;
     return {...data,chapter,anchorId:anchor};
   }
@@ -456,7 +475,7 @@
     }
     let id=ch.id;
     for(const heading of [...ch.sections,...ch.revisions]){
-      // Summary headings hidden by the reader's preference have no geometry.
+      // Hidden end-of-chapter headings have no usable reading geometry.
       if(!heading.getClientRects().length)continue;
       if(heading.getBoundingClientRect().top<=line)id=heading.id;
       else break;
@@ -510,7 +529,8 @@
   window.addEventListener('scroll',requestUpdate,{passive:true});
   window.addEventListener('resize',requestUpdate);
   window.addEventListener('hashchange',()=>{
-    // A deliberate direct link to a hidden summary stays accessible via :target.
+    // Explicit deep links reveal the requested revision section temporarily.
+    syncLinkedRevision();
     filter();
     requestUpdate();
   });

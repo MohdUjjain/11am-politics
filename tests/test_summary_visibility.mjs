@@ -3,7 +3,8 @@ import {createRequire} from 'node:module';
 import {readFileSync} from 'node:fs';
 const require=createRequire(import.meta.url);
 const visibility=require('../summary-visibility.js');
-function makeStorage(){
+
+function storage(){
   const map=new Map();
   return {
     getItem:key=>map.has(key)?map.get(key):null,
@@ -11,51 +12,67 @@ function makeStorage(){
     removeItem:key=>map.delete(key)
   };
 }
-const memory=makeStorage();
-assert.equal(visibility.read(memory),true,'Default is to show all summaries');
-assert.equal(visibility.isSummaryAnchor('ch01-rev01'),true);
-assert.equal(visibility.isSummaryAnchor('ch20-rev01'),true);
-assert.equal(visibility.isSummaryAnchor('ch07-rev02'),false);
-assert.equal(visibility.isSummaryAnchor('ch07-sec01'),false);
-assert.equal(visibility.isSummaryAnchor('ch99-rev01'),false);
-assert.equal(visibility.write(memory,false),true);
-assert.equal(visibility.read(memory),false,'Hide preference is stored');
-delete require.cache[require.resolve('../summary-visibility.js')];
-const nextLaunch=require('../summary-visibility.js');
-assert.equal(nextLaunch.read(memory),false,'Hide preference persists after relaunch');
-assert.equal(nextLaunch.write(memory,true),true);
-assert.equal(nextLaunch.read(memory),true,'Reader may re-enable summaries');
-assert.equal(nextLaunch.read({getItem:()=>{throw Error('storage disabled')}}),true,'Storage failure defaults to visible');
-assert.equal(nextLaunch.write({setItem:()=>{throw Error('storage disabled')}},false),false);
+const s=storage();
+assert.equal(visibility.read(s),true,'All end-of-chapter material shown by default');
+for(let n=1;n<=20;n++){
+  const ch='ch'+String(n).padStart(2,'0');
+  for(let revision=1;revision<=5;revision++){
+    assert.equal(visibility.isRevisionAnchor(ch+'-rev'+String(revision).padStart(2,'0')),true);
+  }
+}
+assert.equal(visibility.isRevisionAnchor('ch07-rev06'),true,
+  'Chapter 7 extra philosopher table must also be covered');
+assert.equal(visibility.isRevisionAnchor('ch07-sec06'),false);
+assert.equal(visibility.isRevisionAnchor('ch21-rev01'),false);
 
+assert.equal(visibility.write(s,false),true);
+assert.equal(visibility.read(s),false,'Hide preference saved');
+delete require.cache[require.resolve('../summary-visibility.js')];
+const next=require('../summary-visibility.js');
+assert.equal(next.read(s),false,'Hide preference survives a restart');
+assert.equal(next.write(s,true),true);
+assert.equal(next.read(s),true,'User can re-enable end-matter');
+
+// Preserve the existing setting when upgrading from the summary-only release.
+const legacy=storage();
+legacy.setItem(visibility.LEGACY_KEY,'false');
+assert.equal(next.read(legacy),false,'Existing hidden preference migrates');
+assert.equal(legacy.getItem(next.KEY),'false');
+assert.equal(legacy.getItem(next.LEGACY_KEY),null);
+const oldShow=storage();
+oldShow.setItem(next.LEGACY_KEY,'true');
+assert.equal(next.read(oldShow),true);
+assert.equal(next.read({getItem:()=>{throw Error('blocked')}}),true);
+assert.equal(next.write({setItem:()=>{throw Error('blocked')}},false),false);
+
+// Source remains fully present: only a single CSS display rule hides each
+// entire end-matter container on screens; printing is unaffected.
 const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
 const css=readFileSync(new URL('../navigation.css',import.meta.url),'utf8');
 const nav=readFileSync(new URL('../navigation.js',import.meta.url),'utf8');
-const summaryMarkup=/<div class="em-title" id="ch\d{2}-rev01">📋 Chapter Summary<\/div>\s*<p>/g;
-assert.equal([...html.matchAll(summaryMarkup)].length,20,
-  'Every chapter has a summary heading followed by a single paragraph');
-assert.match(html, /id="politicsShowSummaries" checked/,
-  'Native checkbox is available in the sidebar');
-assert.ok(html.indexOf('src="./summary-visibility.js"')<
-  html.indexOf('src="./navigation.js"'),
-  'Preference helper must be ready before the navigation controller');
-
-assert.match(css, /@media screen\s*\{/);
-assert.ok(css.includes('body.politics-hide-chapter-summaries .chapter .end-matter > .em-title[id$="-rev01"] + p'),
-  'Only chapter-summary paragraph is hidden in the reading view');
-assert.ok(css.includes('.em-title[id$="-rev01"]:target + p'),
-  'An explicit deep-linked chapter summary remains available');
-assert.match(css, /@media print\s*\{/);
+assert.equal((html.match(/<div class="end-matter">/g)||[]).length,20,
+  'Every chapter retains its original study-material container');
+assert.equal((html.match(/<div class="em-title" id="ch[0-9]{2}-rev[0-9]{2}">/g)||[]).length,101,
+  'All revision headings are still in the book');
+assert.match(html,/Show End-of-Chapter Study Material/);
+assert.match(html,/id="politicsShowSummaries" checked/);
+assert.match(css,/@media screen\s*\{/);
+assert.ok(css.includes('body.politics-hide-chapter-summaries .chapter > .end-matter {'));
+assert.ok(css.includes('display:none!important;'));
+assert.ok(css.includes('.end-matter.politics-explicit-revision'),
+  'Direct section links can reveal the requested end-matter');
 assert.ok(css.indexOf('body.politics-hide-chapter-summaries')<css.indexOf('@media print'),
-  'Visibility preference rules are screen-only; printing retains the full book');
-assert.ok(nav.includes("summaryVisibility.write(localStorage,showSummaries)"));
-assert.ok(nav.includes("summaryVisibility.read(localStorage)"));
-assert.ok(nav.includes("summaryToggle.addEventListener('change'"));
+  'The summary toggle does not alter printed pages');
+assert.ok(nav.includes('summaryVisibility.isRevisionAnchor'));
+assert.ok(nav.includes("revisionLabel.hidden=hideRevision"),
+  'The revision label must also vanish from the sidebar');
+assert.ok(nav.includes('const hiddenRevision=hideRevision&&'),
+  'All revision links must be hidden from the sidebar when requested');
 assert.ok(nav.includes('if(!heading.getClientRects().length)continue'),
-  'Scroll tracking must skip hidden section headings');
-assert.ok(nav.includes("const hiddenSummary=!showSummaries")&&
-  nav.includes("data.anchorId"),
-  'Resume reading must fall back from a hidden summary');
-assert.ok(nav.includes("location.hash!=='#'+a.dataset.targetId"),
-  'Direct deep links should retain a visible summary shortcut');
-console.log('PASS: summary visibility, persisted choice, deep links, print, reading position');
+  'Scroll position tracking skips hidden headings');
+assert.ok(nav.includes('syncLinkedRevision()'),
+  'Direct revision links remain possible without altering the saved choice');
+assert.ok(nav.includes('summaryVisibility.write(localStorage,showSummaries)'));
+assert.ok(html.indexOf('src="./summary-visibility.js"')<
+  html.indexOf('src="./navigation.js"'));
+console.log('PASS: hide all 20 end-matter sections, migration, shortcuts, direct links and print');

@@ -67,8 +67,10 @@ On a subsequent visit to the cover without a direct `#section` URL, a **Continue
 
 Local storage may be lost if the device or browser clears site data, evicts browser storage, or launches in a private browsing session. Position restoration is approximate after typography changes or major content edits; the chapter and section identities remain the primary anchors.
 
-## Reader option: Show Chapter Summaries
+## Reader option: Show End-of-Chapter Study Material
 
-The sidebar now includes **Show Chapter Summaries** (checked by default). Unchecking it hides the short **Chapter Summary** heading and paragraph at the beginning of each chapter's end-matter, in all 20 chapters. The **One-Page Revision Sheet, Key Definitions, Memory Aids, Examination Questions**, and the additional Chapter 7 contribution table remain visible.
+The existing sidebar checkbox now controls **all end-of-chapter study material** with one action. It is **enabled by default**. Unchecking **Show End-of-Chapter Study Material** hides each chapter's entire `.end-matter` section on screen: **Chapter Summary**, **One-Page Revision Sheet**, **Key Definitions**, **Memory Aids**, **Possible Examination Questions**, and any extra review material (including Chapter 7's philosophers table). The 20 main chapter texts and 140 section links are unaffected.
 
-The preference is stored in `localStorage` using `11am-politics:show-chapter-summaries-v1` and survives site reopening, installed-app relaunching, and cached-edition updates while the browser retains the site's data. On-screen contents search excludes hidden summary shortcuts, and scroll-tracking ignores those hidden headings. A direct bookmark to a summary (`#ch01-rev01`, etc.) still reveals that one target without changing the stored preference. The setting affects the **screen reading view only**: printing or PDF export retains the complete original chapters and summaries.
+The contents drawer also hides all revision shortcuts and their "Revision & Recall" label while the setting is off. Re-check the box to show them again. The switch is persisted in `localStorage` under `11am-politics:show-end-of-chapter-material-v2`, and an existing `show-chapter-summaries-v1` preference is migrated. It survives installed app relaunching and updates so long as browser site data remains.
+
+Deep links to a specific `#chXX-revYY` destination temporarily show that chapter's revision material even if the general setting is off. Clicking the checkbox to hide again immediately restores the hidden view. The preference is **screen-only**; printing/PDF export always includes the full notes. The original book content and revision headings are unchanged.

@@ -143,16 +143,14 @@
     margin:5px 0 0 26px;color:var(--ink-soft,#4B5364);
     font:400 11px/1.42 'Source Sans 3',system-ui,sans-serif;
   }
-  body.politics-hide-chapter-summaries .chapter .end-matter > .em-title[id$="-rev01"],
-  body.politics-hide-chapter-summaries .chapter .end-matter > .em-title[id$="-rev01"] + p {
+  /* One reading-view switch hides the whole end-matter container:
+     all 101 revision blocks across the 20 chapters, not just rev01. */
+  body.politics-hide-chapter-summaries .chapter > .end-matter {
     display:none!important;
   }
-  /* An explicit bookmarked Chapter Summary URL still works without
-     changing the user's saved preference. */
-  body.politics-hide-chapter-summaries .chapter .end-matter > .em-title[id$="-rev01"]:target {
-    display:inline-block!important;
-  }
-  body.politics-hide-chapter-summaries .chapter .end-matter > .em-title[id$="-rev01"]:target + p {
+  /* Explicitly opening a #chXX-revYY bookmark can reveal that chapter's
+     full revision section; the saved hide preference is unchanged. */
+  body.politics-hide-chapter-summaries .chapter > .end-matter.politics-explicit-revision {
     display:block!important;
   }
 
