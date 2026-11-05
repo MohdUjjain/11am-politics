@@ -38,7 +38,9 @@ def main() -> int:
     content, version = render()
     if args.check:
         if not TARGET.is_file() or TARGET.read_text(encoding='utf-8') != content:
-            print('ERROR: stale service-worker.js; run python scripts/build.py', file=sys.stderr)
+            print(f'ERROR: stale service-worker.js (expected cache revision {version}); run python scripts/build.py', file=sys.stderr)
+            for name in SOURCES:
+                print(f'  {name}: {blob_sha((ROOT / name).read_bytes())}', file=sys.stderr)
             return 1
         print(f'PASS: content-hashed service worker {version}')
     else:
