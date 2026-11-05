@@ -66,6 +66,12 @@ def main():
     search=(ROOT/'search.js').read_text(encoding='utf-8')
     assert 'createTreeWalker' in search and 'SHOW_TEXT' in search
     assert 'scrollIntoView' in search and 'politicsFullSearch' in search
+    assert 'p-search-load-more' in search and 'appendNextPage' in search
+    assert 'cancelPending()' in search and 'CSS.highlights.set' in search
+    assert 'readingFill.style.backgroundColor' not in nav
+    assert '::highlight(politics-search-term)' in nav_style
+    assert 'thead th{' in (ROOT/'index.html').read_text(encoding='utf-8')
+    assert 'background:#fff!important;' in (ROOT/'index.html').read_text(encoding='utf-8')
     assert 'politicsFullSearch' in doc.ids and 'politicsSearchPopover' in doc.ids
     assert 'politicsSearchResults' in doc.ids
     assert 'politicsNavSearch' not in doc.ids

@@ -324,6 +324,39 @@ li{margin-bottom:5px;}
   .box, table, .case-study, .flow, .duel{break-inside:avoid;}
   h2{break-after:avoid;}
   h2,h3,h4{break-after:avoid;}
+
+  /* Reliable high-contrast printing even when "Background graphics" is OFF.
+     The screen edition keeps the chapter colors and decorative gradients. */
+  .chapter-tab{
+    background:#fff!important;
+    background-image:none!important;
+    color:#20242C!important;
+    border-top:5pt solid #20242C;
+    border-bottom:1.5pt solid #20242C;
+  }
+  .chapter-tab h1,
+  .chapter-tab .kicker,
+  .chapter-tab .ch-subtitle,
+  .chapter-tab .ch-quote{color:#20242C!important;opacity:1!important;}
+  .chapter-tab .ch-quote{border-left-color:#20242C!important;}
+  .chapter-tab .ch-num-big{color:#20242C!important;opacity:.15!important;}
+  thead th{
+    background:#fff!important;
+    background-image:none!important;
+    color:#20242C!important;
+    border-bottom:2pt solid #20242C!important;
+  }
+  .end-matter > .em-title{
+    background:#fff!important;
+    background-image:none!important;
+    color:#20242C!important;
+    border:1pt solid #20242C;
+  }
+  .toc-num{
+    background:#fff!important;
+    color:#20242C!important;
+    border:1pt solid #20242C;
+  }
 }
 @media screen{
   .chapter{border-bottom:1px solid var(--rule);}

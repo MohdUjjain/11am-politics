@@ -439,7 +439,6 @@
     const label='Ch. '+ch.number+' · '+ch.title;
     status.textContent='Now reading: '+label;
     readingLabel.textContent=label;
-    readingFill.style.backgroundColor=ch.color;
   
   }
   function updateReading(){

@@ -29,7 +29,41 @@
     const snippet=t.slice(start,end);
     return (start?'…':'')+snippet+(end<t.length?'…':'');
   }
-  if(typeof document==='undefined')return Object.freeze({squish,fold,matches,excerpt});
+  // Unicode-aware match offsets so a search for "democracy" can also
+  // highlight a diacritic variant without moving the original text nodes.
+  function matchOffsets(text,query,max=48){
+    const tokens=[...new Set(fold(query).split(' ').filter(Boolean))];
+    if(!tokens.length)return [];
+    let normalized='',starts=[],ends=[];
+    for(let i=0;i<text.length;){
+      const glyph=String.fromCodePoint(text.codePointAt(i));
+      const simple=glyph.normalize('NFKD')
+        .replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase();
+      for(let j=0;j<simple.length;j++){
+        starts.push(i);ends.push(i+glyph.length);
+      }
+      normalized+=simple;
+      i+=glyph.length;
+    }
+    const hits=[];
+    for(const token of tokens){
+      let at=0;
+      while(hits.length<max && (at=normalized.indexOf(token,at))!==-1){
+        hits.push([starts[at],ends[at+token.length-1]]);
+        at+=Math.max(1,token.length);
+      }
+      if(hits.length>=max)break;
+    }
+    hits.sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+    // Remove overlapping ranges: DOM marks must not be nested or malformed.
+    const disjoint=[];
+    for(const hit of hits){
+      if(!disjoint.length||hit[0]>=disjoint[disjoint.length-1][1])
+        disjoint.push(hit);
+    }
+    return disjoint;
+  }
+  if(typeof document==='undefined')return Object.freeze({squish,fold,matches,excerpt,matchOffsets});
 
   const get=id=>document.getElementById(id);
   const input=get('politicsFullSearch');
@@ -39,8 +73,10 @@
   const closeButton=get('politicsSearchClose');
   if(!input||!popup||!results||!meta||!closeButton)return Object.freeze({squish,fold,matches,excerpt});
 
-  let records=null,visible=[],selected=null,debounce=null;
-  const MAX_VISIBLE=65;
+  let records=null,selected=null,debounce=null,searchRevision=0;
+  let matchesForQuery=[],shown=0,previousMarks=[];
+  const PAGE_SIZE=35;
+  const HIGHLIGHT_NAME='politics-search-term';
   function make(tag,className,value){
     const el=document.createElement(tag);
     if(className)el.className=className;
@@ -100,13 +136,68 @@
     return records;
   }
 
+  function cancelPending(){
+    searchRevision++;
+    if(debounce!==null){clearTimeout(debounce);debounce=null;}
+  }
   function show(){
     popup.hidden=false;
     input.setAttribute('aria-expanded','true');
   }
   function hide(){
+    cancelPending();
     popup.hidden=true;
     input.setAttribute('aria-expanded','false');
+  }
+  function clearHighlights(){
+    if(window.CSS?.highlights)CSS.highlights.delete(HIGHLIGHT_NAME);
+    for(const mark of previousMarks){
+      if(!mark.isConnected)continue;
+      const parent=mark.parentNode;
+      while(mark.firstChild)parent.insertBefore(mark.firstChild,mark);
+      mark.remove();
+      parent.normalize();
+    }
+    previousMarks=[];
+    if(selected)selected.classList.remove('p-search-hit');
+    selected=null;
+  }
+  function highlightPassage(element,query){
+    clearHighlights();
+    selected=element;
+    element.classList.add('p-search-hit');
+    const walker=document.createTreeWalker(element,NodeFilter.SHOW_TEXT);
+    const ranges=[],fallback=[];
+    let node;
+    while((node=walker.nextNode())){
+      if(!node.nodeValue?.trim()||node.parentElement?.closest('script,style'))continue;
+      const hits=matchOffsets(node.nodeValue,query);
+      if(!hits.length)continue;
+      for(const [start,end] of hits){
+        const range=document.createRange();
+        range.setStart(node,start);
+        range.setEnd(node,end);
+        ranges.push(range);
+      }
+      fallback.push({node,hits});
+    }
+    if(window.CSS?.highlights && typeof Highlight==='function'){
+      CSS.highlights.set(HIGHLIGHT_NAME,new Highlight(...ranges));
+      return;
+    }
+    // Fallback for browsers without CSS Custom Highlight API. Work backwards
+    // within each text node so splitting doesn't invalidate earlier offsets.
+    for(const {node,hits} of fallback){
+      for(const [start,end] of [...hits].reverse()){
+        node.splitText(end);
+        const middle=node.splitText(start);
+        const mark=document.createElement('mark');
+        mark.className='p-search-term';
+        middle.parentNode.insertBefore(mark,middle);
+        mark.appendChild(middle);
+        previousMarks.push(mark);
+      }
+    }
   }
   function addSnippet(parent,text,query){
     const t=excerpt(text,query);
@@ -121,10 +212,9 @@
     }
   }
   function selectResult(record){
-    hide();
+    hide(); // cancels queued typing callbacks before any navigation
     const el=record.element;
-    if(selected)selected.classList.remove('p-search-hit');
-    selected=el;
+    const query=input.value;
     const revision=el.closest('.end-matter');
     if(revision&&document.body.classList.contains('politics-hide-chapter-summaries')){
       revision.classList.add('politics-explicit-revision');
@@ -136,47 +226,27 @@
     }
     requestAnimationFrame(()=>{
       el.scrollIntoView({block:'center',behavior:'instant'});
-      el.classList.add('p-search-hit');
+      highlightPassage(el,query);
       if(!el.hasAttribute('tabindex'))el.setAttribute('tabindex','-1');
       el.focus({preventScroll:true});
     });
   }
-  function render(){
-    if(document.body.classList.contains('politics-nav-open')){
-      hide();return;
-    }
+  function appendNextPage(){
+    // An incremental results list has no 65-result ceiling. A button provides
+    // deliberate access to the complete corpus in manageable batches.
+    results.querySelector('.p-search-load-more')?.remove();
     const query=squish(input.value);
-    results.replaceChildren();
-    visible=[];
-    if(!query){hide();meta.textContent='Search the complete notes';return;}
-    const all=buildIndex();
-    const matched=[];
-    for(const r of all){
-      if(matches(r.searchText,query))matched.push(r);
-    }
-    matched.sort((a,b)=>{
-      // Prefer phrase hits, but preserve reading order within the same rank.
-      const q=fold(query);
-      const rank=r=>r.searchText.includes(q)?2:1;
-      return rank(b)-rank(a);
-    });
-    visible=matched.slice(0,MAX_VISIBLE);
-    const total=matched.length;
-    meta.textContent=total
-      ?total+' matching passages'+(total>MAX_VISIBLE?' · first '+MAX_VISIBLE+' shown':'')
-      :'No matching passages';
-    if(!total){
-      results.appendChild(make('p','p-search-empty','Try another word or phrase.'));
-    }
-    for(const record of visible){
+    const limit=Math.min(matchesForQuery.length,shown+PAGE_SIZE);
+    const fragment=document.createDocumentFragment();
+    for(let i=shown;i<limit;i++){
+      const record=matchesForQuery[i];
       const button=make('button','p-search-result');
       button.type='button';
       const locationLabel=(record.chapter?'Ch. '+record.chapter+' · ':'')+
         record.chapterTitle;
       button.appendChild(make('span','p-search-result-heading',locationLabel));
-      if(record.sectionTitle!==record.chapterTitle){
+      if(record.sectionTitle!==record.chapterTitle)
         button.appendChild(make('span','p-search-result-section',record.sectionTitle));
-      }
       const preview=make('span','p-search-result-snippet');
       addSnippet(preview,record.text,query);
       button.appendChild(preview);
@@ -192,13 +262,61 @@
           event.preventDefault();hide();input.focus();
         }
       });
-      results.appendChild(button);
+      fragment.appendChild(button);
     }
+    results.appendChild(fragment);
+    shown=limit;
+    if(matchesForQuery.length>shown){
+      const more=make('button','p-search-load-more',
+        'Show more results · '+shown+' of '+matchesForQuery.length);
+      more.type='button';
+      more.addEventListener('click',()=>{
+        const firstNew=shown;
+        appendNextPage();
+        // Focus the first newly revealed result, not an earlier page.
+        results.querySelectorAll('.p-search-result')[firstNew]?.focus();
+      });
+      results.appendChild(more);
+    }
+    meta.textContent=matchesForQuery.length
+      ?'Showing '+shown+' of '+matchesForQuery.length+' matching passages'
+      :'No matching passages';
+  }
+  function render(){
+    if(document.body.classList.contains('politics-nav-open')){
+      hide();return;
+    }
+    const query=squish(input.value);
+    results.replaceChildren();
+    matchesForQuery=[];
+    shown=0;
+    if(!query){hide();meta.textContent='Search the complete notes';return;}
+    for(const record of buildIndex()){
+      if(matches(record.searchText,query))matchesForQuery.push(record);
+    }
+    // Prefer exact phrase hits while keeping the book order for ties.
+    matchesForQuery.sort((a,b)=>{
+      const q=fold(query);
+      return Number(b.searchText.includes(q))-Number(a.searchText.includes(q));
+    });
+    if(!matchesForQuery.length){
+      results.appendChild(make('p','p-search-empty','Try another word or phrase.'));
+    }else{
+      appendNextPage();
+    }
+    meta.textContent=matchesForQuery.length
+      ?'Showing '+shown+' of '+matchesForQuery.length+' matching passages'
+      :'No matching passages';
     show();
   }
   input.addEventListener('input',()=>{
-    if(debounce)clearTimeout(debounce);
-    debounce=setTimeout(render,90);
+    cancelPending();
+    clearHighlights();
+    const revision=searchRevision;
+    debounce=setTimeout(()=>{
+      debounce=null;
+      if(revision===searchRevision)render();
+    },90);
   });
   input.addEventListener('focus',()=>{if(input.value.trim())render();});
   input.addEventListener('keydown',event=>{
@@ -218,10 +336,7 @@
     if(!popup.hidden && !popup.contains(event.target)&&
        !input.contains(event.target))hide();
   });
-  window.addEventListener('politics:drawer-open',()=>{
-    if(debounce)clearTimeout(debounce);
-    hide();
-  });
+  window.addEventListener('politics:drawer-open',hide);
   document.addEventListener('keydown',event=>{
     if(event.key==='/'&&!event.ctrlKey&&!event.metaKey&&!event.altKey&&
       !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)&&
@@ -229,5 +344,5 @@
       event.preventDefault();input.focus();input.select();
     }
   });
-  return Object.freeze({squish,fold,matches,excerpt,buildIndex});
+  return Object.freeze({squish,fold,matches,excerpt,matchOffsets,buildIndex});
 });

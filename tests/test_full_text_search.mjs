@@ -13,6 +13,13 @@ assert.equal(search.matches('Something',''),false);
 assert.ok(search.excerpt('Introduction to the political system of democratic nations','political').includes('political'));
 assert.ok(search.excerpt('a'.repeat(80)+' sovereignty '+'b'.repeat(290),'sovereignty').includes('sovereignty'));
 assert.ok(search.excerpt('Some longer passage','passage').includes('passage'));
+assert.deepEqual(search.matchOffsets('Démocracy and sovereign power','democracy'),[[0,9]],
+  'Accent-insensitive query must locate exact original text positions');
+assert.deepEqual(search.matchOffsets('Power and state power','power'),[[0,5],[16,21]],
+  'Every occurrence of a term in a passage should be highlighted');
+assert.deepEqual(search.matchOffsets('Civil, Political and Social rights','political social'),
+  [[7,16],[21,27]],'Multi-word query must highlight both terms');
+assert.deepEqual(search.matchOffsets('some words',''),[]);
 
 const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
 const nav=readFileSync(new URL('../navigation.js',import.meta.url),'utf8');
@@ -40,6 +47,19 @@ assert.ok(source.includes("document.createTreeWalker(container,NodeFilter.SHOW_T
   'Search must index text nodes, not just headings');
 assert.ok(source.includes("'section.chapter'")||source.includes("'section.chapter')"),
   'Search must index every chapter');
+assert.ok(source.includes('function cancelPending()')&&source.includes('searchRevision'),
+  'Pending searches must be invalidated on closing, selecting and new queries');
+assert.ok(source.includes('const PAGE_SIZE=35')&&source.includes('p-search-load-more')&&
+  source.includes('appendNextPage()'),
+  'All results must be reachable through incremental paging');
+assert.ok(!source.includes('MAX_VISIBLE=65'),'Old hard ceiling must be removed');
+assert.ok(source.includes("CSS.highlights.set(HIGHLIGHT_NAME")&&
+  source.includes("mark.className='p-search-term'"),
+  'Term highlighting must work both with and without the browser API');
+assert.ok(!nav.includes('readingFill.style.backgroundColor=ch.color'),
+  'The book rail must not change with chapter hue');
+assert.ok(css.includes('::highlight(politics-search-term)')&&
+  css.includes('mark.p-search-term'),'Exact term highlighting must be styled');
 assert.ok(source.includes("el.scrollIntoView({block:'center'"),
   'Search click must navigate to the matching passage');
 assert.ok(source.includes("revision.classList.add('politics-explicit-revision')"),

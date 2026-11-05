@@ -42,3 +42,9 @@ jobs:
         run: node tests/test_reading_position.mjs
       - name: Simulate cached reopening and interrupted updates
         run: node tests/test_service_worker.mjs
+      - name: Install headless Chromium browser tests
+        run: |
+          python -m pip install --disable-pip-version-check playwright pypdf
+          python -m playwright install --with-deps chromium
+      - name: Verify search UI and print with backgrounds disabled (Chromium)
+        run: python tests/test_browser_batch_a.py

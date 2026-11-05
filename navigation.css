@@ -106,6 +106,28 @@
     padding:0 2px;font-weight:700;
   }
   .p-search-empty {padding:18px;margin:0;color:var(--ink-soft,#4B5364);}
+  .p-search-load-more {
+    display:block;width:100%;min-height:48px;padding:12px 16px;
+    background:var(--paper,#F7F5EF);color:var(--blue,#1F5F8B);
+    border:0;border-top:1px solid var(--rule,#DCD6C4);
+    font:700 13px/1.4 'Source Sans 3',sans-serif;
+    text-align:center;cursor:pointer;
+  }
+  .p-search-load-more:hover,.p-search-load-more:focus-visible {
+    background:var(--blue-bg,#E9F2FA);
+    outline:2px solid var(--blue,#1F5F8B);outline-offset:-2px;
+  }
+  /* Highlight exact matching words in the original text without removing
+     the book's inline formatting. The <mark> rule is a browser fallback. */
+  ::highlight(politics-search-term){
+    background-color:#F8E3A0;color:#20242C;
+    text-decoration:underline;text-decoration-color:#93650A;
+  }
+  mark.p-search-term{
+    background-color:#F8E3A0;color:#20242C;
+    text-decoration:underline;text-decoration-color:#93650A;
+    border-radius:2px;
+  }
   .chapter .p-search-hit,.legend-page .p-search-hit,.toc-page .p-search-hit {
     outline:3px solid #C18B24;outline-offset:4px;
     border-radius:3px;
@@ -401,4 +423,7 @@
 @media print {
   #politicsReadingHeader,#politicsNavFab,#politicsNavBackdrop,#politicsNavPanel,
   #politicsContinuePrompt {display:none!important;}
+  /* Search fallback marks may remain after the search; never print them. */
+  mark.p-search-term{background:none!important;color:inherit!important;
+    text-decoration:none!important;}
 }
