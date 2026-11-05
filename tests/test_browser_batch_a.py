@@ -38,6 +38,8 @@ def check():
             context.route(re.compile(r"^https://fonts\.(googleapis|gstatic)\.com/"),
                           lambda route: route.abort())
             page = context.new_page()
+            page_errors = []
+            page.on("pageerror", lambda error: page_errors.append(str(error)))
             page.goto(url, wait_until="domcontentloaded")
             page.wait_for_function(
                 "() => document.querySelectorAll('.p-nav-group').length === 6"
@@ -57,6 +59,11 @@ def check():
             # Click a real result, ensure the text itself is highlighted.
             page.locator(".p-search-result").nth(36).click()
             expect(page.locator("#politicsSearchPopover")).to_be_hidden()
+            page.wait_for_function(
+                "() => document.querySelectorAll('.p-search-hit').length === 1",
+                timeout=5000,
+            )
+            assert not page_errors, page_errors
             highlighted = page.evaluate("""() => ({
               full: document.querySelectorAll('.p-search-hit').length,
               text: CSS.highlights?.get('politics-search-term')?.size || 0,
