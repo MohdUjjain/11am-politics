@@ -123,6 +123,39 @@
     cursor:pointer;font:700 11px 'Source Sans 3',sans-serif;
   }
   .p-nav-actions button:hover {border-color:var(--blue,#1F5F8B);background:var(--blue-bg,#E9F2FA);}
+
+  /* Per-device, screen-only choice; authored notes and PDF stay intact. */
+  .p-nav-summary-setting {
+    margin-top:12px;padding:10px 11px;
+    background:#fff;border:1px solid var(--rule,#DCD6C4);
+    border-radius:8px;
+  }
+  .p-nav-summary-option {
+    display:flex;align-items:center;gap:9px;
+    color:var(--ink,#20242C);cursor:pointer;
+    font:700 13px/1.35 'Source Sans 3',system-ui,sans-serif;
+  }
+  #politicsShowSummaries {
+    flex:none;appearance:auto;accent-color:var(--blue,#1F5F8B);
+    width:17px;height:17px;margin:0;cursor:pointer;
+  }
+  #politicsSummariesHint {
+    margin:5px 0 0 26px;color:var(--ink-soft,#4B5364);
+    font:400 11px/1.42 'Source Sans 3',system-ui,sans-serif;
+  }
+  body.politics-hide-chapter-summaries .chapter .end-matter > .em-title[id$="-rev01"],
+  body.politics-hide-chapter-summaries .chapter .end-matter > .em-title[id$="-rev01"] + p {
+    display:none!important;
+  }
+  /* An explicit bookmarked Chapter Summary URL still works without
+     changing the user's saved preference. */
+  body.politics-hide-chapter-summaries .chapter .end-matter > .em-title[id$="-rev01"]:target {
+    display:inline-block!important;
+  }
+  body.politics-hide-chapter-summaries .chapter .end-matter > .em-title[id$="-rev01"]:target + p {
+    display:block!important;
+  }
+
   .p-nav-tree {flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:10px 13px 24px;}
   .p-nav-frontmatter {display:flex;gap:8px;margin:0 0 11px;}
   .p-nav-frontmatter a {

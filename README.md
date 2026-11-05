@@ -66,3 +66,9 @@ The browser saves `chapterId`, `anchorId`, a **fraction of the current section**
 On a subsequent visit to the cover without a direct `#section` URL, a **Continue reading?** card offers **Continue reading** or **Not now**. No automatic scroll jump is performed. The drawer's **Continue** button offers the same explicit action. A direct bookmarked section URL still opens that section normally.
 
 Local storage may be lost if the device or browser clears site data, evicts browser storage, or launches in a private browsing session. Position restoration is approximate after typography changes or major content edits; the chapter and section identities remain the primary anchors.
+
+## Reader option: Show Chapter Summaries
+
+The sidebar now includes **Show Chapter Summaries** (checked by default). Unchecking it hides the short **Chapter Summary** heading and paragraph at the beginning of each chapter's end-matter, in all 20 chapters. The **One-Page Revision Sheet, Key Definitions, Memory Aids, Examination Questions**, and the additional Chapter 7 contribution table remain visible.
+
+The preference is stored in `localStorage` using `11am-politics:show-chapter-summaries-v1` and survives site reopening, installed-app relaunching, and cached-edition updates while the browser retains the site's data. On-screen contents search excludes hidden summary shortcuts, and scroll-tracking ignores those hidden headings. A direct bookmark to a summary (`#ch01-rev01`, etc.) still reveals that one target without changing the stored preference. The setting affects the **screen reading view only**: printing or PDF export retains the complete original chapters and summaries.

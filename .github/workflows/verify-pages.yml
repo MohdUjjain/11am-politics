@@ -29,9 +29,12 @@ jobs:
       - name: Parse standalone navigation and offline JavaScript
         run: |
           node --check reading-position.js
+          node --check summary-visibility.js
           node --check navigation.js
           node --check offline.js
           node --check service-worker.js
+      - name: Test summary visibility preference, deep links and printing
+        run: node tests/test_summary_visibility.mjs
       - name: Test durable reading checkpoints and edition migration
         run: node tests/test_reading_position.mjs
       - name: Simulate cached reopening and interrupted updates

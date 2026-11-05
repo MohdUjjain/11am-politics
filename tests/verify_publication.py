@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 URL = 'https://mohdujjain.github.io/11am-politics/'
 ASSETS = [
     'index.html','manifest.webmanifest','offline.js',
-    'reading-position.js','navigation.js','navigation.css',
+    'reading-position.js','summary-visibility.js','navigation.js','navigation.css',
     'icons/icon-192.png','icons/icon-512.png',
     'favicon-16.png','favicon-32.png',
     'og-image.png','404.html','sitemap.xml',
@@ -73,6 +73,14 @@ def main():
     assert 'politicsChapterProgress' in doc.ids and 'politicsChapterPercent' in doc.ids
     assert 'politicsContinuePrompt' in doc.ids and 'politicsContinueButton' in doc.ids
     assert 'politicsContinueDismiss' in doc.ids and 'politicsContinueDescription' in doc.ids
+    assert 'politicsShowSummaries' in doc.ids
+    assert 'src="./summary-visibility.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
+    assert "summaryToggle.addEventListener('change'" in nav
+    assert "summaryVisibility.read(localStorage)" in nav
+    assert "summaryVisibility.write(localStorage,showSummaries)" in nav
+    assert 'politics-hide-chapter-summaries' in nav_style
+    assert '.em-title[id$="-rev01"]:target + p' in nav_style
+    assert len(re.findall(r'<div class="em-title" id="ch\d{2}-rev01">📋 Chapter Summary</div>\s*<p>', (ROOT/'index.html').read_text(encoding='utf-8'))) == 20
     assert 'role="progressbar"' in (ROOT/'index.html').read_text(encoding='utf-8')
     assert 'src="./reading-position.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
     assert (ROOT/'navigation.js').read_text(encoding='utf-8').find('window.PoliticsReadingPosition')>0

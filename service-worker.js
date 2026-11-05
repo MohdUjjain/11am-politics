@@ -3,11 +3,11 @@
  * Browser storage can still be evicted by the browser or OS.
  */
 const CACHE_PREFIX = '11am-politics-reader-';
-const BOOK_CACHE = CACHE_PREFIX + '3b0bfc445709';
+const BOOK_CACHE = CACHE_PREFIX + 'd1589ed50f93';
 const FONT_CACHE = '11am-politics-google-fonts-v1';
 const SHELL = [
   './index.html', './manifest.webmanifest', './offline.js',
-  './reading-position.js', './navigation.js', './navigation.css',
+  './reading-position.js', './summary-visibility.js', './navigation.js', './navigation.css',
   './icons/icon-192.png', './icons/icon-512.png',
   './favicon-16.png', './favicon-32.png',
   './og-image.png', './404.html', './sitemap.xml'

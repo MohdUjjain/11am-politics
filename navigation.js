@@ -3,7 +3,11 @@
 (function(){
   'use strict';
   const position=window.PoliticsReadingPosition;
-  if(!position){console.warn('Reading-position helper unavailable');return;}
+  const summaryVisibility=window.PoliticsSummaryVisibility;
+  if(!position||!summaryVisibility){
+    console.warn('Reading settings helper unavailable');
+    return;
+  }
   const get=id=>document.getElementById(id);
   const panel=get('politicsNavPanel');
   const trigger=get('politicsNavFab');
@@ -11,6 +15,7 @@
   const closeButton=get('politicsNavClose');
   const tree=get('politicsNavTree');
   const input=get('politicsNavSearch');
+  const summaryToggle=get('politicsShowSummaries');
   const status=get('politicsNavStatus');
   const results=get('politicsNavResults');
   const resume=get('politicsNavResume');
@@ -22,7 +27,7 @@
   const continueDescription=get('politicsContinueDescription');
   const continueButton=get('politicsContinueButton');
   const continueDismiss=get('politicsContinueDismiss');
-  if(!panel||!trigger||!tree||!input)return;
+  if(!panel||!trigger||!tree||!input||!summaryToggle)return;
 
   const groups=[];
   const chapters=[];
@@ -39,6 +44,7 @@
   let lastWriteFraction=-1;
   let suspendCapture=false;
   let resumePromptDismissed=false;
+  let showSummaries=summaryVisibility.read(localStorage);
 
   function create(tag,className,text){
     const e=document.createElement(tag);
@@ -189,7 +195,13 @@
         );
         let subMatches=0;
         ch.children.querySelectorAll('a.p-nav-entry').forEach(a=>{
-          const matched=!searching||chapterMatch||fold(a.textContent).includes(q);
+          // Hide only the Chapter Summary shortcut; other revision links stay.
+          // A direct #rev01 URL may still reveal its explicit target.
+          const hiddenSummary=!showSummaries&&
+            summaryVisibility.isSummaryAnchor(a.dataset.targetId)&&
+            location.hash!=='#'+a.dataset.targetId;
+          const matched=!hiddenSummary&&
+            (!searching||chapterMatch||fold(a.textContent).includes(q));
           a.hidden=!matched;
           if(searching&&matched&&!chapterMatch)subMatches++;
         });
@@ -211,6 +223,15 @@
     clearSearch();
     groups.forEach(g=>openGroup(g,open,true));
     chapters.forEach(ch=>openChapter(ch,open,true));
+  }
+  function applySummaryView(show,remember){
+    showSummaries=!!show;
+    summaryToggle.checked=showSummaries;
+    document.body.classList.toggle('politics-hide-chapter-summaries',!showSummaries);
+    if(remember)summaryVisibility.write(localStorage,showSummaries);
+    filter();
+    refreshResume();
+    requestUpdate();
   }
 
   function focusables(){
@@ -264,7 +285,11 @@
     const chapter=chapters.find(c=>c.id===data.chapterId);
     if(!chapter)return null;
     // An updated edition may have moved or removed individual headings.
-    const anchor=byTarget.has(data.anchorId)?data.anchorId:chapter.id;
+    const hiddenSummary=!showSummaries&&
+      summaryVisibility.isSummaryAnchor(data.anchorId)&&
+      location.hash!=='#'+data.anchorId;
+    const anchor=byTarget.has(data.anchorId)&&!hiddenSummary
+      ?data.anchorId:chapter.id;
     return {...data,chapter,anchorId:anchor};
   }
   function savedDescription(saved){
@@ -298,7 +323,9 @@
     const chapterStart=topOf(ch.section);
     const following=chapters[Number(ch.number)]?.section;
     const chapterEnd=following?topOf(following):topOf(ch.section)+ch.section.offsetHeight;
-    const headingList=[ch.section,...ch.sections,...ch.revisions];
+    // Elements hidden on screen must not be used as position boundaries.
+    const headingList=[ch.section,...ch.sections,...ch.revisions]
+      .filter(el=>el.getClientRects().length>0);
     const anchor=headingList.find(el=>el.id===anchorId)||ch.section;
     const index=headingList.indexOf(anchor);
     const next=headingList[index+1];
@@ -429,6 +456,8 @@
     }
     let id=ch.id;
     for(const heading of [...ch.sections,...ch.revisions]){
+      // Summary headings hidden by the reader's preference have no geometry.
+      if(!heading.getClientRects().length)continue;
       if(heading.getBoundingClientRect().top<=line)id=heading.id;
       else break;
     }
@@ -446,13 +475,18 @@
     requestAnimationFrame(()=>target.focus({preventScroll:true}));
   }
 
-  collect();build();filter();refreshResume();
+  collect();build();applySummaryView(showSummaries,false);
   trigger.addEventListener('click',open);
   closeButton.addEventListener('click',()=>close(true));
   backdrop.addEventListener('click',()=>close(true));
   get('politicsNavExpandAll').addEventListener('click',()=>expandAll(true));
   get('politicsNavCollapseAll').addEventListener('click',()=>expandAll(false));
   input.addEventListener('input',filter);
+  summaryToggle.addEventListener('change',()=>{
+    // Save the current reading checkpoint before removing summary content.
+    persistReading(true);
+    applySummaryView(summaryToggle.checked,true);
+  });
   tree.addEventListener('click',e=>{
     const link=e.target.closest('a[href^="#"]');
     if(!link)return;
@@ -475,7 +509,11 @@
   });
   window.addEventListener('scroll',requestUpdate,{passive:true});
   window.addEventListener('resize',requestUpdate);
-  window.addEventListener('hashchange',requestUpdate);
+  window.addEventListener('hashchange',()=>{
+    // A deliberate direct link to a hidden summary stays accessible via :target.
+    filter();
+    requestUpdate();
+  });
   window.addEventListener('load',requestUpdate);
   requestUpdate();
 })();

@@ -428,6 +428,13 @@ th,td{padding:7px 9px}
       <button type="button" id="politicsNavExpandAll">Expand all</button>
       <button type="button" id="politicsNavCollapseAll">Collapse all</button>
     </div>
+    <div class="p-nav-summary-setting">
+      <label for="politicsShowSummaries" class="p-nav-summary-option">
+        <input type="checkbox" id="politicsShowSummaries" checked>
+        <span>Show Chapter Summaries</span>
+      </label>
+      <p id="politicsSummariesHint">Hide or show the short summary at the end of each chapter. Revision sheets, definitions, memory aids and exam questions stay visible. This choice is saved on this device; printing is unchanged.</p>
+    </div>
   </div>
   <nav id="politicsNavTree" class="p-nav-tree" aria-label="Chapter, section and revision contents"></nav>
   <div class="p-nav-footer">
@@ -4216,6 +4223,7 @@ th,td{padding:7px 9px}
 </aside>
 <script src="./offline.js" defer></script>
 <script src="./reading-position.js" defer></script>
+<script src="./summary-visibility.js" defer></script>
 <script src="./navigation.js" defer></script>
 </body>
 </html>
