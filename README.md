@@ -51,7 +51,7 @@ After Pages is enabled, visit the site online and wait for **Available offline**
 
 ## Collapsible reading navigation
 
-A floating **Contents** button opens a screen-only, accessible sidebar. Its six subject groups, 20 chapter rows, 140 in-chapter section links and 101 revision shortcuts are derived directly from the book. The final **Closing Note** has its own destination. Use the independent chevrons to expand chapters, the search field to find headings, and the progress bar to locate the current chapter. **Resume reading** saves only the most recent section ID in local browser storage; there is no account, tracking or server sync.
+A floating **Contents** button opens a two-tab, accessible sidebar. **Index** holds the six subject groups, 20 chapter rows, 140 section links and 101 revision shortcuts, with expand/collapse controls. **Tools** holds the saved end-of-chapter visibility switch and a **Print / Save as PDF** action. The shared **Continue Reading** button is available from either tab. The cover and printed-contents shortcuts have been removed. The final **Closing Note** retains its index destination. **Resume reading** saves only the most recent section ID in local browser storage; there is no account, tracking or server sync.
 
 Section links follow the stable `#ch01-sec01` convention, and revision links use `#ch01-rev01`. The original chapter URLs `#ch01`–`#ch20` still work. Changes to the notes must preserve these IDs, or update relevant anchors deliberately.
 
@@ -74,3 +74,9 @@ The existing sidebar checkbox now controls **all end-of-chapter study material**
 The contents drawer also hides all revision shortcuts and their "Revision & Recall" label while the setting is off. Re-check the box to show them again. The switch is persisted in `localStorage` under `11am-politics:show-end-of-chapter-material-v2`, and an existing `show-chapter-summaries-v1` preference is migrated. It survives installed app relaunching and updates so long as browser site data remains.
 
 Deep links to a specific `#chXX-revYY` destination temporarily show that chapter's revision material even if the general setting is off. Clicking the checkbox to hide again immediately restores the hidden view. The preference is **screen-only**; printing/PDF export always includes the full notes. The original book content and revision headings are unchanged.
+
+## Full-text header search and simplified sidebar (current)
+
+The sticky parchment header now contains a **Search all notes** field. Search reads **the actual book text** from all 20 chapters, including body paragraphs, lists, tables, definitions, callouts, subheadings, and end-of-chapter study material (even when hidden from normal reading). No external service or network connection is used, and the search JavaScript is included in the offline PWA cache. The result list shows a chapter, contextual heading, and excerpt for each matching passage (up to 65 visible at once). Clicking a result jumps directly to the matching passage and outlines it; if the result is inside hidden revision material, that chapter's revision section is temporarily revealed without changing the saved preference. Press **/** outside a text field to focus search, use **↓** to move through results, **Enter** to open, and **Esc** to dismiss.
+
+The sidebar now has an **Index** tab (chapter tree, expand/collapse controls) and a **Tools** tab (show/hide end-of-chapter material and browser Print / Save as PDF). The **Continue Reading** control remains in the shared footer, so it works on both tabs. Tab buttons support arrow-key switching. The redundant **Cover** and **Printed contents** sidebar links are removed; the original book pages themselves are untouched. The old sidebar title-only search was removed.

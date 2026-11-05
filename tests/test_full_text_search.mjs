@@ -1,0 +1,60 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {readFileSync} from 'node:fs';
+const require=createRequire(import.meta.url);
+const search=require('../search.js');
+
+assert.equal(search.fold('  DÉMOCRACY   AND  POWER  '),'democracy and power');
+assert.equal(search.matches('The sovereignty of the state','sovereignty'),true);
+assert.equal(search.matches('The constitutional separation of powers','separation powers'),true);
+assert.equal(search.matches('Green politics and cosmopolitan ideas','green cosmopolitan'),true);
+assert.equal(search.matches('Sovereignty alone','sovereignty democracy'),false);
+assert.equal(search.matches('Something',''),false);
+assert.ok(search.excerpt('Introduction to the political system of democratic nations','political').includes('political'));
+assert.ok(search.excerpt('a'.repeat(80)+' sovereignty '+'b'.repeat(290),'sovereignty').includes('sovereignty'));
+assert.ok(search.excerpt('Some longer passage','passage').includes('passage'));
+
+const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
+const nav=readFileSync(new URL('../navigation.js',import.meta.url),'utf8');
+const css=readFileSync(new URL('../navigation.css',import.meta.url),'utf8');
+const source=readFileSync(new URL('../search.js',import.meta.url),'utf8');
+assert.match(html,/id="politicsFullSearch"/);
+assert.match(html,/id="politicsSearchPopover"/);
+assert.match(html,/id="politicsSearchResults"/);
+assert.match(html,/role="search"/);
+assert.match(html,/id="politicsTabIndex" role="tab" aria-selected="true"/);
+assert.match(html,/id="politicsTabTools" role="tab" aria-selected="false"/);
+assert.match(html,/id="politicsPanelIndex" class="p-nav-tabpanel" role="tabpanel"/);
+assert.match(html,/id="politicsPanelTools" class="p-nav-tabpanel p-nav-toolspanel" role="tabpanel"/);
+assert.match(html,/id="politicsNavPrint"/);
+assert.ok(!html.includes('id="politicsNavSearch"'),'Sidebar search removed');
+assert.ok(!nav.includes("makeLink('book-cover'"),'Cover shortcut removed');
+assert.ok(!nav.includes("makeLink('book-contents'"),'Printed Contents shortcut removed');
+assert.ok(!nav.includes('politicsNavSearch'),'No stale sidebar search handlers');
+assert.ok(nav.includes('window.print()'),'Print action opens browser print dialogue');
+assert.ok(nav.includes("switchTab('tools'"),'Tools tab usable');
+assert.ok(nav.includes("switchTab('index'"),'Index tab usable');
+assert.ok(nav.includes("resume.addEventListener('click',continueReading)"),
+  'Continue Reading remains accessible from both tabs');
+assert.ok(source.includes("document.createTreeWalker(container,NodeFilter.SHOW_TEXT)"),
+  'Search must index text nodes, not just headings');
+assert.ok(source.includes("'section.chapter'")||source.includes("'section.chapter')"),
+  'Search must index every chapter');
+assert.ok(source.includes("el.scrollIntoView({block:'center'"),
+  'Search click must navigate to the matching passage');
+assert.ok(source.includes("revision.classList.add('politics-explicit-revision')"),
+  'Search must open hidden review material when matched');
+assert.ok(css.includes('.p-search-popover')&&css.includes('.p-search-result-snippet'),
+  'Sticky-header results UI styled');
+assert.ok(css.includes('.p-nav-tabs')&&css.includes('.p-nav-tabpanel[hidden]'),
+  'Tabbed sidebar styled');
+assert.ok(css.includes('#politicsFullSearch'),'Sticky header search styling present');
+assert.ok(css.includes('@media print'),'Print remains separate from screen controls');
+assert.ok(html.indexOf('src="./navigation.js"')<html.indexOf('src="./search.js"'),
+  'Header search loads after chapter navigation');
+// The actual academic book remains intact and should be searchable text.
+assert.equal((html.match(/<section class="chapter" id="ch[0-9]{2}"/g)||[]).length,20);
+assert.equal((html.match(/<div class="end-matter">/g)||[]).length,20);
+assert.equal((html.match(/id="ch[0-9]{2}-sec[0-9]{2}"/g)||[]).length,140);
+assert.equal((html.match(/id="ch[0-9]{2}-rev[0-9]{2}"/g)||[]).length,101);
+console.log('PASS: full-text matching, header search, sidebar tabs, printing and deep passage navigation');

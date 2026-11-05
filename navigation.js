@@ -14,7 +14,11 @@
   const backdrop=get('politicsNavBackdrop');
   const closeButton=get('politicsNavClose');
   const tree=get('politicsNavTree');
-  const input=get('politicsNavSearch');
+  const tabIndex=get('politicsTabIndex');
+  const tabTools=get('politicsTabTools');
+  const indexPanel=get('politicsPanelIndex');
+  const toolsPanel=get('politicsPanelTools');
+  const printButton=get('politicsNavPrint');
   const summaryToggle=get('politicsShowSummaries');
   const status=get('politicsNavStatus');
   const results=get('politicsNavResults');
@@ -27,7 +31,7 @@
   const continueDescription=get('politicsContinueDescription');
   const continueButton=get('politicsContinueButton');
   const continueDismiss=get('politicsContinueDismiss');
-  if(!panel||!trigger||!tree||!input||!summaryToggle)return;
+  if(!panel||!trigger||!tree||!summaryToggle||!tabIndex||!tabTools)return;
 
   const groups=[];
   const chapters=[];
@@ -96,11 +100,6 @@
   }
 
   function build(){
-    const intro=create('div','p-nav-frontmatter');
-    intro.appendChild(makeLink('book-cover','Cover','p-nav-cover'));
-    intro.appendChild(makeLink('book-contents','Printed contents','p-nav-printed'));
-    tree.appendChild(intro);
-
     chapters.forEach(ch=>{
       let g=groups.find(x=>x.name===ch.group);
       if(!g){
@@ -119,7 +118,6 @@
         g={name:ch.group,element:outer,button:heading,children,chapters:[],manualOpen:false};
         groups.push(g);
         heading.addEventListener('click',()=>{
-          if(input.value.trim())clearSearch();
           openGroup(g,!g.element.classList.contains('expanded'),true);
         });
         tree.appendChild(outer);
@@ -162,7 +160,6 @@
       }
       g.children.appendChild(outer);
       toggle.addEventListener('click',()=>{
-        if(input.value.trim())clearSearch();
         const willOpen=!ch.element.classList.contains('expanded');
         if(willOpen)chapters.forEach(other=>{if(other!==ch)openChapter(other,false,true);});
         openChapter(ch,willOpen,true);
@@ -179,53 +176,45 @@
     tree.appendChild(finalLinks);
   }
 
-  function clearSearch(){
-    input.value='';
-    filter();
-  }
   function filter(){
-    const q=fold(input.value), searching=!!q;
-    let shown=0;
     groups.forEach(g=>{
-      const groupMatch=searching && fold(g.name).includes(q);
-      let groupCount=0;
+      g.element.hidden=false;
       g.chapters.forEach(ch=>{
-        const chapterMatch=searching && (
-          groupMatch||fold(ch.number+' '+ch.title+' chapter '+Number(ch.number)).includes(q)
-        );
-        let subMatches=0;
+        ch.element.hidden=false;
         const linkedRevision=!!ch.section.querySelector('.end-matter.politics-explicit-revision');
         const hideRevision=!showSummaries&&!linkedRevision;
         const revisionLabel=ch.children.querySelector('.p-nav-revision-label');
         if(revisionLabel)revisionLabel.hidden=hideRevision;
         ch.children.querySelectorAll('a.p-nav-entry').forEach(a=>{
-          // The same switch controls all revision shortcuts, not chapter sections.
-          const hiddenRevision=hideRevision&&
-            summaryVisibility.isRevisionAnchor(a.dataset.targetId);
-          const matched=!hiddenRevision&&
-            (!searching||chapterMatch||fold(a.textContent).includes(q));
-          a.hidden=!matched;
-          if(searching&&matched&&!chapterMatch)subMatches++;
+          a.hidden=hideRevision&&summaryVisibility.isRevisionAnchor(a.dataset.targetId);
         });
-        const visible=!searching||chapterMatch||subMatches>0;
-        ch.element.hidden=!visible;
-        if(visible){groupCount++;shown++;}
-        if(searching)openChapter(ch,visible,false);
-        else openChapter(ch,ch.manualOpen,false);
       });
-      g.element.hidden=searching&&groupCount===0;
-      if(searching)openGroup(g,groupCount>0,false);
-      else openGroup(g,g.manualOpen,false);
     });
-    results.textContent=searching
-      ? shown+' of '+chapters.length+' chapters match'
-      : chapters.length+' chapters · Search titles, sections and revision';
   }
   function expandAll(open){
-    clearSearch();
     groups.forEach(g=>openGroup(g,open,true));
     chapters.forEach(ch=>openChapter(ch,open,true));
   }
+  function switchTab(which,focus){
+    const index=which!=='tools';
+    tabIndex.setAttribute('aria-selected',String(index));
+    tabTools.setAttribute('aria-selected',String(!index));
+    tabIndex.tabIndex=index?0:-1;
+    tabTools.tabIndex=index?-1:0;
+    indexPanel.hidden=!index;
+    toolsPanel.hidden=index;
+    if(focus)(index?tabIndex:tabTools).focus();
+  }
+  function onTabKeys(e){
+    const keys=['ArrowLeft','ArrowRight','Home','End'];
+    if(!keys.includes(e.key))return;
+    e.preventDefault();
+    const onIndex=tabIndex.getAttribute('aria-selected')==='true';
+    const next=e.key==='Home'?'index':e.key==='End'?'tools':
+      onIndex?'tools':'index';
+    switchTab(next,true);
+  }
+
   function syncLinkedRevision(){
     document.querySelectorAll('.end-matter.politics-explicit-revision')
       .forEach(el=>el.classList.remove('politics-explicit-revision'));
@@ -282,6 +271,7 @@
     trigger.classList.add('is-hidden');
     trigger.setAttribute('aria-expanded','true');
     document.body.classList.add('politics-nav-open');
+    window.dispatchEvent(new Event('politics:drawer-open'));
     closeButton.focus();
     document.addEventListener('keydown',onKeys);
   }
@@ -494,13 +484,20 @@
     requestAnimationFrame(()=>target.focus({preventScroll:true}));
   }
 
-  collect();build();applySummaryView(showSummaries,false);
+  collect();build();applySummaryView(showSummaries,false);switchTab('index',false);
   trigger.addEventListener('click',open);
   closeButton.addEventListener('click',()=>close(true));
   backdrop.addEventListener('click',()=>close(true));
   get('politicsNavExpandAll').addEventListener('click',()=>expandAll(true));
   get('politicsNavCollapseAll').addEventListener('click',()=>expandAll(false));
-  input.addEventListener('input',filter);
+  tabIndex.addEventListener('click',()=>switchTab('index',false));
+  tabTools.addEventListener('click',()=>switchTab('tools',false));
+  tabIndex.addEventListener('keydown',onTabKeys);
+  tabTools.addEventListener('keydown',onTabKeys);
+  printButton.addEventListener('click',()=>{
+    close(false);
+    requestAnimationFrame(()=>window.print());
+  });
   summaryToggle.addEventListener('change',()=>{
     // Save the current reading checkpoint before removing summary content.
     persistReading(true);

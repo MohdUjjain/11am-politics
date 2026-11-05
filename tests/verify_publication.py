@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 URL = 'https://mohdujjain.github.io/11am-politics/'
 ASSETS = [
     'index.html','manifest.webmanifest','offline.js',
-    'reading-position.js','summary-visibility.js','navigation.js','navigation.css',
+    'reading-position.js','summary-visibility.js','navigation.js','search.js','navigation.css',
     'icons/icon-192.png','icons/icon-512.png',
     'favicon-16.png','favicon-32.png',
     'og-image.png','404.html','sitemap.xml',
@@ -62,7 +62,20 @@ def main():
         assert f'ch{num:02}-rev01' in doc.ids
     nav=(ROOT/'navigation.js').read_text(encoding='utf-8')
     nav_style=(ROOT/'navigation.css').read_text(encoding='utf-8')
-    assert 'politicsNavTree' in nav and 'politicsNavSearch' in nav
+    assert 'politicsNavTree' in nav and 'politicsNavSearch' not in nav
+    search=(ROOT/'search.js').read_text(encoding='utf-8')
+    assert 'createTreeWalker' in search and 'SHOW_TEXT' in search
+    assert 'scrollIntoView' in search and 'politicsFullSearch' in search
+    assert 'politicsFullSearch' in doc.ids and 'politicsSearchPopover' in doc.ids
+    assert 'politicsSearchResults' in doc.ids
+    assert 'politicsNavSearch' not in doc.ids
+    assert 'politicsTabIndex' in doc.ids and 'politicsTabTools' in doc.ids
+    assert 'politicsPanelIndex' in doc.ids and 'politicsPanelTools' in doc.ids
+    assert 'politicsNavPrint' in doc.ids and 'window.print()' in nav
+    assert 'switchTab' in nav and 'onTabKeys' in nav
+    assert "makeLink('book-cover'" not in nav
+    assert "makeLink('book-contents'" not in nav
+    assert 'src="./search.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
     assert 'politicsNavResume' in nav and 'politicsNavFab' in nav
     assert 'aria-expanded' in nav and 'aria-current' in nav
     assert 'inert' in nav and 'Escape' in nav

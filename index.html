@@ -398,6 +398,12 @@ th,td{padding:7px 9px}
 <header id="politicsReadingHeader" aria-label="Reading progress">
   <div class="p-reading-row">
     <strong class="p-reading-brand">11AM · POLITICS</strong>
+    <div class="p-top-search" role="search">
+      <label class="p-visually-hidden" for="politicsFullSearch">Search all Politics notes</label>
+      <span class="p-top-search-icon" aria-hidden="true">⌕</span>
+      <input id="politicsFullSearch" type="search" placeholder="Search all notes…" autocomplete="off"
+             aria-controls="politicsSearchResults" aria-expanded="false">
+    </div>
     <span id="politicsReadingLabel">Complete Study Guide</span>
     <div class="p-chapter-indicator">
       <span class="p-chapter-indicator-label">CHAPTER</span>
@@ -407,6 +413,13 @@ th,td{padding:7px 9px}
         <span class="p-chapter-ring-center" id="politicsChapterPercent">—</span>
       </div>
     </div>
+  </div>
+  <div id="politicsSearchPopover" class="p-search-popover" role="region" aria-label="Search results" hidden>
+    <div class="p-search-toolbar">
+      <span id="politicsSearchMeta" role="status" aria-live="polite">Search chapters, definitions, examples and exam material</span>
+      <button id="politicsSearchClose" type="button" aria-label="Close search results">×</button>
+    </div>
+    <div id="politicsSearchResults" class="p-search-results"></div>
   </div>
   <div class="p-reading-track"><div id="politicsReadingFill" role="progressbar" aria-label="Progress through the study guide" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>
 </header>
@@ -420,23 +433,35 @@ th,td{padding:7px 9px}
     </div>
     <button type="button" id="politicsNavClose" aria-label="Close contents">×</button>
   </div>
-  <div class="p-nav-tools">
-    <label class="p-nav-search-label" for="politicsNavSearch">Find a chapter or section</label>
-    <input type="search" id="politicsNavSearch" placeholder="Title, topic, number, revision…" autocomplete="off" aria-describedby="politicsNavResults">
-    <p id="politicsNavResults" role="status" aria-live="polite"></p>
+  <div class="p-nav-tabs" role="tablist" aria-label="Contents navigation">
+    <button type="button" id="politicsTabIndex" role="tab" aria-selected="true"
+            aria-controls="politicsPanelIndex" tabindex="0">Index</button>
+    <button type="button" id="politicsTabTools" role="tab" aria-selected="false"
+            aria-controls="politicsPanelTools" tabindex="-1">Tools</button>
+  </div>
+  <div id="politicsPanelIndex" class="p-nav-tabpanel" role="tabpanel"
+       aria-labelledby="politicsTabIndex">
     <div class="p-nav-actions">
       <button type="button" id="politicsNavExpandAll">Expand all</button>
       <button type="button" id="politicsNavCollapseAll">Collapse all</button>
     </div>
+    <nav id="politicsNavTree" class="p-nav-tree"
+         aria-label="Chapter, section and revision contents"></nav>
+  </div>
+  <div id="politicsPanelTools" class="p-nav-tabpanel p-nav-toolspanel" role="tabpanel"
+       aria-labelledby="politicsTabTools" hidden>
+    <div class="p-nav-tools-heading">Reading preferences</div>
     <div class="p-nav-summary-setting">
       <label for="politicsShowSummaries" class="p-nav-summary-option">
         <input type="checkbox" id="politicsShowSummaries" checked>
         <span>Show End-of-Chapter Study Material</span>
       </label>
-      <p id="politicsSummariesHint">One switch for the entire final section of every chapter: summary, revision sheet, definitions, memory aids, exam questions and any additional revision tables. This choice is saved on this device. Printing always includes everything.</p>
+      <p id="politicsSummariesHint">Show or hide every chapter’s summary, revision sheets, definitions, memory aids and examination questions. This choice is saved on this device.</p>
     </div>
+    <div class="p-nav-tools-heading">Export this book</div>
+    <button id="politicsNavPrint" type="button" class="p-nav-print">Print / Save as PDF</button>
+    <p class="p-nav-tool-note">Print keeps all chapters and revision material, even if you hide it while reading on screen.</p>
   </div>
-  <nav id="politicsNavTree" class="p-nav-tree" aria-label="Chapter, section and revision contents"></nav>
   <div class="p-nav-footer">
     <button type="button" id="politicsNavResume" hidden>Resume reading</button>
     <p>Choose a chapter title to jump, or expand its sections and revision shortcuts.</p>
@@ -4225,5 +4250,6 @@ th,td{padding:7px 9px}
 <script src="./reading-position.js" defer></script>
 <script src="./summary-visibility.js" defer></script>
 <script src="./navigation.js" defer></script>
+<script src="./search.js" defer></script>
 </body>
 </html>
