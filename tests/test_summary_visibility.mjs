@@ -66,7 +66,7 @@ assert.ok(css.indexOf('body.politics-hide-chapter-summaries')<css.indexOf('@medi
 assert.ok(nav.includes('summaryVisibility.isRevisionAnchor'));
 assert.ok(nav.includes("revisionLabel.hidden=hideRevision"),
   'The revision label must also vanish from the sidebar');
-assert.ok(nav.includes('const hiddenRevision=hideRevision&&'),
+assert.ok(nav.includes('a.hidden=hideRevision&&'),
   'All revision links must be hidden from the sidebar when requested');
 assert.ok(nav.includes('if(!heading.getClientRects().length)continue'),
   'Scroll position tracking skips hidden headings');
