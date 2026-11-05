@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {readFileSync} from 'node:fs';
 const require=createRequire(import.meta.url);
-const visibility=require('../study-material-visibility.js');
+const visibility=require('../../assets/js/study-material-visibility.js');
 
 function storage(){
   const map=new Map();
@@ -27,8 +27,8 @@ assert.equal(visibility.isRevisionAnchor('ch21-rev01'),false);
 
 assert.equal(visibility.write(s,false),true);
 assert.equal(visibility.read(s),false,'Hide preference saved');
-delete require.cache[require.resolve('../study-material-visibility.js')];
-const next=require('../study-material-visibility.js');
+delete require.cache[require.resolve('../../assets/js/study-material-visibility.js')];
+const next=require('../../assets/js/study-material-visibility.js');
 assert.equal(next.read(s),false,'Hide preference survives a restart');
 assert.equal(next.write(s,true),true);
 assert.equal(next.read(s),true,'User can re-enable end-matter');
@@ -47,9 +47,9 @@ assert.equal(next.write({setItem:()=>{throw Error('blocked')}},false),false);
 
 // Source remains fully present: only a single CSS display rule hides each
 // entire end-matter container on screens; printing is unaffected.
-const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
-const css=readFileSync(new URL('../navigation.css',import.meta.url),'utf8');
-const nav=readFileSync(new URL('../navigation.js',import.meta.url),'utf8');
+const html=readFileSync(new URL('../../index.html',import.meta.url),'utf8');
+const css=readFileSync(new URL('../../assets/css/navigation.css',import.meta.url),'utf8');
+const nav=readFileSync(new URL('../../assets/js/navigation.js',import.meta.url),'utf8');
 assert.equal((html.match(/<div class="end-matter">/g)||[]).length,20,
   'Every chapter retains its original study-material container');
 assert.equal((html.match(/<div class="em-title" id="ch[0-9]{2}-rev[0-9]{2}">/g)||[]).length,101,
@@ -73,6 +73,6 @@ assert.ok(nav.includes('if(!heading.getClientRects().length)continue'),
 assert.ok(nav.includes('syncLinkedRevision()'),
   'Direct revision links remain possible without altering the saved choice');
 assert.ok(nav.includes('studyMaterialVisibility.write(localStorage,showStudyMaterial)'));
-assert.ok(html.indexOf('src="./study-material-visibility.js"')<
-  html.indexOf('src="./navigation.js"'));
+assert.ok(html.indexOf('src="./assets/js/study-material-visibility.js"')<
+  html.indexOf('src="./assets/js/navigation.js"'));
 console.log('PASS: hide all 20 end-matter sections, migration, shortcuts, direct links and print');

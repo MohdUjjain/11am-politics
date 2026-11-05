@@ -7,10 +7,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = (
-    'index.html', 'manifest.webmanifest', 'offline.js',
-    'reading-position.js', 'study-material-visibility.js', 'navigation.js', 'search.js', 'navigation.css',
-    'icons/icon-192.png', 'icons/icon-512.png',
-    'favicon-16.png', 'favicon-32.png', 'og-image.png',
+    'index.html', 'manifest.webmanifest', 'assets/js/offline.js',
+    'assets/js/reading-position.js', 'assets/js/study-material-visibility.js', 'assets/js/navigation.js', 'assets/js/search.js', 'assets/css/navigation.css',
+    'assets/icons/icon-192.png', 'assets/icons/icon-512.png',
+    'assets/icons/favicon-16.png', 'assets/icons/favicon-32.png', 'assets/images/og-image.png',
     '404.html', 'sitemap.xml', 'scripts/service-worker.template.js',
 )
 TARGET = ROOT / 'service-worker.js'

@@ -18,7 +18,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright, expect
 from pypdf import PdfReader
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "artifacts" / "politics-visual-regression"
 OUT.mkdir(parents=True, exist_ok=True)
 BREAKPOINTS = ((320, 568), (390, 844), (768, 900), (1440, 900))

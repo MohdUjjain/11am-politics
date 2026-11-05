@@ -3,14 +3,14 @@
  * Browser storage can still be evicted by the browser or OS.
  */
 const CACHE_PREFIX = '11am-politics-reader-';
-const BOOK_CACHE = CACHE_PREFIX + '846729ac4b1d';
+const BOOK_CACHE = CACHE_PREFIX + 'da3d88167f1a';
 const FONT_CACHE = '11am-politics-google-fonts-v1';
 const SHELL = [
-  './index.html', './manifest.webmanifest', './offline.js',
-  './reading-position.js', './study-material-visibility.js', './navigation.js', './search.js', './navigation.css',
-  './icons/icon-192.png', './icons/icon-512.png',
-  './favicon-16.png', './favicon-32.png',
-  './og-image.png', './404.html', './sitemap.xml'
+  './index.html', './manifest.webmanifest', './assets/js/offline.js',
+  './assets/js/reading-position.js', './assets/js/study-material-visibility.js', './assets/js/navigation.js', './assets/js/search.js', './assets/css/navigation.css',
+  './assets/icons/icon-192.png', './assets/icons/icon-512.png',
+  './assets/icons/favicon-16.png', './assets/icons/favicon-32.png',
+  './assets/images/og-image.png', './404.html', './sitemap.xml'
 ];
 const SCOPE = new URL(self.registration.scope);
 const BOOK_URL = new URL('./index.html',SCOPE).href;

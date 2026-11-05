@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createContext,runInContext} from 'node:vm';
 
-const code=readFileSync(new URL('../service-worker.js',import.meta.url),'utf8');
+const code=readFileSync(new URL('../../service-worker.js',import.meta.url),'utf8');
 const scope='https://mohdujjain.github.io/11am-politics/';
 const path=p=>new URL(p,scope).href;
 
@@ -71,11 +71,11 @@ assert.equal(good.stats().skipped,1);
 const version=[...good.stores.keys()].find(n=>n.startsWith('11am-politics-reader-') && !n.endsWith('prior'));
 assert.ok(version);
 assert.equal(good.stores.get(version).records.size,15,'Entire app shell cached');
-assert.ok(good.stores.get(version).records.has(path('./reading-position.js')),'Reading checkpoint helper cached');
-assert.ok(good.stores.get(version).records.has(path('./study-material-visibility.js')),'Summary preference helper cached');
-assert.ok(good.stores.get(version).records.has(path('./navigation.js')),'Navigation JS cached');
-assert.ok(good.stores.get(version).records.has(path('./search.js')),'Full-text search JS cached');
-assert.ok(good.stores.get(version).records.has(path('./navigation.css')),'Navigation CSS cached');
+assert.ok(good.stores.get(version).records.has(path('./assets/js/reading-position.js')),'Reading checkpoint helper cached');
+assert.ok(good.stores.get(version).records.has(path('./assets/js/study-material-visibility.js')),'Summary preference helper cached');
+assert.ok(good.stores.get(version).records.has(path('./assets/js/navigation.js')),'Navigation JS cached');
+assert.ok(good.stores.get(version).records.has(path('./assets/js/search.js')),'Full-text search JS cached');
+assert.ok(good.stores.get(version).records.has(path('./assets/css/navigation.css')),'Navigation CSS cached');
 await good.lifecycle('activate');
 assert.ok(good.stores.has('11am-hikam-reader-untouched'),'Sibling app cache must remain');
 assert.ok(!good.stores.has('11am-politics-reader-prior'),'Old Politics edition cleaned');

@@ -2,14 +2,14 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 
-const read=path=>readFileSync(new URL('../'+path,import.meta.url),'utf8');
+const read=path=>readFileSync(new URL('../../'+path,import.meta.url),'utf8');
 const html=read('index.html');
-const nav=read('navigation.js');
-const css=read('navigation.css');
-const search=read('search.js');
-const offline=read('offline.js');
+const nav=read('assets/js/navigation.js');
+const css=read('assets/css/navigation.css');
+const search=read('assets/js/search.js');
+const offline=read('assets/js/offline.js');
 const worker=read('service-worker.js');
-const helper=read('study-material-visibility.js');
+const helper=read('assets/js/study-material-visibility.js');
 
 // Academic notes are a frozen invariant of this UI-only consolidation.
 // The expected SHA is the exact Git blob hash of the unmodified 20 chapters.
@@ -37,13 +37,13 @@ for(const [filename,source] of Object.entries({
       filename+' still references obsolete interface name '+obsolete);
   }
 }
-assert.ok(html.includes('src="./study-material-visibility.js"'));
+assert.ok(html.includes('src="./assets/js/study-material-visibility.js"'));
 assert.ok(nav.includes('window.PoliticsStudyMaterialVisibility'));
 assert.ok(nav.includes('studyMaterialVisibility.write(localStorage,showStudyMaterial)'));
 assert.ok(css.includes('body.politics-hide-study-material .chapter > .end-matter'));
 assert.ok(search.includes("politics-hide-study-material"));
-assert.ok(offline.includes("'./study-material-visibility.js'"));
-assert.ok(worker.includes("'./study-material-visibility.js'"));
+assert.ok(offline.includes("'./assets/js/study-material-visibility.js'"));
+assert.ok(worker.includes("'./assets/js/study-material-visibility.js'"));
 assert.ok(helper.includes("KEY='11am-politics:show-end-of-chapter-material-v2'"),
   'Existing saved preferences must use the original v2 key');
 assert.ok(helper.includes("LEGACY_KEY='11am-politics:show-chapter-summaries-v1'"),

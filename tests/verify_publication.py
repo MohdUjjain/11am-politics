@@ -9,11 +9,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 URL = 'https://mohdujjain.github.io/11am-politics/'
 ASSETS = [
-    'index.html','manifest.webmanifest','offline.js',
-    'reading-position.js','study-material-visibility.js','navigation.js','search.js','navigation.css',
-    'icons/icon-192.png','icons/icon-512.png',
-    'favicon-16.png','favicon-32.png',
-    'og-image.png','404.html','sitemap.xml',
+    'index.html','manifest.webmanifest','assets/js/offline.js',
+    'assets/js/reading-position.js','assets/js/study-material-visibility.js','assets/js/navigation.js','assets/js/search.js','assets/css/navigation.css',
+    'assets/icons/icon-192.png','assets/icons/icon-512.png',
+    'assets/icons/favicon-16.png','assets/icons/favicon-32.png',
+    'assets/images/og-image.png','404.html','sitemap.xml',
 ]
 
 class Document(HTMLParser):
@@ -47,6 +47,16 @@ def meta(doc, attribute, key):
 def main():
     for file in ASSETS:
         assert (ROOT/file).is_file(), 'Missing: '+file
+    # Keep the published root limited to the GitHub Pages/PWA entry points.
+    misplaced = sorted(p.name for p in ROOT.iterdir()
+                       if p.is_file() and (
+                           p.suffix in ('.css', '.png') or
+                           (p.suffix == '.js' and p.name != 'service-worker.js')
+                       ))
+    assert not misplaced, 'Runtime assets belong in assets/, not root: '+str(misplaced)
+    for folder in ('assets/js','assets/css','assets/icons','assets/images',
+                   'tests/unit','tests/browser','scripts','docs'):
+        assert (ROOT/folder).is_dir(), 'Missing repository directory: '+folder
     doc=Document()
     doc.feed((ROOT/'index.html').read_text(encoding='utf-8'))
     assert doc.chapters == [f'ch{n:02}' for n in range(1,21)], '20 chapters changed'
@@ -60,10 +70,10 @@ def main():
     for num in range(1,21):
         assert f'ch{num:02}-sec01' in doc.ids
         assert f'ch{num:02}-rev01' in doc.ids
-    nav=(ROOT/'navigation.js').read_text(encoding='utf-8')
-    nav_style=(ROOT/'navigation.css').read_text(encoding='utf-8')
+    nav=(ROOT/'assets/js/navigation.js').read_text(encoding='utf-8')
+    nav_style=(ROOT/'assets/css/navigation.css').read_text(encoding='utf-8')
     assert 'politicsNavTree' in nav and 'politicsNavSearch' not in nav
-    search=(ROOT/'search.js').read_text(encoding='utf-8')
+    search=(ROOT/'assets/js/search.js').read_text(encoding='utf-8')
     assert 'createTreeWalker' in search and 'SHOW_TEXT' in search
     assert 'scrollIntoView' in search and 'politicsFullSearch' in search
     assert "get('politicsSearchMore')" in search and 'appendNextPage' in search
@@ -89,13 +99,13 @@ def main():
     assert 'switchTab' in nav and 'onTabKeys' in nav
     assert "makeLink('book-cover'" not in nav
     assert "makeLink('book-contents'" not in nav
-    assert 'src="./search.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
+    assert 'src="./assets/js/search.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
     assert 'politicsNavResume' in nav and 'politicsNavFab' in nav
     assert 'aria-expanded' in nav and 'aria-current' in nav
     assert 'inert' in nav and 'Escape' in nav
     assert '@media print' in nav_style and '#politicsNavPanel' in nav_style
-    assert any(link.get('rel')=='stylesheet' and link.get('href')=='./navigation.css' for link in doc.links)
-    assert 'src="./navigation.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
+    assert any(link.get('rel')=='stylesheet' and link.get('href')=='./assets/css/navigation.css' for link in doc.links)
+    assert 'src="./assets/js/navigation.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
     assert 'politicsReadingFill' in doc.ids and 'politicsNavPanel' in doc.ids
     assert 'politicsChapterProgress' in doc.ids and 'politicsChapterPercent' in doc.ids
     assert 'politicsContinuePrompt' in doc.ids and 'politicsContinueButton' in doc.ids
@@ -104,12 +114,12 @@ def main():
     for new_id in ('politicsResumeNote','politicsEditionVersion','politicsEditionStatus',
                    'politicsCheckUpdates','politicsEditionReload'):
         assert new_id in doc.ids, 'Missing Batch C control: '+new_id
-    offline_client=(ROOT/'offline.js').read_text(encoding='utf-8')
+    offline_client=(ROOT/'assets/js/offline.js').read_text(encoding='utf-8')
     assert "type:'GET_EDITION'" in offline_client
     assert 'checkForUpdates(true)' in offline_client
     assert 'offline-toggle.is-ready' in nav_style
     assert 'hiddenRevision' in nav and 'resumeNote.hidden' in nav
-    assert 'src="./study-material-visibility.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
+    assert 'src="./assets/js/study-material-visibility.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
     assert "studyMaterialToggle.addEventListener('change'" in nav
     assert "studyMaterialVisibility.read(localStorage)" in nav
     assert "studyMaterialVisibility.write(localStorage,showStudyMaterial)" in nav
@@ -121,8 +131,8 @@ def main():
     assert 'Show End-of-Chapter Study Material' in (ROOT/'index.html').read_text(encoding='utf-8')
     assert len(re.findall(r'<div class="em-title" id="ch\d{2}-rev01">📋 Chapter Summary</div>\s*<p>', (ROOT/'index.html').read_text(encoding='utf-8'))) == 20
     assert 'role="progressbar"' in (ROOT/'index.html').read_text(encoding='utf-8')
-    assert 'src="./reading-position.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
-    assert (ROOT/'navigation.js').read_text(encoding='utf-8').find('window.PoliticsReadingPosition')>0
+    assert 'src="./assets/js/reading-position.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
+    assert (ROOT/'assets/js/navigation.js').read_text(encoding='utf-8').find('window.PoliticsReadingPosition')>0
     assert 'pagehide' in nav and 'visibilitychange' in nav
     assert 'showContinuePrompt' in nav and 'continueReading' in nav
     assert 'updateChapterProgress' in nav and 'suspendCapture' in nav
@@ -131,12 +141,12 @@ def main():
     assert all(anchor in doc.ids for anchor in doc.anchors), 'Broken chapter link'
     assert any(link.get('rel')=='canonical' and link.get('href')==URL for link in doc.links)
     assert any(link.get('rel')=='manifest' and link.get('href')=='./manifest.webmanifest' for link in doc.links)
-    assert any(link.get('rel')=='icon' and link.get('href')=='./favicon-32.png' for link in doc.links)
+    assert any(link.get('rel')=='icon' and link.get('href')=='./assets/icons/favicon-32.png' for link in doc.links)
     assert meta(doc,'name','description')
     assert meta(doc,'name','twitter:card')=='summary_large_image'
-    assert meta(doc,'name','twitter:image')==URL+'og-image.png'
+    assert meta(doc,'name','twitter:image')==URL+'assets/images/og-image.png'
     assert meta(doc,'property','og:site_name')=='11AM Politics'
-    assert meta(doc,'property','og:image')==URL+'og-image.png'
+    assert meta(doc,'property','og:image')==URL+'assets/images/og-image.png'
     assert meta(doc,'property','og:image:width')=='1200'
     assert meta(doc,'property','og:image:height')=='630'
     assert meta(doc,'property','og:url')==URL
@@ -144,8 +154,11 @@ def main():
     assert manifest['id']=='/11am-politics/' and manifest['scope']=='./'
     assert manifest['start_url']=='./' and manifest['display']=='standalone'
     assert {'192x192','512x512'} <= {i['sizes'] for i in manifest['icons']}
+    for icon in manifest['icons']:
+        assert icon['src'].startswith('./assets/icons/'), 'Unexpected install icon path'
+        assert (ROOT/icon['src']).is_file(), 'Missing manifest icon: '+icon['src']
     worker=(ROOT/'service-worker.js').read_text()
-    client=(ROOT/'offline.js').read_text()
+    client=(ROOT/'assets/js/offline.js').read_text()
     for path in ASSETS:
         assert './'+path in worker, 'Not precached: '+path
         assert './'+path in client, 'Not status checked: '+path
@@ -157,7 +170,7 @@ def main():
     assert 'noindex' in (ROOT/'404.html').read_text().lower()
     assert '/11am-politics/' in (ROOT/'404.html').read_text()
     assert '<loc>'+URL+'</loc>' in (ROOT/'sitemap.xml').read_text()
-    card=(ROOT/'og-image.png').read_bytes()
+    card=(ROOT/'assets/images/og-image.png').read_bytes()
     assert card.startswith(bytes.fromhex('89504e470d0a1a0a')), 'Invalid PNG'
     assert struct.unpack('>II',card[16:24])==(1200,630), 'Wrong social image dimensions'
     print('PASS: chapters, 140 section links, 101 revision links, drawer, PWA, metadata, offline assets')

@@ -12,7 +12,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright, expect
 from pypdf import PdfReader
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 
 
 class QuietHandler(SimpleHTTPRequestHandler):

@@ -11,7 +11,7 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright, expect
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 STORAGE_KEY = "11am-politics:reading-position-v2"
 PREF_KEY = "11am-politics:show-end-of-chapter-material-v2"
 

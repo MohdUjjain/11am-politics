@@ -28,34 +28,34 @@ jobs:
         run: python tests/verify_publication.py
       - name: Parse standalone navigation and offline JavaScript
         run: |
-          node --check reading-position.js
-          node --check study-material-visibility.js
-          node --check navigation.js
-          node --check search.js
-          node --check offline.js
+          node --check assets/js/reading-position.js
+          node --check assets/js/study-material-visibility.js
+          node --check assets/js/navigation.js
+          node --check assets/js/search.js
+          node --check assets/js/offline.js
           node --check service-worker.js
-      - name: Test summary visibility preference, deep links and printing
-        run: node tests/test_study_material_visibility.mjs
+      - name: Test study-material visibility, deep links and print
+        run: node tests/unit/test_study_material_visibility.mjs
       - name: Test full-text search and sidebar tabs
-        run: node tests/test_full_text_search.mjs
+        run: node tests/unit/test_search.mjs
       - name: Ensure academic source integrity and reader code consolidation
-        run: node tests/test_consolidation.mjs
+        run: node tests/unit/test_consolidation.mjs
       - name: Test durable reading checkpoints and edition migration
-        run: node tests/test_reading_position.mjs
+        run: node tests/unit/test_reading_position.mjs
       - name: Simulate cached reopening and interrupted updates
-        run: node tests/test_service_worker.mjs
+        run: node tests/unit/test_service_worker.mjs
       - name: Install headless Chromium browser tests
         run: |
           python -m pip install --disable-pip-version-check playwright pypdf
           python -m playwright install --with-deps chromium
       - name: Verify search UI and print with backgrounds disabled (Chromium)
-        run: python tests/test_browser_batch_a.py
+        run: python tests/browser/test_search_print.py
       - name: Verify mobile layout, accessibility and reduced motion (Chromium)
-        run: python tests/test_browser_batch_b.py
+        run: python tests/browser/test_mobile_accessibility.py
       - name: Verify saved reading through browser restarts and installed editions (Chromium)
-        run: python tests/test_browser_batch_c.py
+        run: python tests/browser/test_reading_offline.py
       - name: Capture cross-viewport UI screenshots and print proofs (Chromium)
-        run: python tests/test_browser_visual_regression.py
+        run: python tests/browser/test_visual_regression.py
       - name: Upload cross-viewport and print evidence
         if: always()
         uses: actions/upload-artifact@v4

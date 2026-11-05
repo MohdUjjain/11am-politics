@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {readFileSync} from 'node:fs';
 const require=createRequire(import.meta.url);
-const search=require('../search.js');
+const search=require('../../assets/js/search.js');
 
 assert.equal(search.fold('  DÉMOCRACY   AND  POWER  '),'democracy and power');
 assert.equal(search.matches('The sovereignty of the state','sovereignty'),true);
@@ -21,10 +21,10 @@ assert.deepEqual(search.matchOffsets('Civil, Political and Social rights','polit
   [[7,16],[21,27]],'Multi-word query must highlight both terms');
 assert.deepEqual(search.matchOffsets('some words',''),[]);
 
-const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
-const nav=readFileSync(new URL('../navigation.js',import.meta.url),'utf8');
-const css=readFileSync(new URL('../navigation.css',import.meta.url),'utf8');
-const source=readFileSync(new URL('../search.js',import.meta.url),'utf8');
+const html=readFileSync(new URL('../../index.html',import.meta.url),'utf8');
+const nav=readFileSync(new URL('../../assets/js/navigation.js',import.meta.url),'utf8');
+const css=readFileSync(new URL('../../assets/css/navigation.css',import.meta.url),'utf8');
+const source=readFileSync(new URL('../../assets/js/search.js',import.meta.url),'utf8');
 assert.match(html,/id="politicsFullSearch"/);
 assert.match(html,/id="politicsSearchPopover"/);
 assert.match(html,/id="politicsSearchResults"/);
@@ -89,7 +89,7 @@ assert.ok(css.includes('.p-nav-tabs')&&css.includes('.p-nav-tabpanel[hidden]'),
   'Tabbed sidebar styled');
 assert.ok(css.includes('#politicsFullSearch'),'Sticky header search styling present');
 assert.ok(css.includes('@media print'),'Print remains separate from screen controls');
-assert.ok(html.indexOf('src="./navigation.js"')<html.indexOf('src="./search.js"'),
+assert.ok(html.indexOf('src="./assets/js/navigation.js"')<html.indexOf('src="./assets/js/search.js"'),
   'Header search loads after chapter navigation');
 // The actual academic book remains intact and should be searchable text.
 assert.equal((html.match(/<section class="chapter" id="ch[0-9]{2}"/g)||[]).length,20);

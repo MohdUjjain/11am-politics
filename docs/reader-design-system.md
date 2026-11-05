@@ -6,9 +6,9 @@
 
 The original 920px parchment academic dossier uses Fraunces editorial headings, Source Sans 3 text, IBM Plex Mono metadata, and chapter-specific binder hues. These core tokens remain in index.html.
 
-Reader controls in navigation.css use the same palette: a parchment sticky header, a fixed blue whole-book rail, a chapter-color progress circle, a left modal Contents drawer with Index and Tools tabs, and an understated floating offline status. The Index contains chapter/section/revision links, Tools contains study visibility, offline version/update controls and Print / Save as PDF.
+Reader controls in assets/css/navigation.css use the same palette: a parchment sticky header, a fixed blue whole-book rail, a chapter-color progress circle, a left modal Contents drawer with Index and Tools tabs, and an understated floating offline status. The Index contains chapter/section/revision links, Tools contains study visibility, offline version/update controls and Print / Save as PDF.
 
-## Reader tokens — navigation.css
+## Reader tokens — assets/css/navigation.css
 
 | Token | Role |
 |---|---|
@@ -39,7 +39,7 @@ Screen-only hiding applies to the entire chapter end-matter container. Direct re
 
 ## Naming and persistence compatibility
 
-Reader setting helper: study-material-visibility.js, global PoliticsStudyMaterialVisibility. Checkbox: politicsShowStudyMaterial. Body class: politics-hide-study-material. Retire the old summary-only JavaScript, CSS and DOM names.
+Reader setting helper: assets/js/study-material-visibility.js, global PoliticsStudyMaterialVisibility. Checkbox: politicsShowStudyMaterial. Body class: politics-hide-study-material. Retire the old summary-only JavaScript, CSS and DOM names.
 
 **Preserve these historical localStorage keys exactly:**
 
@@ -61,15 +61,15 @@ Local checks:
 
     python scripts/build.py --check
     python tests/verify_publication.py
-    node tests/test_study_material_visibility.mjs
-    node tests/test_consolidation.mjs
-    node tests/test_full_text_search.mjs
-    node tests/test_reading_position.mjs
-    node tests/test_service_worker.mjs
-    python tests/test_browser_batch_a.py
-    python tests/test_browser_batch_b.py
-    python tests/test_browser_batch_c.py
-    python tests/test_browser_visual_regression.py
+    node tests/unit/test_study_material_visibility.mjs
+    node tests/unit/test_consolidation.mjs
+    node tests/unit/test_search.mjs
+    node tests/unit/test_reading_position.mjs
+    node tests/unit/test_service_worker.mjs
+    python tests/browser/test_search_print.py
+    python tests/browser/test_mobile_accessibility.py
+    python tests/browser/test_reading_offline.py
+    python tests/browser/test_visual_regression.py
 
 Browser tests require Python playwright and pypdf plus Playwright Chromium. Generated artifacts/ should not be committed.
 
@@ -80,3 +80,7 @@ Browser tests require Python playwright and pypdf plus Playwright Chromium. Gene
 - Keep persistent storage independent of cache eviction and worker updates.
 - Update CI expectations when renaming a control; verify both screen and print.
 - Run narrow-mobile scenarios first for new interface additions.
+
+## Repository layout
+
+The deployed book entry point, service worker, manifest, 404 and sitemap remain at the repository root. Reader JavaScript lives under `assets/js/`; reader CSS is `assets/css/navigation.css`; icons and social preview assets live under `assets/icons/` and `assets/images/`. Build scripts, unit tests and browser tests remain under `scripts/`, `tests/unit/` and `tests/browser/` respectively. For the complete organization and safe-update procedure see [Architecture](architecture.md).

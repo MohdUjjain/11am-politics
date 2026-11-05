@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 const require=createRequire(import.meta.url);
-const helper=require('../reading-position.js');
+const helper=require('../../assets/js/reading-position.js');
 
 function storage(){
   const map=new Map();
@@ -31,8 +31,8 @@ assert.ok(fresh.getItem(helper.KEY),'Checkpoint must persist as local storage');
 
 // A restarted tab or installed app uses a fresh JavaScript instance but the
 // same browser-managed localStorage. This is not part of the service-worker cache.
-delete require.cache[require.resolve('../reading-position.js')];
-const afterRestart=require('../reading-position.js');
+delete require.cache[require.resolve('../../assets/js/reading-position.js')];
+const afterRestart=require('../../assets/js/reading-position.js');
 assert.deepEqual(afterRestart.read(fresh),before,'Close and restart preserves state');
 
 // A newly published edition can have different paragraph lengths and offsets;

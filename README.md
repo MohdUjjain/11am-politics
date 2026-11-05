@@ -1,137 +1,97 @@
-# 11AM — Politics Complete Study Notes
+# 11AM Politics
 
-**Read and install:** https://mohdujjain.github.io/11am-politics/
+[Open the study guide](https://mohdujjain.github.io/11am-politics/) · [GitHub Pages](https://github.com/MohdUjjain/11am-politics/settings/pages)
 
-This repository publishes the uploaded **Politics: The Complete Premium Study Notes & Revision Guide** as a single, installable and offline-capable GitHub Pages website. All 20 chapters, study tables, revision sheets and exam questions remain in the one-page `index.html`. The PWA additions do not rewrite the academic content.
+An installable, offline-capable **20-chapter political science study guide**, published as a static GitHub Pages project. It has a full-text search, chapter/section index, reading-progress indicators, saved reading position, end-of-chapter study-material toggle, and print/PDF support.
 
-## One-time GitHub Pages activation
+## Repository layout
 
-Open this repository's **Settings → Pages**. Under **Build and deployment**, choose **Deploy from a branch**, branch **main**, folder **/(root)**, then select **Save**. GitHub will publish `index.html` at the address above. Further commits to main deploy automatically.
+```text
+11am-politics/
+├── index.html                     # The complete book + the Pages entry point
+├── manifest.webmanifest           # Installable PWA metadata
+├── service-worker.js              # Generated offline worker (keep at root for scope)
+├── 404.html                       # GitHub Pages error page
+├── sitemap.xml                    # Search discovery
+├── assets/
+│   ├── css/
+│   │   └── navigation.css         # Screen-only reader controls and design tokens
+│   ├── js/
+│   │   ├── navigation.js          # Contents drawer, progress, resume integration
+│   │   ├── search.js              # Full-text search and passage highlighting
+│   │   ├── reading-position.js    # Saved reading checkpoint
+│   │   ├── study-material-visibility.js
+│   │   └── offline.js             # PWA installation, edition, updates
+│   ├── icons/
+│   │   ├── icon-192.png
+│   │   ├── icon-512.png
+│   │   ├── favicon-16.png
+│   │   └── favicon-32.png
+│   └── images/
+│       └── og-image.png           # Landscape link-sharing preview
+├── scripts/
+│   ├── build.py                   # Deterministic worker / cache revision generator
+│   └── service-worker.template.js
+├── tests/
+│   ├── verify_publication.py      # Structural, links, metadata and asset integrity
+│   ├── unit/                      # Node tests for search, settings, checkpoints, PWA
+│   └── browser/                   # Chromium interactions, mobile and visual regression
+├── docs/
+│   ├── architecture.md            # Hosting, paths, builds and offline constraints
+│   └── reader-design-system.md    # Colors, typography, layout and UX guidelines
+└── .github/workflows/
+    └── verify-pages.yml
+```
 
-## Install and read without internet
+**Only deployment entry points belong at the root.** GitHub Pages reads `index.html` directly; the service worker stays at `/11am-politics/service-worker.js` to control the entire guide. The original academic chapter text and print CSS remain inside `index.html` deliberately, so this repository needs no bundler, app framework or server.
 
-1. Visit the public site once **while online**. Allow the page to load.
-2. Tap the small **Saving offline…** control in the lower-right corner; wait until it says **Available offline**. The service worker has then cached the entire 20-chapter HTML file, the app script, manifest, and both icons.
-3. On Android Chrome or desktop Chrome/Edge choose the browser's **Install app** option (or the in-page Install button if offered). On iPhone/iPad, use **Safari → Share → Add to Home Screen**.
-4. Reopen the installed app without Wi-Fi or mobile data. Every chapter, table, and internal section link remains available.
-5. Tap **Available offline → Keep on this device** to *request* persistent browser storage for longer retention. Browsers may grant or decline.
+## Working on the site
 
-**Important:** Browser offline data is not guaranteed permanent. Device storage management, uninstalling, or clearing site data can remove it. Persistent storage reduces the risk of automatic eviction; it cannot override manual deletion or every OS storage policy.
+The book's academic HTML and chapter IDs are immutable for interface-only improvements. New controls belong in `assets/js/` and `assets/css/`; site-wide assets belong in `assets/icons/` and `assets/images/`. Test changes against the original chapter hash, internal anchors and print output.
 
-## Updated editions
+After **every** change to the HTML, worker template or cached asset, regenerate the service worker:
 
-The service worker opens the cached book immediately, even when offline. When a reader returns online, it checks whether `index.html` has changed, saves the **complete** replacement, then shows **New edition ready**. The reader can choose **Reload updated guide**.
+```bash
+python scripts/build.py
+python scripts/build.py --check
+python tests/verify_publication.py
+```
 
-The original Google Fonts references remain. The worker also saves the fonts used in online sessions when possible. If a particular font isn't available offline, the browser substitutes a local fallback, but **all book content remains accessible**.
+Then run the unit tests:
 
-If editing app scripts/icons rather than just the text, change the `BOOK_CACHE` identifier in `service-worker.js` to force a new atomic app-shell pre-cache.
+```bash
+node tests/unit/test_search.mjs
+node tests/unit/test_reading_position.mjs
+node tests/unit/test_study_material_visibility.mjs
+node tests/unit/test_service_worker.mjs
+node tests/unit/test_consolidation.mjs
+```
 
-## File structure
+For browser checks, install Python `playwright` and `pypdf` plus Playwright Chromium:
 
-- `index.html`: complete one-page book and unobtrusive install/offline controls
-- `service-worker.js`: offline cache, font caching and background edition refresh
-- `offline.js`: offline status, installation and persistent-storage controls
-- `manifest.webmanifest` and `icons/`: installable PWA metadata and icons
-- `404.html`: custom missing-page fallback
-- `sitemap.xml`: one-page canonical sitemap
-- `.nojekyll`: serve static HTML unchanged
+```bash
+python tests/browser/test_search_print.py
+python tests/browser/test_mobile_accessibility.py
+python tests/browser/test_reading_offline.py
+python tests/browser/test_visual_regression.py
+```
 
-## Testing
+The visual test produces screenshots at 320, 390, 768 and 1440 CSS-pixel widths and print PDFs with backgrounds on/off. GitHub Actions uploads the evidence as `politics-reader-visual-regression` (14-day retention). The workflow runs the full suite for pushes and pull requests.
 
-After Pages is enabled, visit the site online and wait for **Available offline**. On desktop, use Chrome DevTools → Application → Service Workers/Cache Storage, then switch Network to **Offline** and reload. On a phone, launch the installed app in airplane mode. If the browser doesn't offer installation, use its menu's **Add to Home Screen** option.
+## Deployment
 
-## Publishing checklist
-- After editing any published file, run `python scripts/build.py` to regenerate the content-hashed service worker.
-- Validate with `python scripts/build.py --check`, `python tests/verify_publication.py` and `node tests/test_service_worker.mjs`.
-- Commit `index.html`, the regenerated `service-worker.js` and any changed public assets together; GitHub Pages publishes from `main` / `(root)`.
-- The GitHub Actions verification workflow reports problems but does not itself block a branch-based Pages deployment.
-- Open the site online, confirm `Available offline`, install it, then test reopening in airplane mode. After a new edition goes live, reopen online and use `Reload updated guide` when prompted.
-- Social sharing uses the public 1200×630 `og-image.png`, which some messaging apps may cache independently.
-- `robots.txt` at `/11am-politics/robots.txt` would not control crawlers at the origin root; the canonical URL and sitemap are the useful project-site metadata here.
+This is a **GitHub Pages project site** using the `main` branch and `/(root)`. The public URL remains:
 
-## Collapsible reading navigation
+**https://mohdujjain.github.io/11am-politics/**
 
-A floating **Contents** button opens a two-tab, accessible sidebar. **Index** holds the six subject groups, 20 chapter rows, 140 section links and 101 revision shortcuts, with expand/collapse controls. **Tools** holds the saved end-of-chapter visibility switch and a **Print / Save as PDF** action. The shared **Continue Reading** button is available from either tab. The cover and printed-contents shortcuts have been removed. The final **Closing Note** retains its index destination. **Resume reading** saves only the most recent section ID in local browser storage; there is no account, tracking or server sync.
+The cache ID is automatically derived from hashes of all listed sources in `scripts/build.py`. New editions are precached atomically before activating, while the reader's position and preferences remain in local browser storage. Do not rename the saved localStorage keys. Older offline clients are supported via the existing service-worker update mechanism.
 
-Section links follow the stable `#ch01-sec01` convention, and revision links use `#ch01-rev01`. The original chapter URLs `#ch01`–`#ch20` still work. Changes to the notes must preserve these IDs, or update relevant anchors deliberately.
+For implementation details and constraints, see [Architecture](docs/architecture.md) and [Reader design system](docs/reader-design-system.md).
 
-The navigation lives in `navigation.js` and `navigation.css`, both included in the complete offline shell. The drawer and reading header are excluded from print; the original cover, table of contents and study guide remain printable.
+## Integrity guarantees
 
-## On-device reading checkpoint and two progress indicators
-
-The thin **book progress rail** spans the complete document. The separate **circular chapter indicator** displays progress within the active chapter, using that chapter's accent color. The sticky header has a parchment background, dark ink text, and the book's blue progress rail.
-
-The browser saves `chapterId`, `anchorId`, a **fraction of the current section**, a **fraction of the chapter**, and a timestamp in `localStorage` under `11am-politics:reading-position-v2`. The last section ID from earlier installed releases is automatically migrated. Saving occurs during reading and on page visibility changes / page closure, without syncing or tracking. Cached editions do not clear local storage. If a heading is missing in a newer edition, the chapter fraction is used as a fallback.
-
-On a subsequent visit to the cover without a direct `#section` URL, a **Continue reading?** card offers **Continue reading** or **Not now**. No automatic scroll jump is performed. The drawer's **Continue** button offers the same explicit action. A direct bookmarked section URL still opens that section normally.
-
-Local storage may be lost if the device or browser clears site data, evicts browser storage, or launches in a private browsing session. Position restoration is approximate after typography changes or major content edits; the chapter and section identities remain the primary anchors.
-
-## Reader option: Show End-of-Chapter Study Material
-
-The existing sidebar checkbox now controls **all end-of-chapter study material** with one action. It is **enabled by default**. Unchecking **Show End-of-Chapter Study Material** hides each chapter's entire `.end-matter` section on screen: **Chapter Summary**, **One-Page Revision Sheet**, **Key Definitions**, **Memory Aids**, **Possible Examination Questions**, and any extra review material (including Chapter 7's philosophers table). The 20 main chapter texts and 140 section links are unaffected.
-
-The contents drawer also hides all revision shortcuts and their "Revision & Recall" label while the setting is off. Re-check the box to show them again. The switch is persisted in `localStorage` under `11am-politics:show-end-of-chapter-material-v2`, and an existing `show-chapter-summaries-v1` preference is migrated. It survives installed app relaunching and updates so long as browser site data remains.
-
-Deep links to a specific `#chXX-revYY` destination temporarily show that chapter's revision material even if the general setting is off. Clicking the checkbox to hide again immediately restores the hidden view. The preference is **screen-only**; printing/PDF export always includes the full notes. The original book content and revision headings are unchanged.
-
-## Full-text header search and simplified sidebar (current)
-
-The sticky parchment header now contains a **Search all notes** field. Search reads **the actual book text** from all 20 chapters, including body paragraphs, lists, tables, definitions, callouts, subheadings, and end-of-chapter study material (even when hidden from normal reading). No external service or network connection is used, and the search JavaScript is included in the offline PWA cache. The result list shows a chapter, contextual heading, and excerpt for each matching passage (up to 65 visible at once). Clicking a result jumps directly to the matching passage and outlines it; if the result is inside hidden revision material, that chapter's revision section is temporarily revealed without changing the saved preference. Press **/** outside a text field to focus search, use **↓** to move through results, **Enter** to open, and **Esc** to dismiss.
-
-The sidebar now has an **Index** tab (chapter tree, expand/collapse controls) and a **Tools** tab (show/hide end-of-chapter material and browser Print / Save as PDF). The **Continue Reading** control remains in the shared footer, so it works on both tabs. Tab buttons support arrow-key switching. The redundant **Cover** and **Printed contents** sidebar links are removed; the original book pages themselves are untouched. The old sidebar title-only search was removed.
-
-## Batch A — search correctness and print-safe output
-
-Search now cancels pending debounced callbacks whenever results are selected, dismissed or the sidebar is opened. The first **35** matching passages display immediately; **Show more results** appends additional batches until all matching passages are available (there is no arbitrary 65-result ceiling). Selecting a match highlights the *exact matching word(s) inside the original passage* using the CSS Custom Highlight API, with a markup-based fallback for browsers that lack it. Inline academic emphasis, links, and other note formatting remain intact.
-
-The thin **whole-book rail** remains the same book-blue (`#1F5F8B`) across every chapter; only the chapter circle uses a chapter-specific hue.
-
-The print CSS now has a deliberate high-contrast, paper-white treatment for chapter banners, table headings, revision title badges, and printed table-of-contents numbers. This prevents white text from disappearing when browsers omit background graphics. The screen version keeps all of the original colored chapter styling. Printing continues to include the complete study guide and revision material even when that material has been hidden on screen.
-
-GitHub Actions now includes a Chromium browser regression covering incremental search results, term highlighting, dismissal races, chapter-rail color, and **PDF rendering with both background graphics disabled and enabled**. Run locally with `python tests/test_browser_batch_a.py` after installing the Python `playwright` and `pypdf` packages and the Chromium browser.
-
-## Batch B — mobile and accessibility refinement
-
-The sticky parchment header adapts at 600px with a compact **Ch. NN** identity beside the chapter progress circle; on narrower devices it hides the large brand to give search room. Search text uses a 16px mobile font to avoid unintended iOS zoom, and fixed reader controls respect `safe-area-inset-*` via `viewport-fit=cover`. Key touch targets, including drawer close, search close, chapter chevrons, index links and tab controls, are at least 44px high (or 44px square for compact controls).
-
-The drawer is a fully isolated modal while open: outside content is temporarily set `inert`, with its previous state restored when the drawer closes, keyboard focus kept in the drawer, and focus returned to the original trigger. Print closes the drawer and restores focus first. Chapter chevrons update accessible Expand/Collapse labels.
-
-Search now implements a labelled **combobox/listbox** with `aria-activedescendant`, `aria-selected` and live match counts. Arrow keys navigate options while focus remains on the search input; Enter opens a passage, Escape dismisses without blurring, and **Show more** is outside the listbox and returns focus correctly. The `/` shortcut cannot steal focus from the open drawer.
-
-A visible-on-focus skip link jumps directly to the study chapters, with a semantic `main` landmark. Reduced-motion preferences disable smooth document scrolling and UI transitions. Two bright chapter banners (**13 and 14**) use darker screen-only upper gradients and fully opaque kicker text to improve white-on-color contrast. All original academic chapter content and print-specific styling remain unchanged.
-
-Chromium regression now checks 320px, 390px, 600px and desktop, chapter identity, touch target geometry, modal focus isolation, search ARIA keyboard behavior, print focus, reduced motion and chapter banner contrast.
-
-## Batch C — reading continuity and edition confidence
-
-The study guide remembers chapter, revision/section and approximate offset in `localStorage`. A **real Chromium process restart** regression now uses a persistent disk profile, rather than merely re-importing the JavaScript module, to verify that the cover's Continue Reading prompt returns to the original passage.
-
-If the saved position lies in the end-of-chapter review section while **Show End-of-Chapter Study Material** is disabled, the original revision anchor is retained. The cover explains that resuming will **temporarily reveal that chapter's revision material**; clicking Continue jumps back to the exact revision block without changing the saved hide/show preference. Missing section anchors still fall back safely to the saved chapter fraction after future editorial changes.
-
-The sidebar's **Tools → Offline & edition** panel shows the 12-character cached-edition revision reported by the active service worker using a `GET_EDITION` message. **Check for updates** invokes `registration.update()` immediately, bypassing the automatic check's one-minute throttle and displaying clear checking/current/offline/error states. When a new service worker activates, the panel offers **Reload updated edition** without clearing reading checkpoints or preferences.
-
-The floating offline control now shrinks to a quiet circular checkmark when the full study guide has been cached. It remains an accessible button that opens its detailed storage/install controls and grows prominent again if a new edition is ready.
-
-The new Chromium regression covers real process/profile restarts, the saved hidden-section scenario, service-worker edition messages, manual update checking while online and offline, and the compact offline-status presentation. The existing Batch A and B browser tests and offline atomic-upgrade tests remain in CI.
-
-## Batch D — consolidated reader and visual regression evidence
-
-The old summary-only UI nomenclature is now fully replaced by **study material**
-naming. The renamed helper is **study-material-visibility.js**. The existing
-localStorage preference keys remain unchanged and legacy migration remains
-available, so previously saved choices are preserved through app updates.
-Unused sidebar search references and legacy navigation helpers were removed.
-
-The navigation style sheet defines a documented, shared set of reader UI
-tokens rather than repeating independent color, radius and control rules.
-The completed system, identifiers and checks are documented in
-**docs/reader-design-system.md**.
-
-CI verifies a frozen Git blob SHA of all **20 chapters' source HTML** to
-prevent accidental changes to educational content or its format.
-Chromium captures **six reader UI states at four viewport sizes**, a
-print preview and PDF proofs with background graphics enabled and disabled.
-Screenshots and PDFs are downloadable from the GitHub Actions run as the
-**politics-reader-visual-regression** artifact. Captures are visual review
-evidence; geometry and behavior are checked programmatically.
+- The 20 chapters, their 140 section anchors and 101 revision anchors are preserved.
+- All end-of-chapter material appears in printed/PDF output, even when hidden on screen.
+- The search, tabs, reading resume and offline update controls remain available.
+- The site uses its own PWA cache scope and does not delete other 11AM apps' caches.
+- Browser storage may be evicted by the browser or device; offline data is not guaranteed permanently.
