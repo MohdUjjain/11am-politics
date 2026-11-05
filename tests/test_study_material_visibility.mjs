@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {readFileSync} from 'node:fs';
 const require=createRequire(import.meta.url);
-const visibility=require('../summary-visibility.js');
+const visibility=require('../study-material-visibility.js');
 
 function storage(){
   const map=new Map();
@@ -27,8 +27,8 @@ assert.equal(visibility.isRevisionAnchor('ch21-rev01'),false);
 
 assert.equal(visibility.write(s,false),true);
 assert.equal(visibility.read(s),false,'Hide preference saved');
-delete require.cache[require.resolve('../summary-visibility.js')];
-const next=require('../summary-visibility.js');
+delete require.cache[require.resolve('../study-material-visibility.js')];
+const next=require('../study-material-visibility.js');
 assert.equal(next.read(s),false,'Hide preference survives a restart');
 assert.equal(next.write(s,true),true);
 assert.equal(next.read(s),true,'User can re-enable end-matter');
@@ -55,15 +55,15 @@ assert.equal((html.match(/<div class="end-matter">/g)||[]).length,20,
 assert.equal((html.match(/<div class="em-title" id="ch[0-9]{2}-rev[0-9]{2}">/g)||[]).length,101,
   'All revision headings are still in the book');
 assert.match(html,/Show End-of-Chapter Study Material/);
-assert.match(html,/id="politicsShowSummaries" checked/);
+assert.match(html,/id="politicsShowStudyMaterial" checked/);
 assert.match(css,/@media screen\s*\{/);
-assert.ok(css.includes('body.politics-hide-chapter-summaries .chapter > .end-matter {'));
+assert.ok(css.includes('body.politics-hide-study-material .chapter > .end-matter {'));
 assert.ok(css.includes('display:none!important;'));
 assert.ok(css.includes('.end-matter.politics-explicit-revision'),
   'Direct section links can reveal the requested end-matter');
-assert.ok(css.indexOf('body.politics-hide-chapter-summaries')<css.indexOf('@media print'),
+assert.ok(css.indexOf('body.politics-hide-study-material')<css.indexOf('@media print'),
   'The summary toggle does not alter printed pages');
-assert.ok(nav.includes('summaryVisibility.isRevisionAnchor'));
+assert.ok(nav.includes('studyMaterialVisibility.isRevisionAnchor'));
 assert.ok(nav.includes("revisionLabel.hidden=hideRevision"),
   'The revision label must also vanish from the sidebar');
 assert.ok(nav.includes('a.hidden=hideRevision&&'),
@@ -72,7 +72,7 @@ assert.ok(nav.includes('if(!heading.getClientRects().length)continue'),
   'Scroll position tracking skips hidden headings');
 assert.ok(nav.includes('syncLinkedRevision()'),
   'Direct revision links remain possible without altering the saved choice');
-assert.ok(nav.includes('summaryVisibility.write(localStorage,showSummaries)'));
-assert.ok(html.indexOf('src="./summary-visibility.js"')<
+assert.ok(nav.includes('studyMaterialVisibility.write(localStorage,showStudyMaterial)'));
+assert.ok(html.indexOf('src="./study-material-visibility.js"')<
   html.indexOf('src="./navigation.js"'));
 console.log('PASS: hide all 20 end-matter sections, migration, shortcuts, direct links and print');

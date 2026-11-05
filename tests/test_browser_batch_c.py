@@ -92,7 +92,7 @@ def run():
         expect(page.locator("#politicsContinuePrompt")).to_be_visible(timeout=10000)
         expect(page.locator("#politicsResumeNote")).to_be_visible()
         expect(page.locator("#politicsContinueDescription")).to_contain_text("Key Definitions")
-        assert not page.locator("#politicsShowSummaries").is_checked()
+        assert not page.locator("#politicsShowStudyMaterial").is_checked()
         assert page.locator("#ch07 .end-matter").evaluate(
             "el=>getComputedStyle(el).display"
         )=="none"
@@ -101,7 +101,7 @@ def run():
         assert page.locator("#ch07 .end-matter").evaluate(
             "el=>getComputedStyle(el).display"
         )!="none"
-        assert not page.locator("#politicsShowSummaries").is_checked()
+        assert not page.locator("#politicsShowStudyMaterial").is_checked()
         assert page.evaluate("key=>localStorage.getItem(key)",PREF_KEY)=="false"
         assert page.evaluate("document.activeElement.id")=="ch07-rev03"
         ctx.close()

@@ -245,7 +245,7 @@
     const el=record.element;
     const query=input.value;
     const revision=el.closest('.end-matter');
-    if(revision&&document.body.classList.contains('politics-hide-chapter-summaries')){
+    if(revision&&document.body.classList.contains('politics-hide-study-material')){
       revision.classList.add('politics-explicit-revision');
     }
     if(record.anchor){

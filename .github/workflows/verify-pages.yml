@@ -29,15 +29,17 @@ jobs:
       - name: Parse standalone navigation and offline JavaScript
         run: |
           node --check reading-position.js
-          node --check summary-visibility.js
+          node --check study-material-visibility.js
           node --check navigation.js
           node --check search.js
           node --check offline.js
           node --check service-worker.js
       - name: Test summary visibility preference, deep links and printing
-        run: node tests/test_summary_visibility.mjs
+        run: node tests/test_study_material_visibility.mjs
       - name: Test full-text search and sidebar tabs
         run: node tests/test_full_text_search.mjs
+      - name: Ensure academic source integrity and reader code consolidation
+        run: node tests/test_consolidation.mjs
       - name: Test durable reading checkpoints and edition migration
         run: node tests/test_reading_position.mjs
       - name: Simulate cached reopening and interrupted updates
@@ -52,3 +54,13 @@ jobs:
         run: python tests/test_browser_batch_b.py
       - name: Verify saved reading through browser restarts and installed editions (Chromium)
         run: python tests/test_browser_batch_c.py
+      - name: Capture cross-viewport UI screenshots and print proofs (Chromium)
+        run: python tests/test_browser_visual_regression.py
+      - name: Upload cross-viewport and print evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: politics-reader-visual-regression
+          path: artifacts/politics-visual-regression/
+          if-no-files-found: warn
+          retention-days: 14

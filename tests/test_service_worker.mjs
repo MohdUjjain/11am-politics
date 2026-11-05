@@ -72,7 +72,7 @@ const version=[...good.stores.keys()].find(n=>n.startsWith('11am-politics-reader
 assert.ok(version);
 assert.equal(good.stores.get(version).records.size,15,'Entire app shell cached');
 assert.ok(good.stores.get(version).records.has(path('./reading-position.js')),'Reading checkpoint helper cached');
-assert.ok(good.stores.get(version).records.has(path('./summary-visibility.js')),'Summary preference helper cached');
+assert.ok(good.stores.get(version).records.has(path('./study-material-visibility.js')),'Summary preference helper cached');
 assert.ok(good.stores.get(version).records.has(path('./navigation.js')),'Navigation JS cached');
 assert.ok(good.stores.get(version).records.has(path('./search.js')),'Full-text search JS cached');
 assert.ok(good.stores.get(version).records.has(path('./navigation.css')),'Navigation CSS cached');

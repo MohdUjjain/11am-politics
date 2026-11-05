@@ -118,7 +118,7 @@ def check():
               revision.append(chapter.querySelector('.end-matter p').cloneNode(true));
               clone.append(revision);
               document.body.replaceChildren(clone);
-              document.body.classList.add('politics-hide-chapter-summaries');
+              document.body.classList.add('politics-hide-study-material');
             }""")
             print_page.emulate_media(media="print")
             styles = print_page.evaluate("""() => {

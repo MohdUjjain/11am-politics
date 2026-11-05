@@ -3,8 +3,8 @@
 (function(){
   'use strict';
   const position=window.PoliticsReadingPosition;
-  const summaryVisibility=window.PoliticsSummaryVisibility;
-  if(!position||!summaryVisibility){
+  const studyMaterialVisibility=window.PoliticsStudyMaterialVisibility;
+  if(!position||!studyMaterialVisibility){
     console.warn('Reading settings helper unavailable');
     return;
   }
@@ -19,9 +19,8 @@
   const indexPanel=get('politicsPanelIndex');
   const toolsPanel=get('politicsPanelTools');
   const printButton=get('politicsNavPrint');
-  const summaryToggle=get('politicsShowSummaries');
+  const studyMaterialToggle=get('politicsShowStudyMaterial');
   const status=get('politicsNavStatus');
-  const results=get('politicsNavResults');
   const resume=get('politicsNavResume');
   const readingLabel=get('politicsReadingLabel');
   const readingFill=get('politicsReadingFill');
@@ -36,11 +35,10 @@
   const resumeNote=get('politicsResumeNote');
   const continueButton=get('politicsContinueButton');
   const continueDismiss=get('politicsContinueDismiss');
-  if(!panel||!trigger||!tree||!summaryToggle||!tabIndex||!tabTools)return;
+  if(!panel||!trigger||!tree||!studyMaterialToggle||!tabIndex||!tabTools)return;
 
   const groups=[];
   const chapters=[];
-  const chapterLinks=new Map();
   const targetLinks=new Map();
   const byTarget=new Map();
   let selectedId='';
@@ -53,17 +51,13 @@
   let lastWriteFraction=-1;
   let suspendCapture=false;
   let resumePromptDismissed=false;
-  let showSummaries=summaryVisibility.read(localStorage);
+  let showStudyMaterial=studyMaterialVisibility.read(localStorage);
 
   function create(tag,className,text){
     const e=document.createElement(tag);
     if(className)e.className=className;
     if(text!==undefined)e.textContent=text;
     return e;
-  }
-  function fold(s){
-    return String(s||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'')
-      .toLocaleLowerCase().replace(/\s+/g,' ').trim();
   }
   function openGroup(g,open,remember){
     g.element.classList.toggle('expanded',open);
@@ -148,7 +142,6 @@
       toggle.setAttribute('aria-controls',children.id);
       row.append(a,toggle);outer.append(row,children);
       ch.element=outer;ch.button=toggle;ch.children=children;ch.link=a;
-      chapterLinks.set(ch.id,a);
       byTarget.set(ch.id,ch);
 
       ch.sections.forEach(heading=>{
@@ -189,11 +182,11 @@
       g.chapters.forEach(ch=>{
         ch.element.hidden=false;
         const linkedRevision=!!ch.section.querySelector('.end-matter.politics-explicit-revision');
-        const hideRevision=!showSummaries&&!linkedRevision;
+        const hideRevision=!showStudyMaterial&&!linkedRevision;
         const revisionLabel=ch.children.querySelector('.p-nav-revision-label');
         if(revisionLabel)revisionLabel.hidden=hideRevision;
         ch.children.querySelectorAll('a.p-nav-entry').forEach(a=>{
-          a.hidden=hideRevision&&summaryVisibility.isRevisionAnchor(a.dataset.targetId);
+          a.hidden=hideRevision&&studyMaterialVisibility.isRevisionAnchor(a.dataset.targetId);
         });
       });
     });
@@ -225,25 +218,25 @@
   function syncLinkedRevision(){
     document.querySelectorAll('.end-matter.politics-explicit-revision')
       .forEach(el=>el.classList.remove('politics-explicit-revision'));
-    if(showSummaries)return;
+    if(showStudyMaterial)return;
     let id='';
     try{id=decodeURIComponent(location.hash.slice(1));}
     catch{return;}
-    if(!summaryVisibility.isRevisionAnchor(id))return;
+    if(!studyMaterialVisibility.isRevisionAnchor(id))return;
     const target=get(id);
     if(target)target.closest('.end-matter')?.classList.add('politics-explicit-revision');
   }
-  function applySummaryView(show,remember){
-    showSummaries=!!show;
-    summaryToggle.checked=showSummaries;
+  function applyStudyMaterialView(show,remember){
+    showStudyMaterial=!!show;
+    studyMaterialToggle.checked=showStudyMaterial;
     // A manual click to hide must hide everything even when the URL
     // currently points into a revision section.
     if(remember){
       document.querySelectorAll('.end-matter.politics-explicit-revision')
         .forEach(el=>el.classList.remove('politics-explicit-revision'));
-      summaryVisibility.write(localStorage,showSummaries);
+      studyMaterialVisibility.write(localStorage,showStudyMaterial);
     }else syncLinkedRevision();
-    document.body.classList.toggle('politics-hide-chapter-summaries',!showSummaries);
+    document.body.classList.toggle('politics-hide-study-material',!showStudyMaterial);
     filter();
     refreshResume();
     requestUpdate();
@@ -319,8 +312,8 @@
     const exists=byTarget.has(data.anchorId);
     const anchorId=exists?data.anchorId:chapter.id;
     // Hiding study material never silently discards the exact saved section.
-    const hiddenRevision=!showSummaries&&exists&&
-      summaryVisibility.isRevisionAnchor(anchorId)&&
+    const hiddenRevision=!showStudyMaterial&&exists&&
+      studyMaterialVisibility.isRevisionAnchor(anchorId)&&
       !get(anchorId)?.closest('.end-matter.politics-explicit-revision');
     return {...data,chapter,anchorId,hiddenRevision,missingAnchor:!exists};
   }
@@ -517,7 +510,7 @@
     requestAnimationFrame(()=>target.focus({preventScroll:true}));
   }
 
-  collect();build();applySummaryView(showSummaries,false);switchTab('index',false);
+  collect();build();applyStudyMaterialView(showStudyMaterial,false);switchTab('index',false);
   trigger.addEventListener('click',open);
   closeButton.addEventListener('click',()=>close(true));
   backdrop.addEventListener('click',()=>close(true));
@@ -531,10 +524,10 @@
     close(true);
     requestAnimationFrame(()=>window.print());
   });
-  summaryToggle.addEventListener('change',()=>{
+  studyMaterialToggle.addEventListener('change',()=>{
     // Save the current reading checkpoint before removing summary content.
     persistReading(true);
-    applySummaryView(summaryToggle.checked,true);
+    applyStudyMaterialView(studyMaterialToggle.checked,true);
   });
   tree.addEventListener('click',e=>{
     const link=e.target.closest('a[href^="#"]');

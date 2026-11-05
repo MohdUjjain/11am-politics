@@ -1,11 +1,11 @@
-/* On-device visibility setting for the entire end-of-chapter study section.
+/* Reader preference for the complete end-of-chapter study section.
  * The former summary-only setting is migrated so readers keep their choice.
  * Printed notes always include all original material.
  */
 (function(root,factory){
   'use strict';
   const api=factory();
-  if(root)root.PoliticsSummaryVisibility=api;
+  if(root)root.PoliticsStudyMaterialVisibility=api;
   if(typeof module==='object'&&module.exports)module.exports=api;
 })(typeof window==='object'?window:null,function(){
   'use strict';

@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 URL = 'https://mohdujjain.github.io/11am-politics/'
 ASSETS = [
     'index.html','manifest.webmanifest','offline.js',
-    'reading-position.js','summary-visibility.js','navigation.js','search.js','navigation.css',
+    'reading-position.js','study-material-visibility.js','navigation.js','search.js','navigation.css',
     'icons/icon-192.png','icons/icon-512.png',
     'favicon-16.png','favicon-32.png',
     'og-image.png','404.html','sitemap.xml',
@@ -100,7 +100,7 @@ def main():
     assert 'politicsChapterProgress' in doc.ids and 'politicsChapterPercent' in doc.ids
     assert 'politicsContinuePrompt' in doc.ids and 'politicsContinueButton' in doc.ids
     assert 'politicsContinueDismiss' in doc.ids and 'politicsContinueDescription' in doc.ids
-    assert 'politicsShowSummaries' in doc.ids
+    assert 'politicsShowStudyMaterial' in doc.ids
     for new_id in ('politicsResumeNote','politicsEditionVersion','politicsEditionStatus',
                    'politicsCheckUpdates','politicsEditionReload'):
         assert new_id in doc.ids, 'Missing Batch C control: '+new_id
@@ -109,14 +109,14 @@ def main():
     assert 'checkForUpdates(true)' in offline_client
     assert 'offline-toggle.is-ready' in nav_style
     assert 'hiddenRevision' in nav and 'resumeNote.hidden' in nav
-    assert 'src="./summary-visibility.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
-    assert "summaryToggle.addEventListener('change'" in nav
-    assert "summaryVisibility.read(localStorage)" in nav
-    assert "summaryVisibility.write(localStorage,showSummaries)" in nav
-    assert 'politics-hide-chapter-summaries' in nav_style
-    assert 'body.politics-hide-chapter-summaries .chapter > .end-matter {' in nav_style
+    assert 'src="./study-material-visibility.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
+    assert "studyMaterialToggle.addEventListener('change'" in nav
+    assert "studyMaterialVisibility.read(localStorage)" in nav
+    assert "studyMaterialVisibility.write(localStorage,showStudyMaterial)" in nav
+    assert 'politics-hide-study-material' in nav_style
+    assert 'body.politics-hide-study-material .chapter > .end-matter {' in nav_style
     assert '.end-matter.politics-explicit-revision' in nav_style
-    assert 'summaryVisibility.isRevisionAnchor' in nav
+    assert 'studyMaterialVisibility.isRevisionAnchor' in nav
     assert 'syncLinkedRevision' in nav
     assert 'Show End-of-Chapter Study Material' in (ROOT/'index.html').read_text(encoding='utf-8')
     assert len(re.findall(r'<div class="em-title" id="ch\d{2}-rev01">📋 Chapter Summary</div>\s*<p>', (ROOT/'index.html').read_text(encoding='utf-8'))) == 20

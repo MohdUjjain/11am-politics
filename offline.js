@@ -16,7 +16,7 @@
  const editionReload=get('politicsEditionReload');
  const CACHE_PREFIX='11am-politics-reader-';
  const ESSENTIALS=['./index.html','./manifest.webmanifest','./offline.js',
-  './reading-position.js','./summary-visibility.js','./navigation.js',
+  './reading-position.js','./study-material-visibility.js','./navigation.js',
   './search.js','./navigation.css','./icons/icon-192.png','./icons/icon-512.png',
   './favicon-16.png','./favicon-32.png','./og-image.png','./404.html',
   './sitemap.xml'];

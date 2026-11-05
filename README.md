@@ -114,3 +114,24 @@ The sidebar's **Tools → Offline & edition** panel shows the 12-character cache
 The floating offline control now shrinks to a quiet circular checkmark when the full study guide has been cached. It remains an accessible button that opens its detailed storage/install controls and grows prominent again if a new edition is ready.
 
 The new Chromium regression covers real process/profile restarts, the saved hidden-section scenario, service-worker edition messages, manual update checking while online and offline, and the compact offline-status presentation. The existing Batch A and B browser tests and offline atomic-upgrade tests remain in CI.
+
+## Batch D — consolidated reader and visual regression evidence
+
+The old summary-only UI nomenclature is now fully replaced by **study material**
+naming. The renamed helper is **study-material-visibility.js**. The existing
+localStorage preference keys remain unchanged and legacy migration remains
+available, so previously saved choices are preserved through app updates.
+Unused sidebar search references and legacy navigation helpers were removed.
+
+The navigation style sheet defines a documented, shared set of reader UI
+tokens rather than repeating independent color, radius and control rules.
+The completed system, identifiers and checks are documented in
+**docs/reader-design-system.md**.
+
+CI verifies a frozen Git blob SHA of all **20 chapters' source HTML** to
+prevent accidental changes to educational content or its format.
+Chromium captures **six reader UI states at four viewport sizes**, a
+print preview and PDF proofs with background graphics enabled and disabled.
+Screenshots and PDFs are downloadable from the GitHub Actions run as the
+**politics-reader-visual-regression** artifact. Captures are visual review
+evidence; geometry and behavior are checked programmatically.
