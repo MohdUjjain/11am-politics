@@ -54,7 +54,7 @@ def run():
         page.wait_for_function("""key=>{
           const raw=localStorage.getItem(key);
           return !!raw && JSON.parse(raw).anchorId==='ch05-sec03';
-        }""", STORAGE_KEY)
+        }""", arg=STORAGE_KEY)
         before=page.evaluate("key=>JSON.parse(localStorage.getItem(key))",STORAGE_KEY)
         assert before["anchorFraction"]>=0
         assert before["chapterId"]=="ch05"
