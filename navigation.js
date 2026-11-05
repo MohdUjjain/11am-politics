@@ -33,6 +33,7 @@
   const backgroundInertState=new Map();
   const continueCard=get('politicsContinuePrompt');
   const continueDescription=get('politicsContinueDescription');
+  const resumeNote=get('politicsResumeNote');
   const continueButton=get('politicsContinueButton');
   const continueDismiss=get('politicsContinueDismiss');
   if(!panel||!trigger||!tree||!summaryToggle||!tabIndex||!tabTools)return;
@@ -313,13 +314,15 @@
     if(!data)return null;
     const chapter=chapters.find(c=>c.id===data.chapterId);
     if(!chapter)return null;
-    // An updated edition may have moved or removed individual headings.
-    const hiddenRevision=!showSummaries&&
-      summaryVisibility.isRevisionAnchor(data.anchorId)&&
-      !get(data.anchorId)?.closest('.end-matter.politics-explicit-revision');
-    const anchor=byTarget.has(data.anchorId)&&!hiddenRevision
-      ?data.anchorId:chapter.id;
-    return {...data,chapter,anchorId:anchor};
+    // An updated edition may have moved or removed an individual heading.
+    // Missing headings fall back to the saved chapter fraction.
+    const exists=byTarget.has(data.anchorId);
+    const anchorId=exists?data.anchorId:chapter.id;
+    // Hiding study material never silently discards the exact saved section.
+    const hiddenRevision=!showSummaries&&exists&&
+      summaryVisibility.isRevisionAnchor(anchorId)&&
+      !get(anchorId)?.closest('.end-matter.politics-explicit-revision');
+    return {...data,chapter,anchorId,hiddenRevision,missingAnchor:!exists};
   }
   function savedDescription(saved){
     const entry=get(saved.anchorId);
@@ -327,7 +330,8 @@
       ? entry.textContent.trim().replace(/\s+/g,' ').slice(0,75)
       : saved.chapter.title;
     return 'Chapter '+saved.chapter.number+' · '+name+
-      ' · approximately '+Math.round(saved.chapterFraction*100)+'% through the chapter';
+      ' · approximately '+Math.round(saved.chapterFraction*100)+'% through the chapter'+
+      (saved.hiddenRevision?' · hidden study material will be revealed temporarily':'');
   }
   function refreshResume(){
     const saved=savedCheckpoint();
@@ -335,6 +339,7 @@
     if(saved)resume.textContent='Continue · Ch. '+saved.chapter.number+
       ' ('+Math.round(saved.chapterFraction*100)+'%)';
     if(saved&&continueDescription)continueDescription.textContent=savedDescription(saved);
+    if(resumeNote)resumeNote.hidden=!saved?.hiddenRevision;
   }
   function showContinuePrompt(){
     if(!continueCard||resumePromptDismissed||location.hash||
@@ -398,6 +403,13 @@
     resumePromptDismissed=true;
     const ch=saved.chapter;
     const target=get(saved.anchorId);
+    if(saved.hiddenRevision&&target){
+      // Reveal only this chapter's review section for this continuation.
+      // The Tools checkbox and its persisted preference remain unchanged.
+      const revision=target.closest('.end-matter');
+      if(revision)revision.classList.add('politics-explicit-revision');
+      filter();
+    }
     const m=metrics(ch,saved.anchorId);
     const focusOffset=window.innerHeight*.36;
     const useAnchor=!!target&&saved.anchorId!==ch.id;

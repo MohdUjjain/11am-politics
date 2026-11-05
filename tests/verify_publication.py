@@ -101,6 +101,14 @@ def main():
     assert 'politicsContinuePrompt' in doc.ids and 'politicsContinueButton' in doc.ids
     assert 'politicsContinueDismiss' in doc.ids and 'politicsContinueDescription' in doc.ids
     assert 'politicsShowSummaries' in doc.ids
+    for new_id in ('politicsResumeNote','politicsEditionVersion','politicsEditionStatus',
+                   'politicsCheckUpdates','politicsEditionReload'):
+        assert new_id in doc.ids, 'Missing Batch C control: '+new_id
+    offline_client=(ROOT/'offline.js').read_text(encoding='utf-8')
+    assert "type:'GET_EDITION'" in offline_client
+    assert 'checkForUpdates(true)' in offline_client
+    assert 'offline-toggle.is-ready' in nav_style
+    assert 'hiddenRevision' in nav and 'resumeNote.hidden' in nav
     assert 'src="./summary-visibility.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
     assert "summaryToggle.addEventListener('change'" in nav
     assert "summaryVisibility.read(localStorage)" in nav
@@ -142,6 +150,8 @@ def main():
         assert './'+path in worker, 'Not precached: '+path
         assert './'+path in client, 'Not status checked: '+path
     assert '__CACHE_ID__' not in worker
+    assert "type:'EDITION_STATUS'" in worker
+    assert "type==='GET_EDITION'" in worker
     assert 'name.startsWith(CACHE_PREFIX)' in worker, 'Missing scoped cleanup'
     assert 'cache.addAll(SHELL)' in worker, 'Missing complete pre-cache'
     assert 'noindex' in (ROOT/'404.html').read_text().lower()

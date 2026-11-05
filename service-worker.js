@@ -3,7 +3,7 @@
  * Browser storage can still be evicted by the browser or OS.
  */
 const CACHE_PREFIX = '11am-politics-reader-';
-const BOOK_CACHE = CACHE_PREFIX + 'b6d769cbdcb4';
+const BOOK_CACHE = CACHE_PREFIX + '1c9ad19d3547';
 const FONT_CACHE = '11am-politics-google-fonts-v1';
 const SHELL = [
   './index.html', './manifest.webmanifest', './offline.js',
@@ -41,6 +41,14 @@ self.addEventListener('activate',event=>{
   })());
 });
 self.addEventListener('message',event=>{
+  if(event.data?.type==='GET_EDITION'){
+    event.ports?.[0]?.postMessage({
+      type:'EDITION_STATUS',
+      revision:BOOK_CACHE.slice(CACHE_PREFIX.length),
+      cache:BOOK_CACHE
+    });
+    return;
+  }
   if(event.data?.type!=='PREPARE_FONTS')return;
   event.waitUntil((async()=>{
     const items=Array.isArray(event.data.urls)?event.data.urls.slice(0,50):[];

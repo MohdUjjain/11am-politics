@@ -50,3 +50,5 @@ jobs:
         run: python tests/test_browser_batch_a.py
       - name: Verify mobile layout, accessibility and reduced motion (Chromium)
         run: python tests/test_browser_batch_b.py
+      - name: Verify saved reading through browser restarts and installed editions (Chromium)
+        run: python tests/test_browser_batch_c.py

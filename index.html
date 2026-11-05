@@ -496,6 +496,19 @@ th,td{padding:7px 9px}
       </label>
       <p id="politicsSummariesHint">Show or hide every chapter’s summary, revision sheets, definitions, memory aids and examination questions. This choice is saved on this device.</p>
     </div>
+    <div class="p-nav-tools-heading">Offline &amp; edition</div>
+    <div class="p-edition-card" aria-label="Current offline edition">
+      <div class="p-edition-version-row">
+        <span>Saved edition</span>
+        <code id="politicsEditionVersion">Checking…</code>
+      </div>
+      <p id="politicsEditionStatus" role="status" aria-live="polite">Checking offline edition and updates.</p>
+      <div class="p-edition-actions">
+        <button id="politicsCheckUpdates" type="button">Check for updates</button>
+        <button id="politicsEditionReload" type="button" hidden>Reload updated edition</button>
+      </div>
+      <p class="p-edition-hint">This is the saved offline edition. If a new edition is installed while this page is open, reload to see its changes. Your reading position and preferences remain on this device.</p>
+    </div>
     <div class="p-nav-tools-heading">Export this book</div>
     <button id="politicsNavPrint" type="button" class="p-nav-print">Print / Save as PDF</button>
     <p class="p-nav-tool-note">Print keeps all chapters and revision material, even if you hide it while reading on screen.</p>
@@ -527,6 +540,7 @@ th,td{padding:7px 9px}
     <div class="p-resume-kicker">PICK UP WHERE YOU LEFT OFF</div>
     <h2>Continue reading?</h2>
     <p id="politicsContinueDescription">Your last chapter and section were saved on this device.</p>
+    <p id="politicsResumeNote" class="p-resume-hidden-note" hidden>Saved in hidden study material. Continue reading will temporarily reveal that chapter’s study section without changing your saved preference.</p>
     <div class="p-resume-buttons">
       <button type="button" id="politicsContinueButton">Continue reading</button>
       <button type="button" id="politicsContinueDismiss">Not now</button>

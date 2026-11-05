@@ -41,6 +41,14 @@ self.addEventListener('activate',event=>{
   })());
 });
 self.addEventListener('message',event=>{
+  if(event.data?.type==='GET_EDITION'){
+    event.ports?.[0]?.postMessage({
+      type:'EDITION_STATUS',
+      revision:BOOK_CACHE.slice(CACHE_PREFIX.length),
+      cache:BOOK_CACHE
+    });
+    return;
+  }
   if(event.data?.type!=='PREPARE_FONTS')return;
   event.waitUntil((async()=>{
     const items=Array.isArray(event.data.urls)?event.data.urls.slice(0,50):[];

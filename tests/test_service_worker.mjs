@@ -80,6 +80,16 @@ await good.lifecycle('activate');
 assert.ok(good.stores.has('11am-hikam-reader-untouched'),'Sibling app cache must remain');
 assert.ok(!good.stores.has('11am-politics-reader-prior'),'Old Politics edition cleaned');
 assert.equal(good.stats().claimed,1);
+// Edition identity is reported by the actual worker rather than a second
+// version constant that could diverge from the active cached files.
+let editionMessage=null;
+good.listeners.message({
+  data:{type:'GET_EDITION'},
+  ports:[{postMessage:data=>{editionMessage=data;}}]
+});
+assert.equal(editionMessage?.type,'EDITION_STATUS');
+assert.equal(editionMessage?.revision,version.replace('11am-politics-reader-',''));
+assert.equal(editionMessage?.cache,version);
 assert.equal((await good.navigate(scope)).body,'./index.html','Offline reopen uses cached book');
 assert.equal(good.stats().networkCalls,0,'No offline network request needed');
 assert.equal(await good.navigate('https://mohdujjain.github.io/11am-hikam/'),null,'Sibling navigation unaffected');

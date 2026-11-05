@@ -102,3 +102,15 @@ Search now implements a labelled **combobox/listbox** with `aria-activedescendan
 A visible-on-focus skip link jumps directly to the study chapters, with a semantic `main` landmark. Reduced-motion preferences disable smooth document scrolling and UI transitions. Two bright chapter banners (**13 and 14**) use darker screen-only upper gradients and fully opaque kicker text to improve white-on-color contrast. All original academic chapter content and print-specific styling remain unchanged.
 
 Chromium regression now checks 320px, 390px, 600px and desktop, chapter identity, touch target geometry, modal focus isolation, search ARIA keyboard behavior, print focus, reduced motion and chapter banner contrast.
+
+## Batch C — reading continuity and edition confidence
+
+The study guide remembers chapter, revision/section and approximate offset in `localStorage`. A **real Chromium process restart** regression now uses a persistent disk profile, rather than merely re-importing the JavaScript module, to verify that the cover's Continue Reading prompt returns to the original passage.
+
+If the saved position lies in the end-of-chapter review section while **Show End-of-Chapter Study Material** is disabled, the original revision anchor is retained. The cover explains that resuming will **temporarily reveal that chapter's revision material**; clicking Continue jumps back to the exact revision block without changing the saved hide/show preference. Missing section anchors still fall back safely to the saved chapter fraction after future editorial changes.
+
+The sidebar's **Tools → Offline & edition** panel shows the 12-character cached-edition revision reported by the active service worker using a `GET_EDITION` message. **Check for updates** invokes `registration.update()` immediately, bypassing the automatic check's one-minute throttle and displaying clear checking/current/offline/error states. When a new service worker activates, the panel offers **Reload updated edition** without clearing reading checkpoints or preferences.
+
+The floating offline control now shrinks to a quiet circular checkmark when the full study guide has been cached. It remains an accessible button that opens its detailed storage/install controls and grows prominent again if a new edition is ready.
+
+The new Chromium regression covers real process/profile restarts, the saved hidden-section scenario, service-worker edition messages, manual update checking while online and offline, and the compact offline-status presentation. The existing Batch A and B browser tests and offline atomic-upgrade tests remain in CI.
