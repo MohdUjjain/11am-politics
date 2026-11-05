@@ -1,0 +1,31 @@
+{
+  "id": "/11am-politics/",
+  "name": "11AM — Politics: Complete Study Notes",
+  "short_name": "11AM Politics",
+  "description": "A 20-chapter political science revision guide you can install and read offline.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F7F5EF",
+  "theme_color": "#20242C",
+  "lang": "en",
+  "categories": [
+    "education",
+    "books"
+  ],
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
