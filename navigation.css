@@ -438,7 +438,7 @@
   #politicsReadingLabel {display:none;}
   .p-top-search {flex:1 1 130px;min-width:0;}
   /* 16px input text avoids automatic zoom on iOS Safari. */
-  #politicsFullSearch {font-size:16px;height:42px;}
+  #politicsFullSearch {font-size:16px;height:44px;}
   .p-compact-chapter {
     display:block;flex:none;white-space:nowrap;
     font:700 11px/1.1 'IBM Plex Mono',monospace;

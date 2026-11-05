@@ -59,6 +59,9 @@ def check():
             assert header["search"]["right"]<=header["label"]["left"]+2,header
             assert header["ring"]["right"]<=header["viewport"]+1,header
             assert header["size"]=="16px",header
+            assert page.locator("#politicsFullSearch").evaluate(
+                "el => el.getBoundingClientRect().height"
+            )>=44,"Mobile search touch target must be at least 44px"
 
             # Scroll near the start of chapter eight so the responsive
             # chapter identity is meaningful independently of the ring.
