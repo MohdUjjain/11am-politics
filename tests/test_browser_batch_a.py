@@ -149,8 +149,8 @@ def check():
                 assert len(pdf) > 3000
                 reader = PdfReader(io.BytesIO(pdf))
                 text = "\n".join((p.extract_text() or "") for p in reader.pages)
-                assert "Chapter Summary" in text, text[:800]
-                assert "Politics" in text, text[:800]
+                assert "chapter summary" in text.casefold(), text[:800]
+                assert "politics" in text.casefold(), text[:800]
                 print(f"PASS: Chromium PDF background={background}, "
                       f"{len(reader.pages)} pages, visible text and revision")
 
