@@ -391,12 +391,47 @@ th,td{padding:7px 9px}
 <meta name="twitter:description" content="A comprehensive 20-chapter political science revision guide. Install and read offline.">
 <meta name="twitter:image" content="https://mohdujjain.github.io/11am-politics/og-image.png">
 <meta name="twitter:image:alt" content="11AM Politics complete study notes sharing card">
+<link rel="stylesheet" href="./navigation.css">
 </head>
 <body>
+<!-- Screen-only book navigation. The printed study guide is unchanged. -->
+<header id="politicsReadingHeader" aria-label="Reading progress">
+  <div class="p-reading-row">
+    <strong class="p-reading-brand">11AM · POLITICS</strong>
+    <span id="politicsReadingLabel">Complete Study Guide</span>
+  </div>
+  <div class="p-reading-track"><div id="politicsReadingFill" role="progressbar" aria-label="Progress through the study guide" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>
+</header>
+<button type="button" id="politicsNavFab" aria-label="Open contents" aria-controls="politicsNavPanel" aria-expanded="false">☰</button>
+<div id="politicsNavBackdrop" aria-hidden="true" hidden></div>
+<aside id="politicsNavPanel" tabindex="-1" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="politicsNavHeading" inert>
+  <div class="p-nav-head">
+    <div>
+      <h2 id="politicsNavHeading">Contents</h2>
+      <p id="politicsNavStatus" aria-live="polite">Explore 20 chapters and their revision material</p>
+    </div>
+    <button type="button" id="politicsNavClose" aria-label="Close contents">×</button>
+  </div>
+  <div class="p-nav-tools">
+    <label class="p-nav-search-label" for="politicsNavSearch">Find a chapter or section</label>
+    <input type="search" id="politicsNavSearch" placeholder="Title, topic, number, revision…" autocomplete="off" aria-describedby="politicsNavResults">
+    <p id="politicsNavResults" role="status" aria-live="polite"></p>
+    <div class="p-nav-actions">
+      <button type="button" id="politicsNavExpandAll">Expand all</button>
+      <button type="button" id="politicsNavCollapseAll">Collapse all</button>
+    </div>
+  </div>
+  <nav id="politicsNavTree" class="p-nav-tree" aria-label="Chapter, section and revision contents"></nav>
+  <div class="p-nav-footer">
+    <button type="button" id="politicsNavResume" hidden>Resume reading</button>
+    <p>Choose a chapter title to jump, or expand its sections and revision shortcuts.</p>
+  </div>
+</aside>
+
 <div class="shell">
 
 <!-- ============================================================ COVER ============================================================ -->
-<section class="cover">
+<section class="cover" id="book-cover">
   <div class="eyebrow">Comparative &amp; Foundational Political Science · Revision Edition</div>
   <h1>Politics<br><span class="accent-word">The Complete</span><br>Study Notes</h1>
   <p class="dek">A premium, exam-ready revision handbook covering twenty core chapters — from the definition of politics itself to the crisis of contemporary democratic engagement. Every argument, thinker, date, and quotation from the source material has been preserved and reorganised for fast, confident revision.</p>
@@ -427,7 +462,7 @@ th,td{padding:7px 9px}
 </section>
 
 <!-- ============================================================ MASTER TOC ============================================================ -->
-<section class="toc-page">
+<section class="toc-page" id="book-contents">
   <h2>Table of Contents</h2>
   <p class="toc-intro">Twenty chapters, arranged exactly as in the original course sequence — from the definition of the discipline itself through to today's "crisis" of political engagement.</p>
   <ul class="toc-list">
@@ -478,7 +513,7 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>1. The Prologue: The Inevitable Dialogue</h2>
+    <h2 id="ch01-sec01">1. The Prologue: The Inevitable Dialogue</h2>
     <p>Politics is the essential human drama — the <strong>"master science"</strong> through which we attempt to define and construct the <strong>"Good Society."</strong> It is not merely a collection of headlines or the dry machinery of bureaucracy, but a high-stakes dialogue born from two inescapable realities:</p>
 
     <div class="box concept">
@@ -495,7 +530,7 @@ th,td{padding:7px 9px}
       <p><strong>Crusoe alone = no politics. Crusoe + Friday = politics is born.</strong> Remember this because it visually anchors the idea that politics requires <em>more than one person</em> — it cannot exist without an "other" to disagree, negotiate, and share scarce resources with.</p>
     </div>
 
-    <h2>2. The Architecture of Disagreement: Defining the Indefinable</h2>
+    <h2 id="ch01-sec02">2. The Architecture of Disagreement: Defining the Indefinable</h2>
     <p>We are entering a field where the very ground shifts beneath us — a domain of <strong>"essentially contested concepts"</strong> where language itself is a weapon of war. To define "politics" is to take a side in an ancient intellectual struggle. While the broad sense of the term involves the making, preserving, and amending of general social rules, its everyday usage is often stained by pejorative associations.</p>
 
     <div class="box def">
@@ -523,7 +558,7 @@ th,td{padding:7px 9px}
       <p>Examiners love asking you to <strong>"discuss why politics is an essentially contested concept."</strong> Always structure your answer around the idea that definitions are not neutral — each one privileges a particular view of where power legitimately belongs (e.g. restricting politics to government vs. seeing it everywhere).</p>
     </div>
 
-    <h2>3. The Four Pillars: Contrasting Conceptions of Politics</h2>
+    <h2 id="ch01-sec03">3. The Four Pillars: Contrasting Conceptions of Politics</h2>
     <p>To navigate this terrain, we must investigate four distinct lenses. These perspectives categorise politics either as an <strong>arena</strong> (a specific location) or a <strong>process</strong> (a distinctive behaviour).</p>
 
     <h3><span class="roman">I.</span>Politics as the Art of Government</h3>
@@ -559,7 +594,7 @@ th,td{padding:7px 9px}
       <p>Remember the Four Pillars in order with <strong>G-A-C-P</strong>: <strong>G</strong>overnment → <strong>A</strong>ffairs (public) → <strong>C</strong>onsensus (compromise) → <strong>P</strong>ower. Mnemonic sentence: <em>"Government Always Creates Power."</em> Each successive pillar is progressively <em>broader</em> — from the narrowest (only the state) to the widest (everywhere).</p>
     </div>
 
-    <h2>4. The Scientific Voyage: Approaches to the Study of Politics</h2>
+    <h2 id="ch01-sec04">4. The Scientific Voyage: Approaches to the Study of Politics</h2>
     <p>The academic study of politics has been a history of revolutions and counter-revolutions.</p>
 
     <div class="table-wrap">
@@ -592,7 +627,7 @@ th,td{padding:7px 9px}
       <p>Fear of betrayal often leads both to confess. Ironically, rational individual behaviour leads to an <strong>irrational collective outcome</strong> (12 total years in jail vs. just 2 if both had cooperated by staying silent). This tool explains why states fail to cooperate on global issues like climate change or arms control.</p>
     </div>
 
-    <h2>5. The Toolkit of the Analyst: Concepts, Models, and Theories</h2>
+    <h2 id="ch01-sec05">5. The Toolkit of the Analyst: Concepts, Models, and Theories</h2>
     <p>Political scientists do not merely observe; they <strong>"impose meaning"</strong> on a chaotic world.</p>
     <ul>
       <li><strong>Concepts</strong> — the building blocks of thought (e.g. "Equality," "Presidency").</li>
@@ -618,7 +653,7 @@ th,td{padding:7px 9px}
       <div class="flow-note">🔄 Feedback loops back into new Inputs — this is a continuous cycle, not a one-way street.</div>
     </div>
 
-    <h2>6. The Global Shift: Dissolving the Porous Border</h2>
+    <h2 id="ch01-sec06">6. The Global Shift: Dissolving the Porous Border</h2>
     <p>Traditionally, sovereignty was seen as a <strong>"Hard Shell"</strong> — a rigid line dividing the "inside" of domestic order from the "outside" of international anarchy. Globalization has shattered this paradigm, rendering state borders <strong>"porous."</strong></p>
     <p>Transnational flows of capital, information, and technology mean that the "inside" is now inextricably linked to the "outside." The <strong>2007–09 global financial crisis</strong> serves as the definitive proof: a crisis in one corner of the globe can instantly destabilise the domestic stability of a sovereign state thousands of miles away.</p>
 
@@ -634,7 +669,7 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <h2>7. The Epilogue: Revisiting the Master Science</h2>
+    <h2 id="ch01-sec07">7. The Epilogue: Revisiting the Master Science</h2>
     <p>Politics is not a utopian solution. As Stoker warns, it is "designed to disappoint." Its outcomes are messy, ambiguous, and never final. Yet, it remains the only "civilizing force" capable of managing our disagreements in a world of limited resources. It is the essential mechanism that prevents social collapse. We are, and must remain, <strong>"political animals."</strong></p>
 
     <div class="box mistake">
@@ -646,10 +681,10 @@ th,td{padding:7px 9px}
 
   <!-- END MATTER -->
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch01-rev01">📋 Chapter Summary</div>
     <p>Politics arises from the twin facts of diversity and scarcity, and exists as the alternative to a "war of each against all." Because "politics" is an essentially contested concept, its definition is itself a political act — ranging from the narrow "art of government" to the all-encompassing view of politics as "power" present in every social relationship. Four pillars structure this debate: government, public affairs, compromise/consensus, and power, split between "arena" and "process" approaches. The discipline's own study has evolved through philosophical, empirical, behavioural, rational-choice, and new-institutionalist traditions, using tools like concepts, ideal types (Weber), and models (Easton's system). Finally, globalization has transformed the "hard shell" of state sovereignty into a "soft shell," dissolving the once-firm line between domestic and international politics — proven starkly by the 2007–09 financial crisis.</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch01-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Two Preconditions</h5><ul><li>Diversity (we are not alike)</li><li>Scarcity (never enough to go around)</li></ul></div>
       <div class="rs-block"><h5>Four Pillars (GACP)</h5><ul><li>Government (Easton: authoritative allocation of values)</li><li>Public Affairs (state/civil society + public/private)</li><li>Consensus (Crick: "art of the possible")</li><li>Power (Lasswell: "who gets what, when, how")</li></ul></div>
@@ -659,7 +694,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Globalization</h5><ul><li>Hard Shell → Soft Shell sovereignty</li><li>2007–09 crisis = proof of porous borders</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch01-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -675,13 +710,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch01-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>Crusoe + Friday:</b> politics is born only at the moment of human encounter — isolation = pre-political.</div>
       <div class="mc-item"><b>"GAP-P" / "Government Always Creates Power":</b> the order of the four pillars, narrowest to broadest.</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch01-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Define politics using Easton's phrase "authoritative allocation of values."</li><li>Explain why "politics" is described as an "essentially contested concept."</li></ol>
@@ -722,7 +757,7 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>1. The Lens of Perception: Defining Political Ideology</h2>
+    <h2 id="ch02-sec01">1. The Lens of Perception: Defining Political Ideology</h2>
     <p>In the grand theatre of human history, political ideas are not merely dry academic abstractions; they are the <strong>invisible architects</strong> of our lived reality. Every individual, whether consciously or not, acts as a political thinker. These ideas serve as <strong>"lenses"</strong> — distinctive intellectual frameworks or paradigms through which we perceive, interpret, and act upon the world.</p>
 
     <div class="box def">
@@ -735,7 +770,7 @@ th,td{padding:7px 9px}
       <p><strong>Karl Marx</strong> radically reconfigured the term, casting ideology as <strong>"false consciousness."</strong> In the Marxist tradition, ideology represents the ideas of the "ruling class" — a sophisticated apparatus of delusion that conceals the inherent contradictions of the class system to perpetuate the exploitation of the proletariat.</p>
     </div>
 
-    <h2>2. The Architecture of Belief: The Social-Scientific Framework</h2>
+    <h2 id="ch02-sec02">2. The Architecture of Belief: The Social-Scientific Framework</h2>
     <p>From a social-scientific perspective, an ideology is a more or less coherent set of ideas providing the basis for organised political action. These traditions are fluid, overlapping, and built upon three structural pillars:</p>
     <div class="box concept">
       <div class="box-label">🟩 Key Concept — The Three Pillars of Every Ideology</div>
@@ -765,7 +800,7 @@ th,td{padding:7px 9px}
       </div>
     </div>
 
-    <h2>3. The Enlightenment Legacy: Liberalism and the Individual</h2>
+    <h2 id="ch02-sec03">3. The Enlightenment Legacy: Liberalism and the Individual</h2>
     <p>Liberalism is the <strong>"meta-ideology"</strong> of the industrialised West, emerging as a challenge to feudal privilege and the absolutist state, framing the individual as the sovereign of their own destiny.</p>
     <div class="quote-block">John Locke's philosophy justified the "Glorious Revolution" of 1688, arguing that the state exists only to protect "natural rights" — life, liberty, and property — and that its authority remains contingent upon the "consent of the governed."<cite>John Locke (1632–1704), father of early liberalism</cite></div>
 
@@ -797,7 +832,7 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <h2>4. The Resistance to Change: Conservatism and Organic Order</h2>
+    <h2 id="ch02-sec04">4. The Resistance to Change: Conservatism and Organic Order</h2>
     <p>Conservatism emerged in the late 18th century as a visceral reaction against the French Revolution, defending the traditional social order against "liberty, equality, fraternity," favouring experience over theory.</p>
     <div class="quote-block"><strong>Edmund Burke</strong>, progenitor of the Anglo-American tradition, argued that wisdom resides in history and tradition — the "accumulated wisdom of the past." He famously advocated for <strong>"change in order to conserve."</strong></div>
 
@@ -819,7 +854,7 @@ th,td{padding:7px 9px}
       <li><strong>Pragmatism</strong> — preference for "what works" over abstract "systems of thought."</li>
     </ul>
 
-    <h2>5. The Dream of Community: Socialism and its Divergent Paths</h2>
+    <h2 id="ch02-sec05">5. The Dream of Community: Socialism and its Divergent Paths</h2>
     <p>Socialism emerged as the visceral counter-myth to the atomising forces of industrial capitalism, prioritising the collective over the self.</p>
     <div class="box concept">
       <div class="box-label">🟩 Key Concept — Base and Superstructure</div>
@@ -845,7 +880,7 @@ th,td{padding:7px 9px}
       <li><strong>The Frankfurt School</strong> — Adorno, Horkheimer, Marcuse: "Critical Theory," blending Marxism with Freudian psychology to analyse systems of repression.</li>
     </ul>
 
-    <h2>6. The Twentieth-Century Disruptors: Fascism and Anarchism</h2>
+    <h2 id="ch02-sec06">6. The Twentieth-Century Disruptors: Fascism and Anarchism</h2>
     <h3>Fascism: The Deification of the State</h3>
     <p>Fascism is characterised by an <strong>"anticharacter"</strong> — defining itself by what it opposes: antiliberalism, anticommunism, anti-individualism. It seeks an organically unified national community where individual identity is entirely absorbed into the collective.</p>
     <ul>
@@ -864,7 +899,7 @@ th,td{padding:7px 9px}
       <li><strong>Anarcho-communism</strong> — common ownership and decentralization are the only reliable bases for social solidarity (Kropotkin).</li>
     </ul>
 
-    <h2>7. The Modern Expansion: Identity, Environment, and Globalism</h2>
+    <h2 id="ch02-sec07">7. The Modern Expansion: Identity, Environment, and Globalism</h2>
     <h3>Feminism: "The Personal is Political"</h3>
     <div class="table-wrap">
       <table>
@@ -891,7 +926,7 @@ th,td{padding:7px 9px}
       <li><strong>Socialist Cosmopolitanism</strong> — pursuit of global social justice and North–South wealth redistribution.</li>
     </ul>
 
-    <h2>8. Beyond the West: The Revolt against Western Dualism</h2>
+    <h2 id="ch02-sec08">8. Beyond the West: The Revolt against Western Dualism</h2>
     <p>Ideologies originated in the West but have been transformed by <strong>Postcolonialism</strong>, exposing and overturning the psychological dimensions of colonial rule — increasingly a "Revolt against Western Dualism" (challenging subject/object, humankind/nature binaries).</p>
     <ul>
       <li><strong>Third-Worldism</strong> — emerging from the <strong>1955 Bandung Conference</strong>, offering a perspective separate from Western capitalism and Soviet communism.</li>
@@ -905,7 +940,7 @@ th,td{padding:7px 9px}
       </li>
     </ul>
 
-    <h2>9. Conclusion: The Persistence of the Lens</h2>
+    <h2 id="ch02-sec09">9. Conclusion: The Persistence of the Lens</h2>
     <p>The <strong>"End of History"</strong> predicted by <strong>Francis Fukuyama</strong> — that liberal democracy is the final, universal form of human government — has proven premature. The resilience of ethnic nationalism, religious fundamentalism, and resistance to Western "rights-oriented" thinking in Asia show the ideological landscape is diversifying, not converging.</p>
 
     <div class="table-wrap">
@@ -933,10 +968,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch02-rev01">📋 Chapter Summary</div>
     <p>Ideology, first coined by Destutt de Tracy as a neutral "science of ideas," was transformed by Marx into a tool of "false consciousness." Every ideology can be analysed through three pillars: its account of the existing order, its vision of the good society, and its plan for change. Liberalism (individual, freedom, reason) split into classical (negative liberty, minimal state) and modern (positive liberty, welfare state) variants. Conservatism defends organic tradition through paternalistic and New Right strands. Socialism divides into revolutionary communism and reformist social democracy, refined by Neo-Marxists (Lukács, Gramsci, Frankfurt School). Fascism (statism/racialism) and Anarchism (capitalist/communist strands) represent twentieth-century extremes. The late twentieth century saw ideological expansion into feminism, green politics, and cosmopolitanism, while non-Western traditions (postcolonialism, Asian Values, Buddhist non-dualism) challenge the presumed universality of Western liberal democracy — disproving Fukuyama's "End of History."</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch02-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Three Pillars of Ideology</h5><ul><li>Account of existing order</li><li>Vision of good society</li><li>Plan for political change</li></ul></div>
       <div class="rs-block"><h5>Liberalism</h5><ul><li>I FREE-TC: Individualism, Freedom, Reason, Equality, Toleration, Consent, Constitutionalism</li><li>Classical (negative liberty) vs Modern (positive liberty)</li></ul></div>
@@ -946,7 +981,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Modern &amp; Non-Western</h5><ul><li>Feminism: liberal/socialist/radical</li><li>Green: anthropocentrism vs ecocentrism; Gaia (Lovelock)</li><li>Cosmopolitanism: moral/liberal/socialist</li><li>Bandung 1955; Kyoto School; Nagarjuna's sunyata</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch02-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -963,13 +998,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch02-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>"I FREE-TC":</b> the seven elements of the Liberal Prism.</div>
       <div class="mc-item"><b>Statism vs Racialism:</b> Italian Fascism ≈ state above all; Nazism ≈ race above all.</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch02-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Define "ideology" and explain how Marx's usage differed from Destutt de Tracy's.</li><li>What is meant by "the personal is political"?</li></ol>
@@ -1009,10 +1044,10 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>1. The Opening: The Ubiquitous Architect</h2>
+    <h2 id="ch03-sec01">1. The Opening: The Ubiquitous Architect</h2>
     <p>The state is the silent partner in every human contract — the ghost in the machine of our social architecture. While traditional boundaries are challenged by transnational corporations, borderless finance, and international organisations, it remains the primary engine of social order and the <strong>sole proprietor of legitimate violence</strong>. Far from disappearing, the state is undergoing a profound <em>ontological shift</em> — reinventing its jurisdictional architecture to survive in a globalized era.</p>
 
-    <h2>2. Defining the Beast: Four Dimensions of Statehood</h2>
+    <h2 id="ch03-sec02">2. Defining the Beast: Four Dimensions of Statehood</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Perspective</th><th>Core Concept / Focus</th><th>Primary Limitation</th></tr></thead>
@@ -1030,7 +1065,7 @@ th,td{padding:7px 9px}
       <p>The state is a political association that establishes sovereign jurisdiction within defined territorial borders. It exercises authority through permanent, recognisably "public" institutions responsible for the collective organisation of communal life, funded at public expense — encompassing the entire <em>Body Politic</em>, including social security, the courts, and nationalised industries.</p>
     </div>
 
-    <h2>3. The Five Pillars: Anatomy of State Power</h2>
+    <h2 id="ch03-sec03">3. The Five Pillars: Anatomy of State Power</h2>
     <div class="box concept">
       <div class="box-label">🟩 Key Concept — The Leviathan</div>
       <p><strong>Thomas Hobbes</strong> illustrated sovereignty through the "Leviathan" — a gigantic monster necessary to prevent the "nasty, brutish, and short" life of anarchy.</p>
@@ -1053,7 +1088,7 @@ th,td{padding:7px 9px}
       <p>Remember the five pillars: <strong>S</strong>overeignty, <strong>P</strong>ublic Nature, <strong>L</strong>egitimation, <strong>D</strong>omination, <strong>T</strong>erritoriality → <em>"Sovereign Power Loves Domination &amp; Territory."</em></p>
     </div>
 
-    <h2>4. Genesis: How the State Was Forged</h2>
+    <h2 id="ch03-sec04">4. Genesis: How the State Was Forged</h2>
     <p>The modern state is a historical invention of 16th–17th century Europe, replacing overlapping Medieval authority (Church and feudal lords) with a centralised system, formalised by the <strong>Peace of Westphalia (1648)</strong>.</p>
     <div class="table-wrap">
       <table>
@@ -1067,7 +1102,7 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <h2>5. The Mirror of Theory: Rival Perspectives on Power</h2>
+    <h2 id="ch03-sec05">5. The Mirror of Theory: Rival Perspectives on Power</h2>
     <ul>
       <li><strong>The Pluralist State</strong> — rooted in liberal social-contract theory, the state is a "neutral arbiter" or umpire.
         <ul><li><em>Neopluralism</em> (Dahl, Lindblom) — business enjoys a "privileged position" as society's major investor and largest employer.</li></ul>
@@ -1082,7 +1117,7 @@ th,td{padding:7px 9px}
       <li><strong>The Patriarchal State</strong> — feminist theorists critique the public/private divide; the welfare state creates "public dependence" where women are controlled as clients and employees of state services.</li>
     </ul>
 
-    <h2>6. A Typology of Governance: From Minimal to Totalitarian</h2>
+    <h2 id="ch03-sec06">6. A Typology of Governance: From Minimal to Totalitarian</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Type</th><th>Description</th><th>Example</th></tr></thead>
@@ -1108,7 +1143,7 @@ th,td{padding:7px 9px}
       </div>
     </div>
 
-    <h2>7. The Great Eclipse? Globalization and its Discontents</h2>
+    <h2 id="ch03-sec07">7. The Great Eclipse? Globalization and its Discontents</h2>
     <p>The late 20th century suggested a "retreat of the state" via <strong>supraterritoriality</strong> — a borderless world of instant capital flow. The state appeared "hollowed out" by TNCs and NGOs. However, a more nuanced synthesis reveals that <strong>globalization was not imposed on states; globalization was created by states to serve their national interests.</strong> This has led to a transition from "Government" to "Governance," where the state shifts from direct provision to a regulating role.</p>
 
     <div class="box highyield">
@@ -1116,7 +1151,7 @@ th,td{padding:7px 9px}
       <p><strong>Philip Bobbitt</strong> argues this heralds the rise of the <strong>"Market State,"</strong> marking the end of the "Long War" (the 20th-century struggle between liberalism, fascism, and communism). The Market State no longer tries to "tame" capitalism; it bases legitimacy on maximising market opportunities for citizens.</p>
     </div>
 
-    <h2>8. The Failed State and the Burden of Reconstruction</h2>
+    <h2 id="ch03-sec08">8. The Failed State and the Burden of Reconstruction</h2>
     <p>In parts of the developing world, the state has not "retreated" but <strong>collapsed</strong>. Failed States (e.g. Somalia, Liberia) cannot monopolise force, leading to warlordism — often the result of colonial borders that ignored ethnic and religious cohesion.</p>
     <div class="case-study">
       <div class="cs-label">Case Study</div>
@@ -1128,7 +1163,7 @@ th,td{padding:7px 9px}
       </ol>
     </div>
 
-    <h2>9. The Return: Why the State Persists</h2>
+    <h2 id="ch03-sec09">9. The Return: Why the State Persists</h2>
     <p>Despite "death of the state" narratives, the Leviathan is returning in two forms:</p>
     <ul>
       <li><strong>The National Security State</strong> — transnational terrorism forces states to reassert their role as "master of violence" (tighter borders, wider surveillance).</li>
@@ -1145,10 +1180,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch03-rev01">📋 Chapter Summary</div>
     <p>The state can be understood through four lenses (idealist, functionalist, organizational, international), but is most usefully defined organizationally as a sovereign, territorial, public association. Its power rests on five pillars: sovereignty, public nature, legitimation, domination (Weber's monopoly of legitimate violence), and territoriality. It was forged through warfare (Tilly), economic transition (Marx), or the combined IEMP forces (Mann), formalised at the Peace of Westphalia (1648). Rival theories — pluralist, capitalist, Leviathan (New Right), and patriarchal — dispute whose interests the state truly serves. A typology ranges from minimal/nightwatchman to totalitarian and religious states. Though globalization seemed to "hollow out" the state into a mere "Market State," the 2007–09 financial crisis and the rise of the National Security State prove the Leviathan endures — transformed, not abolished.</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch03-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Four Dimensions</h5><ul><li>Idealist (Hegel)</li><li>Functionalist</li><li>Organizational (used here)</li><li>International (legal person)</li></ul></div>
       <div class="rs-block"><h5>Five Pillars (SPLDT)</h5><ul><li>Sovereignty (legal/political; internal/external)</li><li>Public Nature</li><li>Legitimation</li><li>Domination (Weber)</li><li>Territoriality</li></ul></div>
@@ -1158,7 +1193,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Globalization</h5><ul><li>Government → Governance</li><li>Market State (Bobbitt)</li><li>2007–09 crash = state's return</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch03-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -1172,13 +1207,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch03-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>"SPLDT" / "Sovereign Power Loves Domination &amp; Territory":</b> the five pillars of state power.</div>
       <div class="mc-item"><b>IEMP:</b> Ideological, Economic, Military, Political — Mann's synthesis theory of state formation.</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch03-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Define the state using the "organizational" view.</li><li>What did Weber mean by the state's "monopoly of the means of legitimate violence"?</li></ol>
@@ -1218,7 +1253,7 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>1. Introduction: The Invisible Foundation of the State</h2>
+    <h2 id="ch04-sec01">1. Introduction: The Invisible Foundation of the State</h2>
     <p>In 1947, <strong>Winston Churchill</strong> remarked to the UK House of Commons that <em>"democracy is the worst form of government except all those other forms that have been tried from time to time."</em> While a state may claim a monopoly on force, raw coercion is a brittle instrument. This philosophical pivot — from the "monopoly of coercion" to a "sanctification of history" — defines <strong>legitimacy</strong>.</p>
 
     <div class="box def">
@@ -1226,7 +1261,7 @@ th,td{padding:7px 9px}
       <p>From the Latin <em>legitimare</em>, "to declare lawful." The transformation of power into authority — the willingness of citizens to comply with a system of rule because they perceive it as rightful and binding. Without legitimacy, power is a temporary imposition; with it, power becomes authority.</p>
     </div>
 
-    <h2>2. The Triad of Authority: How Regimes Survive</h2>
+    <h2 id="ch04-sec02">2. The Triad of Authority: How Regimes Survive</h2>
     <p><strong>Max Weber</strong> moved the conversation from the abstract "moral obligation" of the philosopher to the concrete "belief in legitimacy" observed by the sociologist, identifying three "ideal types" of legitimacy.</p>
     <div class="table-wrap">
       <table>
@@ -1243,7 +1278,7 @@ th,td{padding:7px 9px}
       <p>Weber regarded <strong>legal-rational</strong> authority as the hallmark of the modern industrial state — power attaches to the <em>office</em>, not the person. But don't forget his warning: the price of this rational efficiency is an <strong>"iron cage"</strong> of bureaucracy that could trap the human spirit in a soulless machine of its own making.</p>
     </div>
 
-    <h2>3. The Legitimation Crisis: Why Systems Falter</h2>
+    <h2 id="ch04-sec03">3. The Legitimation Crisis: Why Systems Falter</h2>
     <p>Legitimacy is a fragile achievement, not a permanent status. <strong>David Beetham</strong> argued power must fulfil a triad of criteria to be legitimate:</p>
     <div class="box concept">
       <div class="box-label">🟩 Key Concept — Beetham's Triad</div>
@@ -1259,7 +1294,7 @@ th,td{padding:7px 9px}
       <p>The crisis in state finances that occurs when expanding social expenditure (welfare) coincides with economic recession and declining tax revenues.</p>
     </div>
 
-    <h2>4. Defining "The People": The Three Pillars of Democracy</h2>
+    <h2 id="ch04-sec04">4. Defining "The People": The Three Pillars of Democracy</h2>
     <p>While <strong>Abraham Lincoln's</strong> "government of, by, and for the people" is the gold standard of democratic rhetoric, <strong>Bernard Crick</strong> reminds us that "democracy" is the most <strong>"promiscuous"</strong> word in public affairs — often used as a mere "hurrah! word."</p>
     <ol>
       <li><strong>Who are the people?</strong> A single cohesive body (Rousseau's <em>General Will</em>) or merely "the majority" — the latter risks the <strong>"tyranny of the majority,"</strong> where the numerically strongest override minority rights.</li>
@@ -1269,7 +1304,7 @@ th,td{padding:7px 9px}
       <li><strong>How far should popular rule extend?</strong> Liberals want a public/private divide keeping democracy within the political realm. Radical democrats and socialists argue for <strong>"economic democracy,"</strong> extending popular rule into the workplace and family life.</li>
     </ol>
 
-    <h2>5. The Many Faces of the Demos: Four Paths to Popular Rule</h2>
+    <h2 id="ch04-sec05">5. The Many Faces of the Demos: Four Paths to Popular Rule</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Model</th><th>Key Thinkers</th><th>Core Idea</th></tr></thead>
@@ -1286,7 +1321,7 @@ th,td{padding:7px 9px}
       <p>J.S. Mill's support for the franchise was famously qualified. Fearing the "tyranny of the majority," he proposed <strong>"plural voting"</strong> (votes of the educated carry more weight) and argued the right to vote should be limited by a <strong>literacy requirement</strong>.</p>
     </div>
 
-    <h2>6. Rival Views: Democracy in Practice</h2>
+    <h2 id="ch04-sec06">6. Rival Views: Democracy in Practice</h2>
     <ul>
       <li><strong>Pluralism</strong> — Robert Dahl's <strong>"Polyarchy"</strong>: power is widely dispersed among "multiple minorities"; democracy as a reliable channel between state and competing interest groups.</li>
       <li><strong>Elitism</strong> — the <strong>"Iron Law of Oligarchy."</strong> C. Wright Mills described a unified <strong>"Power Elite"</strong> (business, military, political cliques) making "history-making" decisions. Schumpeter and Downs proposed <strong>Competitive Elitism</strong> — rival elites compete for votes; politicians as entrepreneurs, voters as consumers.</li>
@@ -1295,7 +1330,7 @@ th,td{padding:7px 9px}
       <li><strong>Marxism</strong> — liberal democracy is a <strong>"bourgeois sham";</strong> political equality is impossible while class power is dictated by unequal ownership of wealth.</li>
     </ul>
 
-    <h2>7. The Global Horizon: Cosmopolitan Democracy</h2>
+    <h2 id="ch04-sec07">7. The Global Horizon: Cosmopolitan Democracy</h2>
     <p>As globalization "hollows out" the nation-state, legitimacy shifts toward the supranational level, addressing the growing <strong>"democratic deficit."</strong></p>
     <div class="table-wrap">
       <table>
@@ -1316,10 +1351,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch04-rev01">📋 Chapter Summary</div>
     <p>Legitimacy is the "alchemy" that transforms raw power into rightful authority. Weber identified three ideal types — traditional, charismatic, legal-rational — the last defining the modern state but risking an "iron cage" of bureaucracy. Legitimacy can collapse into "legitimation crisis" when Beetham's legal/moral/political triad breaks down, as theorised by Habermas (capitalism vs. welfare demands) and King/Rose (government overload). Democracy itself is contested across three questions — who are "the people," how should they rule (direct vs. representative), and how far should rule extend (political vs. economic democracy) — and across four historical models (Classical, Protective, Developmental, People's). Rival theories of how democracy actually functions include Pluralism, Elitism, Corporatism, the New Right critique, and Marxism. Finally, globalization has pushed thinkers toward Cosmopolitan Democracy — a World Parliament or "globalization from below" — to close the growing democratic deficit.</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch04-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Weber's Triad</h5><ul><li>Traditional (custom)</li><li>Charismatic (personal appeal)</li><li>Legal-Rational (office, rules) — modern state; risk of "iron cage"</li></ul></div>
       <div class="rs-block"><h5>Beetham's Legitimation Triad</h5><ul><li>Legal</li><li>Moral</li><li>Political</li></ul></div>
@@ -1329,7 +1364,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Cosmopolitan Democracy</h5><ul><li>World Parliament (Held, Monbiot)</li><li>Globalization from Below</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch04-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -1343,13 +1378,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch04-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>TCL — Traditional, Charismatic, Legal-rational:</b> Weber's three types, in rough historical order.</div>
       <div class="mc-item"><b>Legal-Moral-Political:</b> Beetham's triad — remember as "the Three L-M-Ps of Legitimacy."</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch04-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Define legitimacy and distinguish it from mere coercion.</li><li>What is the "tyranny of the majority"?</li></ol>
@@ -1389,7 +1424,7 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>1. The Prologue: The Measles of Mankind?</h2>
+    <h2 id="ch05-sec01">1. The Prologue: The Measles of Mankind?</h2>
     <p>The nation is a phantom of political theory — notorious for being impossible to pin down, yet powerful enough to command millions to die in its name. It stands as the ultimate unit of political rule, an "architecture of belonging" providing the foundation for international law. Nationalism suffers from a <strong>"multiple-personality syndrome"</strong>: at once progressive and reactionary, liberating and oppressive.</p>
 
     <div class="box concept">
@@ -1397,7 +1432,7 @@ th,td{padding:7px 9px}
       <p>The nation is a complex psycho-political construct serving as the primary unit of modern rule. Its definitions are fundamentally contradictory — bridging ancient ethnic ties and modern political inventions — and its future is besieged by a convergence of global and internal pressures that may render the nation-state redundant.</p>
     </div>
 
-    <h2>2. The Definition Problem: Objective Reality vs. Subjective Perception</h2>
+    <h2 id="ch05-sec02">2. The Definition Problem: Objective Reality vs. Subjective Perception</h2>
     <ul>
       <li><strong>Objective Features</strong> — language, religion, shared past. Yet these fail alone: Switzerland remains a viable nation despite three major languages; the Catholic/Protestant divide is central in Northern Ireland but irrelevant to mainland UK or Germany.</li>
       <li><strong>Subjective Perception</strong> — ultimately the nation is a psycho-political construct: it exists because members perceive themselves as a distinctive political community. This is what distinguishes a nation from a mere <em>ethnic group</em>, which lacks the collective quest for sovereign statehood.</li>
@@ -1419,7 +1454,7 @@ th,td{padding:7px 9px}
       <p>From the Latin <em>nasci</em> ("to be born"): <strong>1. Cultural</strong> (common language, religion, history, traditions); <strong>2. Political</strong> (a group regarding itself as a natural political community); <strong>3. Psychological</strong> (shared loyalty / patriotism).</p>
     </div>
 
-    <h2>3. The Cultural Engine: Organic Ties and the Volksgeist</h2>
+    <h2 id="ch05-sec03">3. The Cultural Engine: Organic Ties and the Volksgeist</h2>
     <p>Cultural nationalism views the nation as an "organic" entity. <strong>Johann Gottfried Herder</strong> and <strong>Johann Gottlieb Fichte</strong> argued the nation is determined by environment and climate. Herder posited every nation possesses a <strong class="glossary-term">Volksgeist</strong> — a unique "spirit of the people" found in language, myths, and legends.</p>
 
     <div class="table-wrap">
@@ -1438,7 +1473,7 @@ th,td{padding:7px 9px}
     </div>
     <p>Following <strong>Friedrich Meinecke's</strong> distinction, "cultural nations" (Greeks, Russians, Germans) are characterised by ethnic homogeneity — membership is inherited kinship, "one blood." Examples: Welsh nationalism; <strong>Marcus Garvey's</strong> Black nationalism, seeking the rediscovery of Africa as a spiritual "homeland."</p>
 
-    <h2>4. The Political Artefact: Imagined Communities and the General Will</h2>
+    <h2 id="ch05-sec04">4. The Political Artefact: Imagined Communities and the General Will</h2>
     <p><strong>Jean-Jacques Rousseau</strong> is the architect of the political vision, introducing the <strong>"General Will"</strong> — shifting the population from "subjects" of a crown to "citizens" possessed of inalienable rights.</p>
     <ul>
       <li><strong>Eric Hobsbawm</strong> — nations are <strong>"invented traditions."</strong> "Popular nationalism" was manufactured in the late 19th century through national anthems, flags, and mass primary education.</li>
@@ -1451,7 +1486,7 @@ th,td{padding:7px 9px}
       <p><strong>Cultural nation = "born into it" (blood/Volksgeist).</strong> <strong>Political nation = "imagined/invented" (Anderson/Hobsbawm).</strong> Pair each theory with its "engine": Herder = Volksgeist; Rousseau = General Will; Anderson = imagination; Hobsbawm = invention.</p>
     </div>
 
-    <h2>5. Case Study: The Canadian Dilemma</h2>
+    <h2 id="ch05-sec05">5. Case Study: The Canadian Dilemma</h2>
     <p>Canada serves as a laboratory for the transition from cultural to political nationalism.</p>
     <div class="case-study">
       <div class="cs-label">Case Study</div>
@@ -1473,7 +1508,7 @@ th,td{padding:7px 9px}
       <p>Today, the tide has turned toward a "rainbow society" — economic benefits and First Nations self-government have largely replaced secessionist fervour with multiculturalism.</p>
     </div>
 
-    <h2>6. The Four Faces of Nationalism: An Ideological Taxonomy</h2>
+    <h2 id="ch05-sec06">6. The Four Faces of Nationalism: An Ideological Taxonomy</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Face</th><th>Origin / Figures</th><th>Motive</th><th>Criticism</th></tr></thead>
@@ -1486,7 +1521,7 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <h2>7. The Crisis of the Nation-State: Centrifugal and Global Pressures</h2>
+    <h2 id="ch05-sec07">7. The Crisis of the Nation-State: Centrifugal and Global Pressures</h2>
     <div class="duel">
       <div class="yes">
         <h5>Internal — Centrifugal Pressures</h5>
@@ -1498,7 +1533,7 @@ th,td{padding:7px 9px}
       </div>
     </div>
 
-    <h2>8. The Final Synthesis: Is a Post-National World Possible?</h2>
+    <h2 id="ch05-sec08">8. The Final Synthesis: Is a Post-National World Possible?</h2>
     <div class="table-wrap">
       <table>
         <caption>Primordialism vs. Constructivism</caption>
@@ -1519,10 +1554,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch05-rev01">📋 Chapter Summary</div>
     <p>A "nation" blends objective cultural features (language, religion, history) with a subjective, psycho-political sense of belonging — distinguishing it from a mere ethnic group by its quest for sovereign statehood. Cultural (organic/Volksgeist, Herder/Fichte, Smith's ethnies) and Political (Rousseau's General Will, Anderson's "imagined communities," Hobsbawm's "invented traditions") theories offer rival explanations of origin. Quebec's shift from "clerical-cultural" to "assertive-political" nationalism (1960s Quiet Revolution to the 1995 referendum) illustrates this transition. Four ideological "faces" of nationalism — Liberal, Conservative, Expansionist, Anticolonial — show its Janus-faced (progressive/reactionary) character. Today the nation-state is squeezed between internal centrifugal pressures (e.g. Belgium) and external global pressures (nuclear, economic, environmental, cultural), fuelling the enduring Primordialism vs. Constructivism debate.</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch05-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Nation vs Ethnic Group</h5><ul><li>Ethnic group = shared descent, no political goal</li><li>Nation = shared loyalty + quest for sovereignty</li></ul></div>
       <div class="rs-block"><h5>Three Dimensions</h5><ul><li>Cultural / Political / Psychological</li></ul></div>
@@ -1532,7 +1567,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Crisis Pressures</h5><ul><li>Internal: centrifugal / ethnic (Belgium)</li><li>External: nuclear, economic, environmental, cultural</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch05-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -1547,12 +1582,12 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch05-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>"Born into it" vs "Imagined into it":</b> Cultural nationalism (blood/Volksgeist) vs. Political nationalism (invention/imagination).</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch05-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Distinguish a "nation" from an "ethnic group."</li><li>What is Benedict Anderson's "imagined community"?</li></ol>
@@ -1592,16 +1627,16 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>1. The Opening: "It's the Economy, Stupid"</h2>
+    <h2 id="ch06-sec01">1. The Opening: "It's the Economy, Stupid"</h2>
     <p>Political survival is dictated by the pulse of the market; governments are consecrated by booms and desecrated by slumps. The "disciplinary separation" of politics and economics is a pedagogical fiction. States provide the scaffolding for markets (property rights, contracts, order) while economic performance provides the state's ultimate legitimacy: <strong>politics is the architecture, economics is the foundation.</strong></p>
 
-    <h2>2. Defining the Field: What is Political Economy?</h2>
+    <h2 id="ch06-sec02">2. Defining the Field: What is Political Economy?</h2>
     <div class="box def">
       <div class="box-label">🟦 Definition — Political Economy</div>
       <p><strong>As a Topic:</strong> the study of the interactive relationship between states (power) and markets (wealth).<br><strong>As a Method:</strong> the application of economic tools (rational-choice, game theory, public-choice theory) to decode political behaviour.</p>
     </div>
 
-    <h2>3. The Three Traditions: Competing Worldviews</h2>
+    <h2 id="ch06-sec03">3. The Three Traditions: Competing Worldviews</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Tradition</th><th>Key Actor</th><th>Core Philosophy</th><th>Role of the State</th></tr></thead>
@@ -1617,7 +1652,7 @@ th,td{padding:7px 9px}
       <p><strong>Mercantilism:</strong> economic nationalism viewing trade as zero-sum for state power. <strong>Protectionism:</strong> tariffs/quotas shielding "infant industries." <strong>Utility Maximizers:</strong> liberal assumption that individuals rationally maximise pleasure over pain. <strong>Surplus Value:</strong> value extracted from workers by underpaying them relative to the value their labour generates.</p>
     </div>
 
-    <h2>4. Mapping the Varieties: Three Faces of Capitalism</h2>
+    <h2 id="ch06-sec04">4. Mapping the Varieties: Three Faces of Capitalism</h2>
     <p>"Pure" capitalism is a scholarly illusion; every real system is a hybrid of its own history and culture.</p>
     <div class="table-wrap">
       <table>
@@ -1630,7 +1665,7 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <h2>5. The Great Debate: Keynesianism vs. Neoliberalism</h2>
+    <h2 id="ch06-sec05">5. The Great Debate: Keynesianism vs. Neoliberalism</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Keynesianism</th><th>Neoliberalism</th></tr></thead>
@@ -1644,14 +1679,14 @@ th,td{padding:7px 9px}
       <p>In the 1970s, Keynesianism's credibility collapsed under <strong>stagflation</strong> — the simultaneous occurrence of economic stagnation (unemployment) and rising inflation. This anomaly paved the way for the neoliberal revolution, as demand-management tools appeared powerless.</p>
     </div>
 
-    <h2>6. The Radical Horizon: Alternatives to the Capitalist Mode</h2>
+    <h2 id="ch06-sec06">6. The Radical Horizon: Alternatives to the Capitalist Mode</h2>
     <ul>
       <li><strong>State Socialism</strong> — the Soviet model replaced the market with "directive planning." It eradicated absolute poverty and built heavy industry, but was doomed by information complexity (planners cannot process more data points than atoms in the universe) and produced a privileged bureaucratic <strong>"New Class."</strong></li>
       <li><strong>Market Socialism</strong> — attempted in Yugoslavia and Hungary; tried to reconcile socialist ownership with market responsiveness via self-managing enterprises.</li>
       <li><strong>Green Economics</strong> — <strong>E.F. Schumacher</strong> argues capitalism and socialism both suffer from the "super-ideology" of Industrialism. His <strong>"Buddhist Economics"</strong> stresses "right livelihood" and morality over material accumulation, shifting focus from growth to Sustainability.</li>
     </ul>
 
-    <h2>7. Globalization: The Borderless Challenge</h2>
+    <h2 id="ch06-sec07">7. Globalization: The Borderless Challenge</h2>
     <p>Globalization is a "complex web of interconnectedness" rendering territorial boundaries permeable and, in many cases, irrelevant.</p>
     <ul>
       <li><strong>Economic</strong> — internationalization of production; no national economy is an island.</li>
@@ -1660,7 +1695,7 @@ th,td{padding:7px 9px}
     </ul>
     <p><strong>Supraterritoriality</strong> is driven by electronic money (capital surging globally at a keystroke) and satellite technology (instant communication bypassing national regulation).</p>
 
-    <h2>8. The Neoliberal Consensus and the 2007–09 Reckoning</h2>
+    <h2 id="ch06-sec08">8. The Neoliberal Consensus and the 2007–09 Reckoning</h2>
     <p>By the 1990s, the <strong>"Washington Consensus"</strong> (Stabilize, Privatize, Liberalize) dominated the globe, fuelling "turbo-capitalism" via <strong>Financialization</strong> — the expansion of the financial sector and debt-fuelled consumption. The 2008 collapse of Lehman Brothers exposed this as a house of cards. <strong>Naomi Klein</strong> argues such crises are part of a broader <strong>"Disaster Capitalism,"</strong> where neoliberal "shock therapy" is pushed during emergencies.</p>
 
     <div class="duel">
@@ -1674,7 +1709,7 @@ th,td{padding:7px 9px}
       </div>
     </div>
 
-    <h2>9. Conclusion: The New Geography of Power</h2>
+    <h2 id="ch06-sec09">9. Conclusion: The New Geography of Power</h2>
     <p>The 2007–09 Crash left a legacy of unsustainable sovereign debt. When governments attempt "fiscal retrenchment," they often trigger the <strong>Paradox of Thrift</strong>: the Keynesian logic that when everyone saves at once, the result is a catastrophic collapse of demand, leading to stagnation.</p>
 
     <div class="quote-block">"The era of the 'internationalization of the state' means that governments now respond more to the dictates of the global economy than to their own public opinion."<cite>Robert Cox</cite></div>
@@ -1687,10 +1722,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch06-rev01">📋 Chapter Summary</div>
     <p>Political economy studies the interaction of state power and market wealth, structured by three rival traditions: state-centric mercantilism, classical/neoclassical laissez-faire, and Marxist class analysis. Real-world capitalism splits into three faces — Enterprise (Anglo-American), Social (German Rhine-Alpine), and State (Japan/China) capitalism. The twentieth century's great policy debate pitted Keynesianism (demand management, the multiplier) against Neoliberalism (monetarism, supply-side reform), the latter triumphing after 1970s stagflation. Radical alternatives — State Socialism, Market Socialism, and Schumacher's Green/Buddhist Economics — offered routes beyond capitalism. Globalization's economic, cultural, and political dimensions, driven by supraterritorial electronic money and satellite technology, culminated in the Washington Consensus and the 2007–09 financial crash, sparking enduring debate over capitalism's inherent stability and the "Paradox of Thrift."</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch06-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Three Traditions</h5><ul><li>State-centric (Mercantilism)</li><li>Classical/Neo-classical (Laissez-faire)</li><li>Marxist (Superstructure)</li></ul></div>
       <div class="rs-block"><h5>Three Faces of Capitalism</h5><ul><li>Enterprise (US/UK)</li><li>Social (Germany)</li><li>State (Japan/China)</li></ul></div>
@@ -1700,7 +1735,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>2007–09 Crisis</h5><ul><li>Washington Consensus → Financialization → Lehman Brothers</li><li>Disaster Capitalism (Klein)</li><li>Paradox of Thrift</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch06-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -1715,13 +1750,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch06-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>"Architecture vs Foundation":</b> politics is the architecture, economics is the foundation — they cannot be separated.</div>
       <div class="mc-item"><b>Enterprise / Social / State:</b> the three faces of capitalism, roughly US → Germany → Japan/China (decreasing market-purity, increasing state role).</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch06-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Define "surplus value" in the Marxist tradition.</li><li>What is meant by "supraterritoriality"?</li></ol>
@@ -1761,14 +1796,14 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>1. Opening: The Invisible Architecture of Politics</h2>
+    <h2 id="ch07-sec01">1. Opening: The Invisible Architecture of Politics</h2>
     <p>Politics does not merely occur within a social "context" — it is the very process through which the conflicts of society are articulated and resolved. <strong>Society</strong> is a collection of individuals characterised by regular patterns of social interaction; proximity is not enough — it requires a stable social structure and mutual awareness.</p>
     <div class="box concept">
       <div class="box-label">🟩 Central Thesis</div>
       <p>The transition from industrial hierarchy to post-industrial networks has shifted the political battlefield. As the "thick" bonds of class have thinned into individualism, a new quest for meaning has emerged: the resurgence of "thick" identity politics based on race, gender, and religion.</p>
     </div>
 
-    <h2>2. The Great Transition: From Industrialism to Post-Industrialism</h2>
+    <h2 id="ch07-sec02">2. The Great Transition: From Industrialism to Post-Industrialism</h2>
     <p>Industrialization drove urbanization and replaced traditional status-based hierarchies with <strong>social class</strong> as the central organising principle. <strong>Ferdinand Tönnies</strong> distinguished two modes of social organisation:</p>
     <div class="table-wrap">
       <table>
@@ -1785,7 +1820,7 @@ th,td{padding:7px 9px}
       <ul class="tight"><li>Transition from manufacturing to a service-oriented workforce</li><li>The rise of the white-collar professional</li><li>"Labour theory of value" replaced by "knowledge theory of value"</li><li>"Fordist" mass production → "post-Fordist" flexible, decentralized production</li></ul>
     </div>
 
-    <h2>3. The Information Age: Networks Over Hierarchies</h2>
+    <h2 id="ch07-sec03">3. The Information Age: Networks Over Hierarchies</h2>
     <p>In this new "weightless economy," intellectual capital has replaced material things as the primary source of wealth. <strong>Manuel Castells</strong> argues we have transitioned into a <strong>network society</strong> — the industrial age relied on rigid hierarchies (trade unions, parties); the information age operates through diffuse, informal, transnational networks (environmental, anti-globalization movements).</p>
     <div class="duel">
       <div class="yes">
@@ -1798,7 +1833,7 @@ th,td{padding:7px 9px}
       </div>
     </div>
 
-    <h2>4. The Sovereign Individual: The Rise of Individualism</h2>
+    <h2 id="ch07-sec04">4. The Sovereign Individual: The Rise of Individualism</h2>
     <p>As social connectedness "hollows out," the void is filled by <strong>individualism</strong>. Industrial capitalism first forced personal choice over work and location; 1980s <strong>neoliberalism</strong> accelerated this. While "productionist" ethics emphasised discipline and duty, modern consumerism equates happiness with material acquisition.</p>
     <div class="quote-block">"There is no such thing as society... only individual men and women and their families."<cite>Margaret Thatcher</cite></div>
 
@@ -1820,7 +1855,7 @@ th,td{padding:7px 9px}
     </div>
     <p><strong>Social Reflexivity</strong>: in an age of mass information, individuals must constantly reflect on identity, leading to <strong>"lifestyle politics"</strong> — defining oneself by choices rather than inherited class.</p>
 
-    <h2>5. The Resurgence of the 'Thick' Bond: Identity Politics</h2>
+    <h2 id="ch07-sec05">5. The Resurgence of the 'Thick' Bond: Identity Politics</h2>
     <p>As class bonds "thinned," a new, combative "thick" connectedness emerged: <strong>Identity Politics</strong>, challenging marginalisation by reshaping group identity through cultural self-assertion. <strong>Edward Said's</strong> <em>Orientalism</em> demonstrated how Western hegemony was maintained through demeaning stereotypes of the "Other." Identity politics counters this via <strong>"consciousness raising."</strong></p>
     <ul>
       <li><strong>Race &amp; Ethnicity</strong> — Race = common ancestry (biological myths); Ethnicity = deep sentiment of loyalty to a cultural group. Evolved from <strong>Marcus Garvey's</strong> black nationalism to modern secessionist ethnic movements.</li>
@@ -1833,7 +1868,7 @@ th,td{padding:7px 9px}
       <p>While the West embraced individualism, Japan and the "Tiger" states (South Korea, Singapore, Taiwan) resisted "thinning" bonds, maintaining social cohesion through Confucianism and "Asian Values," prioritising social responsibility over individual egoism.</p>
     </div>
 
-    <h2>6. The Multicultural Challenge: Cohesion in Diversity</h2>
+    <h2 id="ch07-sec06">6. The Multicultural Challenge: Cohesion in Diversity</h2>
     <p><strong>Will Kymlicka</strong> identified three minority rights: self-government, polyethnic exemptions, and special representation (affirmative action).</p>
     <div class="table-wrap">
       <table>
@@ -1867,10 +1902,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch07-rev01">📋 Chapter Summary</div>
     <p>Society has moved from the "thick" Gemeinschaft bonds of industrial-era class solidarity to the "thin" Gesellschaft, individualized, network-based (Castells) post-industrial and information-age order (Bell). This "hollowing out" of social connectedness — accelerated by neoliberalism and consumerism — produces atomism and, per Durkheim, anomie, while Putnam records declining social capital. In reaction, "thick" identity politics has resurged around race/ethnicity, gender, and religion, contesting Said's "Orientalism" through consciousness-raising. Multiculturalism offers Liberal, Pluralist, and Cosmopolitan models for managing this diversity, tested by real-world flashpoints (Rushdie, van Gogh, Madrid/London bombings, Danish cartoons) and debated between Huntington's "clash of civilizations" and Modood/Parekh's marginalisation thesis.</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch07-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Tönnies</h5><ul><li>Gemeinschaft (community, thick)</li><li>Gesellschaft (association, thin)</li></ul></div>
       <div class="rs-block"><h5>Post-Industrial (Bell)</h5><ul><li>Manufacturing → services</li><li>Knowledge theory of value</li><li>Fordism → Post-Fordism</li></ul></div>
@@ -1880,7 +1915,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Key Debate</h5><ul><li>Huntington: Clash of Civilizations</li><li>Modood/Parekh: marginalisation, not culture</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch07-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -1895,7 +1930,7 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">📊 Key Philosophers &amp; Contributions</div>
+    <div class="em-title" id="ch07-rev04">📊 Key Philosophers &amp; Contributions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Philosopher</th><th>Core Contribution</th></tr></thead>
@@ -1911,13 +1946,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch07-rev05">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>Gemeinschaft = "genuine" community (thick); Gesellschaft = "generic" association (thin):</b> use the shared "G" sound and contrasting vibe to keep them apart.</div>
       <div class="mc-item"><b>Economic Individualism → Atomism → Anomie:</b> a 3-step downward spiral — memorise as "Individual, Isolated, Invisible."</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch07-rev06">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Distinguish Gemeinschaft from Gesellschaft.</li><li>Define "anomie" and identify its theorist.</li></ol>
@@ -1957,10 +1992,10 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>Central Thesis</h2>
+    <h2 id="ch08-sec01">Central Thesis</h2>
     <p>In our hyper-mediated world, the psychological orientations — beliefs, symbols, values — that constitute <strong>"political culture"</strong> are far more decisive in the distribution and maintenance of power than the physical reality of resource allocation. To study politics today is to study the <strong>architecture of perception</strong>.</p>
 
-    <h2>1. The Foundations of Political Culture</h2>
+    <h2 id="ch08-sec02">1. The Foundations of Political Culture</h2>
     <div class="box concept">
       <div class="box-label">🟩 Key Concept</div>
       <p><strong>Political culture is the weather; public opinion is the storm.</strong> Public opinion = volatile, short-term reactions to scandals/policies. Political culture = the long-term psychological bedrock of beliefs about the constitution, the party system, and state legitimacy.</p>
@@ -1983,7 +2018,7 @@ th,td{padding:7px 9px}
       <p>Don't assume low voter turnout automatically = satisfaction. The chapter explicitly poses this as an open question: is it satisfaction (Sleeping Dogs) or "a deeper, more insidious alienation"? A strong answer holds both possibilities in tension.</p>
     </div>
 
-    <h2>2. Hegemony and the Battle of Ideas</h2>
+    <h2 id="ch08-sec03">2. Hegemony and the Battle of Ideas</h2>
     <p>The Marxist tradition reveals political culture as a weapon of the ruling class: <strong>"the ideas of the ruling class are in every epoch the ruling ideas"</strong> (Marx and Engels).</p>
     <ol>
       <li><strong>Bourgeois Ideology</strong> — culture as a "superstructure" propagating "false consciousness."</li>
@@ -1991,7 +2026,7 @@ th,td{padding:7px 9px}
       <li><strong>Repressive Tolerance</strong> — <strong>Herbert Marcuse's</strong> concept: the illusion of free speech and pluralism actually protects the dominant ideology, neutralising radical ideas by allowing them to exist as mere "options" buried under triviality.</li>
     </ol>
 
-    <h2>3. The Crises of Social Capital and Civic Engagement</h2>
+    <h2 id="ch08-sec04">3. The Crises of Social Capital and Civic Engagement</h2>
     <p><strong>Social Capital</strong> = the social networks, norms, and trust allowing a community to function. <strong>Robert Putnam's</strong> <em>"Bowling Alone"</em> thesis warns this capital is in steep decline, producing a "post-civic" generation.</p>
     <div class="box def">
       <div class="box-label">🟦 Causes for Decline in Social Capital</div>
@@ -2002,7 +2037,7 @@ th,td{padding:7px 9px}
       <p><strong>Ronald Inglehart's</strong> theory: youth aren't "lazy" — as economic security increased, they shifted from party membership toward "quality of life" issues (feminism, environmentalism, animal rights), favouring single-issue protest over the ballot box.</p>
     </div>
 
-    <h2>4. The Four Models of Media Influence</h2>
+    <h2 id="ch08-sec05">4. The Four Models of Media Influence</h2>
     <p>The media is a <strong>"secondary agent"</strong> of socialisation that often eclipses the family and school.</p>
     <div class="table-wrap">
       <table>
@@ -2024,7 +2059,7 @@ th,td{padding:7px 9px}
       <p>Chomsky's five filters: <strong>O</strong>wnership, <strong>A</strong>dvertisers, <strong>F</strong>lak, reliance on power-agents ("<strong>F</strong>riends in power"), <strong>M</strong>arket ideology → remember as <em>"OAF-FM broadcasts what power wants."</em></p>
     </div>
 
-    <h2>5. Case Study — WikiLeaks and E-Democracy</h2>
+    <h2 id="ch08-sec06">5. Case Study — WikiLeaks and E-Democracy</h2>
     <p>The digital frontier has birthed <strong>E-democracy</strong>, in three primary models: <strong>Representative</strong> (e-voting, e-petitions bolstering existing systems), <strong>Deliberative</strong> (new virtual spaces for direct debate), <strong>Activist</strong> (social media/"hacktivism" e.g. Anonymous to organize protests, bypassing traditional hierarchies).</p>
     <div class="case-study">
       <div class="cs-label">Case Study</div>
@@ -2042,7 +2077,7 @@ th,td{padding:7px 9px}
       </div>
     </div>
 
-    <h2>6. The Governance of "Spin" and Image</h2>
+    <h2 id="ch08-sec07">6. The Governance of "Spin" and Image</h2>
     <p>The media has <strong>"presidentialized"</strong> politics — <strong>Celebrity Politics</strong> and <strong>Spatial Leadership</strong>, where leaders appeal "over the heads" of their parties directly to the camera, fostering a <strong>"Culture of Contempt."</strong></p>
     <ul class="tight">
       <li><strong>Vetting</strong> — screening arguments before release</li>
@@ -2051,7 +2086,7 @@ th,td{padding:7px 9px}
       <li><strong>24/7 Government</strong> — pressure for "knee-jerk" policy-making, often leading to inertia or muddled thinking</li>
     </ul>
 
-    <h2>7. Media Globalization — McWorld vs. Jihad</h2>
+    <h2 id="ch08-sec08">7. Media Globalization — McWorld vs. Jihad</h2>
     <p><strong>Benjamin Barber</strong> warned of <strong>"McWorld"</strong> — a commercially homogeneous theme park of Western consumerist values driven by Media Imperialism. Yet globalization is not one-way: "reverse penetration" sees Bollywood, Al Jazeera, and "world music" infiltrate and diversify the West. While McWorld "flattens" culture, it provokes a <strong>"Jihad"</strong> — a militant reassertion of local, often fundamentalist, identities.</p>
 
     <div class="table-wrap">
@@ -2076,10 +2111,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch08-rev01">📋 Chapter Summary</div>
     <p>Political culture (the long-term "weather" of beliefs) differs from public opinion (the short-term "storm"), as modelled by Almond and Verba's five-nation study identifying Participant, Subject, and Parochial citizens. The Marxist tradition views culture as ideological control — from bourgeois "false consciousness" to Gramsci's "hegemony" and Marcuse's "repressive tolerance." Putnam's "Bowling Alone" thesis charts declining social capital (suburbanization, privatized leisure, consumer capitalism), while Inglehart's postmaterialism reframes youth disengagement as a shift toward single-issue activism. Four models — Pluralist, Dominant-Ideology, Elite-Values, and Market — explain media influence, refined by Chomsky's five structural filters. The WikiLeaks case study tests transparency against security, while "spin," celebrity politics, and Barber's "McWorld vs. Jihad" frame the tension between global media homogenization and local cultural resistance.</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch08-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Almond &amp; Verba (1963)</h5><ul><li>5 nations: USA, UK, W. Germany, Italy, Mexico</li><li>Participant / Subject / Parochial</li><li>"Sleeping Dogs" theory</li></ul></div>
       <div class="rs-block"><h5>Hegemony &amp; Ideology</h5><ul><li>Bourgeois Ideology (Marx/Engels)</li><li>Hegemony (Gramsci)</li><li>Repressive Tolerance (Marcuse)</li></ul></div>
@@ -2089,7 +2124,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Globalization</h5><ul><li>McWorld vs. Jihad (Barber)</li><li>Reverse penetration (Bollywood, Al Jazeera)</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch08-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -2104,13 +2139,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch08-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>"Weather vs Storm":</b> Political culture is the long-term weather; public opinion is the short-term storm.</div>
       <div class="mc-item"><b>"OAF-FM":</b> Chomsky's five structural filters (Ownership, Advertisers, Flak, Friends-in-power sourcing, Market ideology).</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch08-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Distinguish political culture from public opinion.</li><li>Define Gramsci's concept of "hegemony."</li></ol>
@@ -2150,10 +2185,10 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>1. The Prologue: Beyond the Ballot Box</h2>
+    <h2 id="ch09-sec01">1. The Prologue: Beyond the Ballot Box</h2>
     <p>The ballot is a ritual, a periodic pulse in the veins of the body politic. In the shift away from the classical ideal of direct, continuous participation, <strong>representation</strong> has emerged as the essential bridge — the mechanism translating the chaotic, diverse will of the people into the structured necessity of governance.</p>
 
-    <h2>2. The Four Faces of Representation</h2>
+    <h2 id="ch09-sec02">2. The Four Faces of Representation</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Model</th><th>Primary Logic</th><th>Key Figures</th><th>Core Critique</th></tr></thead>
@@ -2170,7 +2205,7 @@ th,td{padding:7px 9px}
       <p><strong>T</strong>rusteeship, <strong>D</strong>elegation, <strong>M</strong>andate, <strong>R</strong>esemblance → <em>"Trust Delegates to Mirror Reality"</em> captures the spectrum from elite judgment (Trusteeship) to exact social mirroring (Resemblance).</p>
     </div>
 
-    <h2>3. The Double-Edged Sword of Elections</h2>
+    <h2 id="ch09-sec03">3. The Double-Edged Sword of Elections</h2>
     <p>Elections are the "two-way street" of political communication — neither purely accountability nor purely control; they are both.</p>
     <div class="duel">
       <div class="yes"><h5>Bottom-Up Functions</h5><ul><li>The heart of the democratic pulse — the primary mechanism for accountability, letting the public "kick the rascals out."</li></ul></div>
@@ -2189,7 +2224,7 @@ th,td{padding:7px 9px}
       </ol>
     </div>
 
-    <h2>4. The Great Debate: Compulsory Voting</h2>
+    <h2 id="ch09-sec04">4. The Great Debate: Compulsory Voting</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Arguments for Compulsion</th><th>Arguments Against Compulsion</th></tr></thead>
@@ -2202,7 +2237,7 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <h2>5. Systems of Power: Majoritarianism vs. Proportionality</h2>
+    <h2 id="ch09-sec05">5. Systems of Power: Majoritarianism vs. Proportionality</h2>
     <div class="box def">
       <div class="box-label">🟦 Definition — Proportional Representation (PR)</div>
       <p>The principle that parties should be represented in an assembly in direct proportion to their overall electoral strength — a party winning 45% of votes should, ideally, occupy 45% of seats.</p>
@@ -2243,7 +2278,7 @@ th,td{padding:7px 9px}
       </ul>
     </div>
 
-    <h2>6. The Psephology of the Modern Voter</h2>
+    <h2 id="ch09-sec06">6. The Psephology of the Modern Voter</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Model</th><th>Core Logic</th></tr></thead>
@@ -2278,10 +2313,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch09-rev01">📋 Chapter Summary</div>
     <p>Representation replaces impractical direct democracy through four models — Trusteeship, Delegation, Mandate, Resemblance — each with a distinct logic and critique. Elections serve seven functions, oscillating between "bottom-up" accountability and "top-down" elite legitimation, with compulsory voting (Australia's 94–96% turnout) a live debate over civic duty vs. individual freedom. Electoral systems split into Majoritarian (SMP, Second Ballot, AV) favouring stable government, and Proportional (MMP, STV, Party-List) favouring fair representation — illustrated by New Zealand's 1993 shift from FPTP to MMP after a "wrong winner" legitimacy crisis. Voter psephology offers four models (Party-ID, Sociological, Rational-Choice, Dominant-Ideology), with Dealignment driving Issue Voting. Finally, Arrow's Impossibility Theorem proves a perfect collective "public interest" is mathematically unattainable — yet elections remain the indispensable ritual limiting arbitrary government.</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch09-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Four Models (T-D-M-R)</h5><ul><li>Trusteeship (Burke/Mill)</li><li>Delegation (Paine)</li><li>Mandate (parties)</li><li>Resemblance (socialists/feminists)</li></ul></div>
       <div class="rs-block"><h5>Elections: 7 Functions</h5><ul><li>Recruit, Make Government, Represent, Influence Policy, Educate, Legitimize, Strengthen Elites</li></ul></div>
@@ -2291,7 +2326,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Arrow's Theorem</h5><ul><li>No perfect "transitive" collective choice possible</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch09-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -2304,13 +2339,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch09-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>"Trust Delegates to Mirror Reality":</b> the four models of representation, T-D-M-R.</div>
       <div class="mc-item"><b>"Hearts then Heads":</b> the Second Ballot system lets voters vote sincerely first, strategically second.</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch09-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Distinguish the Trustee and Delegate models of representation.</li><li>Define Arrow's Impossibility Theorem.</li></ol>
@@ -2350,14 +2385,14 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>Thesis</h2>
+    <h2 id="ch10-sec01">Thesis</h2>
     <p>Political parties are the essential scaffolding of modern governance, yet their evolution from elite factions to mass machines has created a paradox where the very organisation required to wield power now threatens to alienate the societies they were built to represent.</p>
     <div class="box def">
       <div class="box-label">🟦 Definition — Political Party</div>
       <p>A group of people organized for the purpose of winning government power, typically characterized by formal membership, a broad issue focus, and a shared ideological identity.</p>
     </div>
 
-    <h2>1. The Taxonomy of the Political Machine</h2>
+    <h2 id="ch10-sec02">1. The Taxonomy of the Political Machine</h2>
     <p>Political scientists use four lenses to classify parties: <strong>(1) Cadre vs. Mass</strong> — elite "notables" vs. broad card-carrying membership; <strong>(2) Representative vs. Integrative</strong> — reacting to opinion for votes vs. proactively mobilizing the masses; <strong>(3) Constitutional vs. Revolutionary</strong> — respecting party/state division vs. seeking to fuse with the state; <strong>(4) Left-wing vs. Right-wing</strong> — reform/change vs. continuity.</p>
     <div class="table-wrap">
       <table>
@@ -2383,7 +2418,7 @@ th,td{padding:7px 9px}
       <li><strong>Two-Dimensional Spectrum</strong> — disentangles economic organization (horizontal: Left/Right) from civil liberty (vertical: Authoritarian/Libertarian).</li>
     </ul>
 
-    <h2>2. The Engine Room: Primary Functions of Parties</h2>
+    <h2 id="ch10-sec03">2. The Engine Room: Primary Functions of Parties</h2>
     <ol>
       <li><strong>Representation</strong> — articulating members' and voters' views</li>
       <li><strong>Elite Formation and Recruitment</strong> — the primary training ground for leaders</li>
@@ -2393,7 +2428,7 @@ th,td{padding:7px 9px}
       <li><strong>Organization of Government</strong> — stability, executive/assembly cooperation, structured opposition</li>
     </ol>
 
-    <h2>3. Internal Dynamics — The Struggle for the Soul of the Party</h2>
+    <h2 id="ch10-sec04">3. Internal Dynamics — The Struggle for the Soul of the Party</h2>
     <div class="box highyield">
       <div class="box-label">⭐ High-Yield Fact — The Iron Law of Oligarchy</div>
       <p>In <strong>1911</strong>, <strong>Robert Michels</strong> delivered a sobering thesis analyzing the German SPD: <strong>"He who says organization, says oligarchy."</strong> Democracy is a myth because organization inevitably leads to rule by the few.</p>
@@ -2410,7 +2445,7 @@ th,td{padding:7px 9px}
       <p><strong>Factions:</strong> organized, institutionalized sections within a party (often a "luxury" for parties long in power). <strong>Tendencies:</strong> loose, informal groups distinguished only by a common policy or ideological disposition.</p>
     </div>
 
-    <h2>4. The Network Ecology: Understanding Party Systems</h2>
+    <h2 id="ch10-sec05">4. The Network Ecology: Understanding Party Systems</h2>
     <ul>
       <li><strong>One-Party Systems</strong> — a single party as permanent government.
         <ul><li><em>Communist Model:</em> vanguardism + the <strong>nomenklatura</strong> system (vetted appointments ensuring party-approved "apparatchiks")</li><li><em>Post-colonial Model:</em> built around a charismatic leader (e.g. Mugabe, Zimbabwe) for nation-building/state consolidation</li></ul>
@@ -2437,7 +2472,7 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <h2>5. The Twilight of the Party? Evidence of Decline</h2>
+    <h2 id="ch10-sec06">5. The Twilight of the Party? Evidence of Decline</h2>
     <p>We are entering an era of <strong>"anti-politics,"</strong> with voters drawn to "anti-party parties" — Berlusconi's Forza Italia, the US Tea Party, various Green parties.</p>
     <div class="box highyield">
       <div class="box-label">⭐ High-Yield Fact — UK Party Membership in Numbers</div>
@@ -2453,10 +2488,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch10-rev01">📋 Chapter Summary</div>
     <p>Parties are classified along four axes (cadre/mass, representative/integrative, constitutional/revolutionary, left/right), with the modern "catch-all" party (Kirchheimer) mirroring Downs's economic model of vote-seeking entrepreneurs. Parties perform six functions — representation, elite recruitment, goal formulation, interest aggregation, socialization, and government organization — but internally succumb to Michels's "Iron Law of Oligarchy" (1911), driven by specialization, leader cohesion, and rank-and-file apathy. Party systems range from one-party (Communist/post-colonial) through two-party and dominant-party (Japan's LDP, 54 years) to multiparty (moderate vs. polarized pluralism), illustrated by the ANC's transition from liberation movement to dominant ruling party. Finally, collapsing UK membership figures and the rise of "anti-politics" (Tea Party, Forza Italia) suggest parties face a genuine crisis of relevance, rooted in post-Fordism, postmaterialism, and the Iron Law itself.</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch10-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Four Classification Axes</h5><ul><li>Cadre vs Mass</li><li>Representative vs Integrative</li><li>Constitutional vs Revolutionary</li><li>Left vs Right</li></ul></div>
       <div class="rs-block"><h5>Catch-All &amp; Downs</h5><ul><li>Kirchheimer: reduced ideology, max appeal</li><li>Downs: parties as vote-seeking entrepreneurs</li></ul></div>
@@ -2466,7 +2501,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Decline Evidence</h5><ul><li>UK membership 7%→&lt;1%</li><li>Labour 1M→166k</li><li>Anti-politics: Tea Party, Forza Italia</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch10-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -2480,13 +2515,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch10-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>"He who says organization, says oligarchy":</b> Michels's Iron Law — memorize verbatim, it is frequently quoted directly in exams.</div>
       <div class="mc-item"><b>Cadre = "elite club"; Mass = "big tent":</b> quick visual shorthand for the two historic party types.</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch10-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Define the "catch-all" party.</li><li>State Michels's "Iron Law of Oligarchy."</li></ol>
@@ -2525,10 +2560,10 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>Central Thesis</h2>
+    <h2 id="ch11-sec01">Central Thesis</h2>
     <p>Interest groups and social movements are the primary linkages between government and the governed, facilitating <strong>interest articulation</strong> (expressing social demands) and <strong>interest aggregation</strong> (melding demands into policy alternatives) — evolving from industrial-age cogs into global, decentralized agents of mobilization.</p>
 
-    <h2>1. The Taxonomy of Power: Classifying Political Actors</h2>
+    <h2 id="ch11-sec02">1. The Taxonomy of Power: Classifying Political Actors</h2>
     <ul>
       <li><strong>Communal Groups</strong> — membership by birth/heritage (families, tribes, castes); the principal agents of representation in developing states. State enforcement of obedience through such groups risks <strong>monism</strong>.</li>
       <li><strong>Institutional Groups</strong> — segments of the government machinery (military, bureaucracy), lacking autonomy, influencing from within.</li>
@@ -2549,7 +2584,7 @@ th,td{padding:7px 9px}
       <p><strong>Insider groups</strong> enjoy privileged, institutionalized access to policy formulation — a conferred privilege granted to groups with specialist knowledge willing to ensure member compliance. <strong>Outsider groups</strong> lack regular consultation, often prioritizing "ideological purity," forced to "go public."</p>
     </div>
 
-    <h2>2. The Theoretical Triad: Three Lenses on the State</h2>
+    <h2 id="ch11-sec03">2. The Theoretical Triad: Three Lenses on the State</h2>
     <ul>
       <li><strong>The Pluralist Ideal</strong> — group politics as the essential mechanism of democracy; power fragmented across a <strong>polyarchy</strong>. <strong>Robert Dahl</strong> argued no single elite dominates because different groups are active at different decision-making stages, creating <strong>countervailing powers</strong>.</li>
       <li><strong>The Corporatist Reality</strong>
@@ -2561,7 +2596,7 @@ th,td{padding:7px 9px}
       <li><strong>The New Right Critique</strong> — rooted in public choice theory. <strong>Mancur Olson's</strong> <em>"Logic of Collective Action"</em> highlights the <strong>"free rider"</strong> problem: individuals benefit from group success without contributing. Olson warned strong sectional networks lead to <strong>institutional sclerosis</strong>, choking economic growth via "over-government."</li>
     </ul>
 
-    <h2>3. The Channels of Influence: How Pressure Is Applied</h2>
+    <h2 id="ch11-sec04">3. The Channels of Influence: How Pressure Is Applied</h2>
     <p>Functional groups primarily target the <strong>bureaucracy</strong>, often via the <strong>"revolving door"</strong> — retiring officials moving into private-sector roles. In Japan this is formalized as <strong>amakudari</strong> ("descent from heaven").</p>
     <div class="box concept">
       <div class="box-label">🟩 The Art of the Lobby: The Iron Triangle</div>
@@ -2573,7 +2608,7 @@ th,td{padding:7px 9px}
       <li><strong>Political Culture</strong> — varies by nation: in France, Jacobin ideology views organized interests with suspicion as threats to the "general will," leading to lower unionization but stronger direct action (road blocks, hijacks).</li>
     </ul>
 
-    <h2>4. The New Frontier: Social Movements and Globalization</h2>
+    <h2 id="ch11-sec05">4. The New Frontier: Social Movements and Globalization</h2>
     <table><tbody><tr><td style="width:50%; vertical-align:top; border:none; padding:0 12px 0 0;"><strong>"Old" Movements</strong> — labour, focused on material advancement for the oppressed.</td><td style="width:50%; vertical-align:top; border:none; padding:0;"><strong>New Social Movements (NSMs)</strong> — reflect post-industrial society: quality of life, identity, environmental issues; Laclau and Mouffe describe this as "democratic pluralism"; typically young, affluent, better-educated participants.</td></tr></tbody></table>
     <div class="box highyield">
       <div class="box-label">⭐ High-Yield Fact — Occupy Wall Street (2011)</div>
@@ -2581,7 +2616,7 @@ th,td{padding:7px 9px}
     </div>
     <p><strong>NGOs</strong> like Amnesty International have adapted to globalization, maintaining permanent offices in Brussels and New York to lobby the EU and UN as "advocacy NGOs."</p>
 
-    <h2>5. The Great Debate: Do Groups Enhance or Hinder Democracy?</h2>
+    <h2 id="ch11-sec06">5. The Great Debate: Do Groups Enhance or Hinder Democracy?</h2>
     <div class="duel">
       <div class="yes">
         <h5>Pros — Enhancing Democracy</h5>
@@ -2607,10 +2642,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch11-rev01">📋 Chapter Summary</div>
     <p>Interest groups fall into communal, institutional, and associational categories, further split into sectional (material interests, insider access) and promotional (shared ideals, often outsider) types. Three theories explain their role: Pluralism (Dahl's polyarchy, countervailing powers), Corporatism (state vs. liberal/neocorporatist tripartitism), and the New Right (Olson's free-rider problem and institutional sclerosis). Influence flows through the bureaucracy (the "revolving door," Japan's amakudari), legislatures (the "iron triangle," hard/soft money), courts (Brown v. Board, Roe v. Wade), and civil disobedience. Since the late 20th century, "New Social Movements" (environmentalism, feminism) and digital "anarchist swarms" (Occupy Wall Street, 2011) have supplemented — and globalized — traditional sectional lobbying. The chapter closes on an unresolved debate: do groups disperse power democratically, or does unequal resource access (Miliband) entrench a "military-industrial complex"?</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch11-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Three Categories</h5><ul><li>Communal (birth/heritage)</li><li>Institutional (part of government)</li><li>Associational (voluntary)</li></ul></div>
       <div class="rs-block"><h5>Sectional vs Promotional</h5><ul><li>Sectional: material interest, insider</li><li>Promotional: shared ideals, often outsider</li></ul></div>
@@ -2620,7 +2655,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Great Debate</h5><ul><li>Pros: dispersal, education, participation</li><li>Cons: inequality, unaccountability, insider deals</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch11-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -2634,13 +2669,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch11-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>"Ten who speak vs ten thousand silent":</b> Napoleon's quote anchors the whole chapter's tension between vocal minorities and the passive majority.</div>
       <div class="mc-item"><b>Sectional = "Self" (material self-interest); Promotional = "Shared" ideals:</b> a quick way to remember which group type is which.</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch11-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Distinguish sectional and promotional groups.</li><li>Define Olson's "free rider" problem.</li></ol>
@@ -2679,7 +2714,7 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>1. Defining the Canvas: Government, Systems, and Regimes</h2>
+    <h2 id="ch12-sec01">1. Defining the Canvas: Government, Systems, and Regimes</h2>
     <div class="box def">
       <div class="box-label">🟦 Definition — Government</div>
       <p>Any mechanism through which ordered rule is maintained; more specifically, the formal institutional processes (legislation, execution, adjudication) operating at the national level.</p>
@@ -2694,7 +2729,7 @@ th,td{padding:7px 9px}
       <p>Famously illustrated by the US political system: the strict "separation of powers" designed to prevent tyranny can lead to institutional paralysis, preventing government from generating necessary policy "outputs."</p>
     </div>
 
-    <h2>2. The Methodology of Comparison: Why We Classify</h2>
+    <h2 id="ch12-sec02">2. The Methodology of Comparison: Why We Classify</h2>
     <div class="quote-block">"Without comparisons to make, the mind does not know how to proceed."<cite>Alexis de Tocqueville</cite></div>
     <p>Classification serves <strong>Analytical Understanding</strong> (testing theories where lab experiments are impossible) and <strong>Normative Evaluation</strong> (judging whether a regime "should" be reformed toward models like liberal democracy).</p>
     <div class="box mistake">
@@ -2702,7 +2737,7 @@ th,td{padding:7px 9px}
       <ul class="tight"><li><b>Simplification</b> — masks deep differences (e.g. majoritarian vs. consensual "democracies")</li><li><b>Ethnocentrism</b> — applying Western values universally</li><li><b>Value Bias</b> — labels as weapons (Cold War use of "Totalitarian" to equate communism with fascism)</li><li><b>Globalization</b> — most classifications are "state-bound," ignoring interconnectedness</li></ul>
     </div>
 
-    <h2>3. The Aristotelian Blueprint: Classical Typologies</h2>
+    <h2 id="ch12-sec03">3. The Aristotelian Blueprint: Classical Typologies</h2>
     <p><strong>Aristotle's</strong> 4th-century BCE study of 158 Greek city-states used a two-question framework: <strong>Who rules?</strong> and <strong>Who benefits?</strong></p>
     <div class="table-wrap">
       <table>
@@ -2718,7 +2753,7 @@ th,td{padding:7px 9px}
     <p>Aristotle viewed <strong>Polity</strong> — rule by the many in the interest of all — as the most practicable constitution, ideally led by a stabilizing "middle class." He feared <strong>Democracy</strong> as a debased form where the masses might fall under a <strong>Demagogue</strong> — a leader who whips up hysterical enthusiasm to seize control.</p>
     <p>This foundation was refined by <strong>Jean Bodin's</strong> theory of <strong>Absolutism</strong> (a sovereign bound only by "higher law") and <strong>Thomas Hobbes's</strong> starker vision (sovereignty as a monopoly of coercion, the ruler "entirely unconstrained"). <strong>Locke and Montesquieu</strong> countered with <strong>Liberal Constitutionalism</strong> — natural rights and the "separation of powers."</p>
 
-    <h2>4. The Cold War Prism: The "Three Worlds" Typology</h2>
+    <h2 id="ch12-sec04">4. The Cold War Prism: The "Three Worlds" Typology</h2>
     <div class="table-wrap">
       <table>
         <caption>Global Distribution (1983 Data)</caption>
@@ -2732,7 +2767,7 @@ th,td{padding:7px 9px}
     </div>
     <p>This model collapsed with the fall of the Berlin Wall — the "Second World" vanished, and the "Third World" fragmented into "Newly Industrialized" states and a <strong>"Fourth World"</strong> (sub-Saharan Africa's entrenched poverty).</p>
 
-    <h2>5. The Modern Mosaic: Five Regimes of the 21st Century</h2>
+    <h2 id="ch12-sec05">5. The Modern Mosaic: Five Regimes of the 21st Century</h2>
     <h3><span class="roman">5.1</span>Western Polyarchies</h3>
     <ul class="tight">
       <li><strong>Majoritarian (Westminster) Model</strong> — centralized power, single-party government, uncodified constitutions (e.g. UK)</li>
@@ -2753,7 +2788,7 @@ th,td{padding:7px 9px}
     <h3><span class="roman">5.5</span>Military Regimes</h3>
     <p>Government posts filled per military chain of command. <strong>Forms:</strong> direct rule via a <strong>Junta</strong>, <strong>Personalized Dictatorship</strong> (e.g. Pinochet in Chile), or "String-pulling" from behind the scenes (post-1945 Brazil). <strong>Coup Factors:</strong> economic underdevelopment, loss of regime legitimacy, divergent military/elite interests, international pressure (e.g. CIA support for the Pinochet coup).</p>
 
-    <h2>6. Intellectual Tension: Is Liberal Democracy the "Default Position"?</h2>
+    <h2 id="ch12-sec06">6. Intellectual Tension: Is Liberal Democracy the "Default Position"?</h2>
     <div class="duel">
       <div class="yes">
         <h5>Argument: YES (The Universal Goal)</h5>
@@ -2780,10 +2815,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch12-rev01">📋 Chapter Summary</div>
     <p>Government (transient decision-makers) must be distinguished from regime (enduring rules) and the state (the underlying entity) — classification aids analytical understanding and normative evaluation, but risks simplification, ethnocentrism, and value bias. Aristotle's "who rules/who benefits" framework (Monarchy/Tyranny, Aristocracy/Oligarchy, Polity/Democracy) remains foundational, later refined by Bodin's Absolutism, Hobbes's Leviathan, and Locke/Montesquieu's Liberal Constitutionalism. The Cold War's "Three Worlds" typology (1983: 15%/33%/52% of population) collapsed with the Berlin Wall, giving way to five modern regime types — Western Polyarchies, New Democracies (Third Wave, Grey Zone), East Asian Regimes (Confucian), Islamic Regimes (Turkey case study), and Military Regimes (junta, personalized, string-pulling). The chapter closes on the unresolved Fukuyama debate: is liberal democracy the historical "default," or has a "Democratic Recession" proven the world remains politically diffuse?</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch12-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Key Distinctions</h5><ul><li>State (entity) → Regime (rules) → Government (decision-makers)</li><li>Coup d'état vs. revolution</li></ul></div>
       <div class="rs-block"><h5>Aristotle's Six Forms</h5><ul><li>Monarchy/Tyranny</li><li>Aristocracy/Oligarchy</li><li>Polity/Democracy</li></ul></div>
@@ -2793,7 +2828,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Fukuyama Debate</h5><ul><li>Yes: mandate of history, transition paradigm</li><li>No: illiberal democracy, "Democratic Recession"</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch12-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -2807,13 +2842,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch12-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>"Who Rules? Who Benefits?":</b> Aristotle's two-question grid generates all six forms of government.</div>
       <div class="mc-item"><b>State → Regime → Government:</b> think of nested Russian dolls — the state is the outer shell, the regime the middle layer of rules, government the innermost, most changeable layer.</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch12-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Distinguish "government" from "regime."</li><li>Define Aristotle's concept of "Polity."</li></ol>
@@ -2853,10 +2888,10 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>Central Thesis</h2>
+    <h2 id="ch13-sec01">Central Thesis</h2>
     <p>The modern executive has evolved from a mere implementer of law into a source of highly personalized leadership. This creates a modern paradox: executive power is more visible and media-saturated than ever, yet increasingly difficult to wield effectively against global complexity and social fragmentation.</p>
 
-    <h2>1. Defining the Machine: Anatomy of the Executive Branch</h2>
+    <h2 id="ch13-sec02">1. Defining the Machine: Anatomy of the Executive Branch</h2>
     <p>The traditional doctrine of the Separation of Powers is, in modern practice, a fiction — the executive's responsibilities have swallowed the policy process.</p>
     <div class="table-wrap">
       <table>
@@ -2876,7 +2911,7 @@ th,td{padding:7px 9px}
     </div>
     <p>The executive is organized as a <strong>Pyramidal Structure</strong>: at the apex, we distinguish the <strong>Head of State</strong> (symbolic embodiment of state power) from the <strong>Head of Government / Chief Executive</strong> (manages the policy-making machinery).</p>
 
-    <h2>2. The Five Pillars of Executive Function</h2>
+    <h2 id="ch13-sec03">2. The Five Pillars of Executive Function</h2>
     <ol>
       <li><strong>Ceremonial Leadership</strong> — the executive "stands for" the state, representing national unity</li>
       <li><strong>Policy-making Leadership</strong> — developing coherent economic and social programmes</li>
@@ -2885,7 +2920,7 @@ th,td{padding:7px 9px}
       <li><strong>Crisis Leadership</strong> — the hierarchical structure allows swift, decisive action, often assuming "emergency powers"</li>
     </ol>
 
-    <h2>3. Architectural Variants: Presidential, Parliamentary, and Semi-Presidential Systems</h2>
+    <h2 id="ch13-sec04">3. Architectural Variants: Presidential, Parliamentary, and Semi-Presidential Systems</h2>
     <h3>The US Presidential System</h3>
     <p>The executive is separately elected and constitutionally independent, but power is fragile — <strong>Richard Neustadt</strong> defined it as the <strong>"power to persuade,"</strong> requiring management of four relationships:</p>
     <ul class="tight">
@@ -2899,7 +2934,7 @@ th,td{padding:7px 9px}
     <h3>The Semi-Presidential (Hybrid) System</h3>
     <p>As in the French Fifth Republic — a separately elected president plus a prime minister accountable to the assembly. This can lead to <strong>Cohabitation</strong>, where a president must work with a government controlled by a rival party.</p>
 
-    <h2>4. The Nature of Leadership: From Natural Gift to Political Skill</h2>
+    <h2 id="ch13-sec05">4. The Nature of Leadership: From Natural Gift to Political Skill</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Lens</th><th>Core Claim</th></tr></thead>
@@ -2948,7 +2983,7 @@ th,td{padding:7px 9px}
       <div class="no"><h5>The Case for Adoration</h5><ul><li>Leadership only works if it is personal; a "human face" allows a leader to articulate meaning and pursue bipartisanship above party divisions.</li></ul></div>
     </div>
 
-    <h2>5. The Modern Crisis: Why Leaders Struggle to Deliver</h2>
+    <h2 id="ch13-sec06">5. The Modern Crisis: Why Leaders Struggle to Deliver</h2>
     <ol class="tight">
       <li><strong>Global Complexity</strong> — near-impossible to "get things done" in an enmeshed global economy</li>
       <li><strong>Breakdown of Certainties</strong> — collapse of old ideological narratives</li>
@@ -2956,7 +2991,7 @@ th,td{padding:7px 9px}
       <li><strong>The Cultural Gap</strong> — "career politicians" remote from private citizens' concerns</li>
     </ol>
 
-    <h2>6. Conceptual Hierarchy: The Core Executive</h2>
+    <h2 id="ch13-sec07">6. Conceptual Hierarchy: The Core Executive</h2>
     <p>Per <strong>Rhodes and Dunleavy</strong>, power should be viewed not as a top-down pyramid, but as a <strong>Core Executive</strong>: <strong>The Network</strong> (leader, advisors, cabinet, staff) exerting power through <strong>The Alliance</strong> — building alliances and coalitions of support within that network.</p>
 
     <div class="box tip">
@@ -2967,10 +3002,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch13-rev01">📋 Chapter Summary</div>
     <p>The executive divides into the Political (elected, temporary) and Official/Bureaucratic (appointed, permanent) branches, organized in a pyramid from Head of State to Head of Government, and performs five functions: ceremonial, policy-making, popular, bureaucratic management, and crisis leadership. Three architectural systems — Presidential (Neustadt's "power to persuade"), Parliamentary (Spatial Leadership), and Semi-Presidential (Cohabitation) — structure executive power differently. Leadership itself is understood through four lenses (Natural Gift, Sociological, Organizational, Political Skill), Barber's energy/outlook matrix, and three leadership styles (Laissez-faire, Transactional, Transformational), fuelling a debate between "personalized leadership as authoritarian infantilization" and "personalized leadership as necessary human connection." Modern leaders face a crisis of delivery from global complexity, ideological breakdown, social fragmentation, and a cultural gap — best modelled not as a single pyramid but as Rhodes and Dunleavy's "Core Executive" network of alliances.</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch13-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Executive Dichotomy</h5><ul><li>Political (elected, temporary)</li><li>Bureaucratic (appointed, permanent)</li></ul></div>
       <div class="rs-block"><h5>Five Pillars</h5><ul><li>Ceremonial, Policy-making, Popular, Bureaucratic Management, Crisis</li></ul></div>
@@ -2980,7 +3015,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Modern Crisis (4)</h5><ul><li>Global Complexity, Broken Certainties, Fragmentation, Cultural Gap</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch13-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -2994,13 +3029,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch13-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>Barber Matrix — "APAN":</b> Active-Positive (Kennedy), Active-Negative (Nixon-era Reagan-type), Passive-Positive (Nixon), Passive-Negative (Coolidge/Eisenhower) — plot Energy (vertical) × Outlook (horizontal).</div>
       <div class="mc-item"><b>"Power to Persuade":</b> Neustadt's phrase — the US President is constitutionally powerful but politically must always negotiate.</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch13-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Distinguish the Political and Bureaucratic Executive.</li><li>Define "Cohabitation" in a semi-presidential system.</li></ol>
@@ -3040,17 +3075,17 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>Central Thesis</h2>
+    <h2 id="ch14-sec01">Central Thesis</h2>
     <p>Political assemblies serve as the indispensable "public face" of the modern state, bridging governed and governors. Yet their actual power fluctuates constantly between supreme law-making titans and mere decorative forums rubber-stamping executive dictates.</p>
 
-    <h2>1. Identity and Etymology: Assembly, Legislature, or Parliament?</h2>
+    <h2 id="ch14-sec02">1. Identity and Etymology: Assembly, Legislature, or Parliament?</h2>
     <ul>
       <li><strong>Assembly</strong> — in the French tradition, a "surrogate for the people" (e.g. France's Assemblée Nationale), the title for the lower house where popular spirit is most visible.</li>
       <li><strong>Legislature</strong> — strictly a misnomer; assemblies rarely "make" laws in the modern age, they "pass" them. The executive has largely seized the initiative, leaving the legislature a gatekeeper, not an architect.</li>
       <li><strong>Parliament</strong> — from the French <em>parler</em> ("to speak"): a deliberative forum whose defining feature is not statute "output" but its capacity for <strong>scrutiny</strong>.</li>
     </ul>
 
-    <h2>2. The Architectural Divide: Power Dynamics</h2>
+    <h2 id="ch14-sec03">2. The Architectural Divide: Power Dynamics</h2>
     <div class="quote-block">"Liberty is power cut into pieces."<cite>Thomas Hobbes</cite></div>
     <div class="table-wrap">
       <table>
@@ -3068,7 +3103,7 @@ th,td{padding:7px 9px}
       <p>In <strong>2008</strong>, when the constitution was amended to extend the presidential term, the vote count — <strong>393 to 57</strong> in the State Duma and a staggering <strong>144 to 1</strong> in the Federation Council — revealed an assembly that had long abandoned its role as a check on power.</p>
     </div>
 
-    <h2>3. The Five Pillars: What Do Assemblies Actually Do?</h2>
+    <h2 id="ch14-sec04">3. The Five Pillars: What Do Assemblies Actually Do?</h2>
     <ol>
       <li><strong>Legislation</strong> — <em>positive power</em> (initiating policy) vs. <em>negative power</em> (amending/rejecting). In the UK, private member's bills are rare; in the US, 80% of legislation originates with presidential initiatives.</li>
       <li><strong>Representation</strong> — <em>Trusteeship</em> (Burkean "judgment and wisdom") vs. <em>Mandate</em> (party carries the representative weight). <strong>"Pork Barrel Politics"</strong> — securing government projects/jobs for one's district, via <strong>log rolling</strong> ("back-scratching" among legislators).</li>
@@ -3077,7 +3112,7 @@ th,td{padding:7px 9px}
       <li><strong>Legitimacy</strong> — debating "in the name of the people" makes the system feel rightful (e.g. the <strong>1982 Falklands debate</strong>; the <strong>1988 Iran-Contra hearings</strong>).</li>
     </ol>
 
-    <h2>4. The Structural Debate: One Chamber or Two?</h2>
+    <h2 id="ch14-sec05">4. The Structural Debate: One Chamber or Two?</h2>
     <div class="quote-block">"If the second Chamber agrees with the first it is unnecessary; if it disagrees it is pernicious."<cite>Abbé Sieyès</cite></div>
     <div class="table-wrap">
       <table>
@@ -3091,11 +3126,11 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <h2>5. The Engine Room: The Power of Committees</h2>
+    <h2 id="ch14-sec06">5. The Engine Room: The Power of Committees</h2>
     <div class="quote-block">"Congressional government is committee government."<cite>Woodrow Wilson</cite></div>
     <p>A committee's strength depends on its specialist responsibilities, permanent membership, and resources. In the <strong>United States</strong>, committee power is supreme — scrutiny comes before floor debate; a bill can be redrafted or "killed" before general membership sees it. In the <strong>UK</strong>, committees are often "neutered" because they examine a bill only after its core principle has already passed party-disciplined majority approval.</p>
 
-    <h2>6. The "Decline of Assemblies" Investigation</h2>
+    <h2 id="ch14-sec07">6. The "Decline of Assemblies" Investigation</h2>
     <ul class="tight">
       <li><strong>Disciplined Parties</strong> — loose factions became rigid blocs, turning representatives into <strong>"Lobby Fodder."</strong></li>
       <li><strong>"Big" Government</strong> — power shifted to the bureaucracy; amateurs cannot compete with professional experts.</li>
@@ -3131,10 +3166,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch14-rev01">📋 Chapter Summary</div>
     <p>Assemblies are variously named — Assembly (people's surrogate), Legislature (a misnomer, since executives dominate initiation), or Parliament (from "to speak," emphasizing scrutiny). Their power depends on the executive-legislative relationship: Parliamentary (fusion, confidence, risk of "elective dictatorship"), Presidential (separation, checks/balances, risk of gridlock), or Semi-Presidential (dual executive, risk of superpresidentialism, as in Russia's 2008 vote). Assemblies perform five functions — legislation, representation (trusteeship/mandate, pork barrel), scrutiny, recruitment, and legitimacy — and are structurally debated between unicameral efficiency and bicameral balance (Sieyès's paradox). Committees are the true "engine room" (Wilson), powerful in the US, "neutered" in the UK. A four-part "decline" thesis (disciplined parties, big government, organizational weakness, media/interest groups) is countered by a "transformation" thesis, with real-world autonomy ranging from the policy-making US Congress to the rubber-stamp Russian Federal Assembly.</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch14-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Three Names</h5><ul><li>Assembly (people's surrogate)</li><li>Legislature (misnomer)</li><li>Parliament (to speak / scrutiny)</li></ul></div>
       <div class="rs-block"><h5>Three Systems</h5><ul><li>Parliamentary — Fusion/Confidence</li><li>Presidential — Separation/Checks</li><li>Semi-Presidential — Dual/Asymmetry</li></ul></div>
@@ -3144,7 +3179,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Decline vs Transformation</h5><ul><li>4 decline causes vs. media/committee professionalization counter-argument</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch14-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -3158,13 +3193,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch14-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>Parler → Parliament:</b> remember the French root "to speak" to anchor the idea that scrutiny/debate, not law-output, is Parliament's core function.</div>
       <div class="mc-item"><b>"L-R-S-R-L":</b> Legislation, Representation, Scrutiny, Recruitment, Legitimacy — the five pillars in order.</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch14-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Why is "legislature" considered a misnomer?</li><li>Define "pork barrel politics."</li></ol>
@@ -3203,10 +3238,10 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>1. Introduction: The Resurrection of the "Meta-Rule"</h2>
+    <h2 id="ch15-sec01">1. Introduction: The Resurrection of the "Meta-Rule"</h2>
     <p>For decades, constitutions were dismissed as "legalistic and boring." Since the 1970s, we have witnessed a global resurrection — from Iberian democratic transitions to post-communist Eastern Europe. A constitution functions as a <strong>"meta-rule"</strong> — a set of rules that govern the government itself.</p>
 
-    <h2>2. Defining the Blueprint: Nature, Origins, and the "Age of Constitutions"</h2>
+    <h2 id="ch15-sec02">2. Defining the Blueprint: Nature, Origins, and the "Age of Constitutions"</h2>
     <ul>
       <li><strong>The Broad Concept</strong> — rules (formal laws + informal customs) establishing government powers and the state/individual relationship.</li>
       <li><strong>The Narrow Concept</strong> — a single, authoritative document codifying these provisions as "higher law."</li>
@@ -3217,7 +3252,7 @@ th,td{padding:7px 9px}
       <p>Ignited in the late 18th century via: <strong>War or Revolution</strong> (total regime collapse, e.g. France 1789), <strong>National Independence</strong> (e.g. USA 1787), or <strong>Systemic Disenchantment</strong> (a desire to redraw, not readjust, the rules).</p>
     </div>
 
-    <h2>3. The Typology of Governance: Beyond the Written/Unwritten Binary</h2>
+    <h2 id="ch15-sec03">3. The Typology of Governance: Beyond the Written/Unwritten Binary</h2>
     <p>The old "written vs. unwritten" distinction is imprecise — no constitution is entirely written (most ignore political parties), and few are entirely unwritten. Modern scholarship favours <strong>Codified vs. Uncodified.</strong></p>
     <div class="table-wrap">
       <table>
@@ -3235,7 +3270,7 @@ th,td{padding:7px 9px}
       <p>Don't conflate codification with rigidity. The <strong>US Constitution</strong> is formally rigid (two-thirds Congressional majorities + three-quarters state ratification) yet perpetually "updated" via judicial interpretation. The <strong>UK's</strong> uncodified constitution is formally flexible, yet conventions limiting the monarch's power are so embedded that modification is virtually unthinkable.</p>
     </div>
 
-    <h2>4. The Functional Heart: Why States Adopt Constitutions</h2>
+    <h2 id="ch15-sec04">4. The Functional Heart: Why States Adopt Constitutions</h2>
     <ol>
       <li><strong>Empowering States</strong> — marks the formal birth of jurisdiction (US only complete with the 1789 ratification; India remained under a British Governor-General until its 1950 federal constitution).</li>
       <li><strong>Establishing Values and Goals</strong> — never neutral: the 1982 Turkish constitution enshrines Atatürk's nationalism; the German Basic Law commits to "serve the peace of the world."</li>
@@ -3244,14 +3279,14 @@ th,td{padding:7px 9px}
       <li><strong>Legitimizing Regimes</strong> — a "cloak of legality"; in the US this has evolved into a <strong>"cult of constitution worship."</strong></li>
     </ol>
 
-    <h2>5. The Law-Morality Paradox: Positivism vs. Natural Law</h2>
+    <h2 id="ch15-sec05">5. The Law-Morality Paradox: Positivism vs. Natural Law</h2>
     <p><strong>Legal Positivism</strong> (H.L.A. Hart) holds that law is a social fact — Hart identified <strong>"primary rules"</strong> (regulating behaviour) and <strong>"secondary rules"</strong> (governing how laws are made/adjudicated); law is valid because it follows these procedures.</p>
     <div class="duel">
       <div class="yes"><h5>The Liberal View — Protection of Freedom</h5><ul><li>Rooted in J.S. Mill's <b>"Harm Principle"</b>: the individual is sovereign over their own body/mind. Law is legitimate only when preventing "harm to others."</li></ul></div>
       <div class="no"><h5>The Conservative View — Upholding Order</h5><ul><li><b>Patrick Devlin</b> argues society is held together by a "shared morality." Law must enforce this to prevent decay, given a greedy, selfish human nature.</li></ul></div>
     </div>
 
-    <h2>6. The Judicial Gatekeepers: Neutrality or Political Agency?</h2>
+    <h2 id="ch15-sec06">6. The Judicial Gatekeepers: Neutrality or Political Agency?</h2>
     <ul>
       <li><strong>External Bias</strong> — political influence on recruitment; US presidents appoint justices ideologically, producing shifts between "liberal" and "conservative" courts (Warren vs. Roberts Courts).</li>
       <li><strong>Internal Bias</strong> — prejudices from judges' social homogeneity; UK's higher judiciary criticized for "Oxbridge" dominance (white, male, upper-middle-class).</li>
@@ -3261,7 +3296,7 @@ th,td{padding:7px 9px}
       <p><strong>Judicial Independence</strong> (structural separation, protected by tenure) differs from <strong>Neutrality</strong> (total absence of political sympathy — nearly impossible). The realistic standard is professional <strong>Impartiality</strong> — judges may hold private sympathies so long as they don't intrude on public responsibilities.</p>
     </div>
 
-    <h2>7. Power in Action: Judicial Review and the Bush v. Gore Case Study</h2>
+    <h2 id="ch15-sec07">7. Power in Action: Judicial Review and the Bush v. Gore Case Study</h2>
     <div class="case-study">
       <div class="cs-label">Case Study</div>
       <h4>The 2000 US Election — Bush v. Gore</h4>
@@ -3278,10 +3313,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch15-rev01">📋 Chapter Summary</div>
     <p>Constitutions are "meta-rules" governing government itself — broadly, any rules (formal + informal) establishing state powers; narrowly, a single authoritative document. The "Age of Constitutions" began in the late 18th century via war/revolution, independence, or systemic disenchantment. Modern typology favours Codified vs. Uncodified (not written/unwritten), with rigidity a separate axis from codification (US rigid-but-interpreted; UK flexible-but-entrenched-by-convention). Constitutions serve five functions: empowering states, establishing values, providing stability, protecting freedom (negative/positive rights), and legitimizing regimes. The Law-Morality Paradox pits Hart's Legal Positivism against the Liberal Harm Principle (Mill) and Conservative shared-morality view (Devlin). Judges face External Bias (political appointment) and Internal Bias (social homogeneity), navigating the gap between Independence and Impartiality — epitomized by the politically fraught Bush v. Gore (2000) ruling and the UK's post-1998 shift toward judicial activism.</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch15-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Broad vs Narrow Concept</h5><ul><li>Broad: formal + informal rules</li><li>Narrow: single document, "higher law"</li></ul></div>
       <div class="rs-block"><h5>Codified vs Uncodified</h5><ul><li>Codified: single doc, hierarchy, entrenched, justiciable</li><li>Uncodified: multiple sources, no hierarchy, flexible</li></ul></div>
@@ -3291,7 +3326,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Bush v. Gore (2000)</h5><ul><li>14th Amendment; 5–4 split</li><li>Overreach / Division / Partisanship</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch15-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -3306,13 +3341,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch15-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>"Meta-rule":</b> a constitution is a rule about rules — the simplest possible one-phrase definition.</div>
       <div class="mc-item"><b>Ma'at, Ti'en, Mosaic Law, Shari'a:</b> the four ancient "higher moral powers" — remember as "the four pre-modern constitutions that weren't."</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch15-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Distinguish codified and uncodified constitutions.</li><li>Define "ultra vires."</li></ol>
@@ -3352,7 +3387,7 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>1. The Architecture of Choice: Theories of Decision-Making</h2>
+    <h2 id="ch16-sec01">1. The Architecture of Choice: Theories of Decision-Making</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Model</th><th>Core Logic</th><th>Primary Limitation</th></tr></thead>
@@ -3369,7 +3404,7 @@ th,td{padding:7px 9px}
       <p><strong>Amitai Etzioni's</strong> <em>mixed scanning</em>: high-order rational evaluation sets a basic direction, followed by incremental adjustments to detail. Within the Belief System Model, <strong>Paul Sabatier</strong> identifies a three-level hierarchy: <strong>deep core beliefs</strong> (fundamental principles), <strong>near-core beliefs</strong> (policy preferences), and <strong>secondary beliefs</strong> (implementation details).</p>
     </div>
 
-    <h2>2. The Life Cycle of an Idea: The Four Stages of Policy</h2>
+    <h2 id="ch16-sec02">2. The Life Cycle of an Idea: The Four Stages of Policy</h2>
     <div class="flow">
       <div class="step">INITIATION</div><div class="arrow">→</div>
       <div class="step">FORMULATION</div><div class="arrow">→</div>
@@ -3387,7 +3422,7 @@ th,td{padding:7px 9px}
       <p>Cite named examples, not generalities: the <strong>2003 Iraq invasion</strong>, intended as part of the "war on terror," resulted in a counter-insurgency war that <em>strengthened</em> militant Islam. The <strong>UK Poll Tax</strong> — designed to control local government spending — caused widespread civil unrest and political failure due to design-phase oversights.</p>
     </div>
 
-    <h2>3. The Bureaucracy: More Than Just "Red Tape"</h2>
+    <h2 id="ch16-sec03">3. The Bureaucracy: More Than Just "Red Tape"</h2>
     <p><strong>Max Weber's</strong> "ideal type" bureaucracy is defined by rationality, rule-governed behaviour, and impersonal authority — Weber warned this drive for efficiency could create an <strong>"iron cage,"</strong> leaving society managed by "specialists without spirit."</p>
     <p>Bureaucracies perform four vital functions:</p>
     <ol class="tight">
@@ -3407,7 +3442,7 @@ th,td{padding:7px 9px}
       <p>The 1950s–60s "economic miracle" exemplifies "bureaucratic rule that works." The <strong>Ministry of International Trade and Industry (MITI)</strong> functioned as a body of "permanent politicians" practicing <strong>indicative planning</strong> to "pick winners." Elite status was maintained through extreme meritocratic barriers — the entrance system recruited only <strong>1 in 40</strong> candidates, with <strong>70%</strong> of senior officials Tokyo University graduates. However, top-down planning created an inflexibility left unresponsive to globalization; by <strong>2001</strong>, MITI was absorbed into a new ministry, seen as protecting conglomerates rather than the national interest.</p>
     </div>
 
-    <h2>4. The "Fourth Branch" of Government: Sources of Bureaucratic Power</h2>
+    <h2 id="ch16-sec04">4. The "Fourth Branch" of Government: Sources of Bureaucratic Power</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Source of Power</th><th>Description</th><th>Impact</th></tr></thead>
@@ -3419,7 +3454,7 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <h2>5. Taming the Leviathan: Mechanisms of Control</h2>
+    <h2 id="ch16-sec05">5. Taming the Leviathan: Mechanisms of Control</h2>
     <ul>
       <li><strong>Accountability</strong> — ministerial responsibility (in theory); Ombudsman systems (e.g. UK Parliamentary Commissioner for Administration), though these often lack force of law.</li>
       <li><strong>Politicization</strong> — overt "spoils system" (US); "covert politicization" — Germany's <strong>Berufsverbot</strong> (retirement of unwanted officials), French "politicized clans," or Thatcher's search for officials who were "one of us."</li>
@@ -3436,7 +3471,7 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <h2>6. Conclusion: The Future of the Administrative State</h2>
+    <h2 id="ch16-sec06">6. Conclusion: The Future of the Administrative State</h2>
     <p>The contemporary trend is <strong>New Public Management</strong>, championed in <strong>Osborne and Gaebler's</strong> <em>Reinventing Government</em>: the state should <strong>"steer"</strong> (set policy) rather than <strong>"row"</strong> (deliver services) — creating executive agencies and a "skeletal state" adopting private-sector techniques.</p>
 
     <div class="box tip">
@@ -3447,10 +3482,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch16-rev01">📋 Chapter Summary</div>
     <p>Policy decisions are theorized through four competing models — Rational Actor, Incrementalism, Bureaucratic Organization, and the Belief System Model (Sabatier's deep-core/near-core/secondary hierarchy), bridged by Etzioni's "mixed scanning." Policy itself moves through a four-stage life cycle (Initiation, Formulation, Implementation, Evaluation), illustrated by the failures of the 2003 Iraq invasion and the UK Poll Tax. Weber's "ideal type" bureaucracy performs administration, policy advice, clientelism, and political stability, but risks an "iron cage" — exemplified by Japan's MITI, whose meritocratic elitism drove the "economic miracle" before its 2001 dissolution. As a "Fourth Branch," bureaucrats draw power from strategic position, permanence, and expertise, checked (imperfectly) through ministerial accountability, politicization (spoils systems, Berufsverbot), and counter-bureaucracies (EOP). The chapter concludes with the shift toward New Public Management — the state "steering" rather than "rowing."</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch16-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Four Decision Models</h5><ul><li>Rational Actor / Incrementalism / Bureaucratic Organization / Belief System</li><li>Etzioni: Mixed Scanning</li><li>Sabatier: deep-core/near-core/secondary</li></ul></div>
       <div class="rs-block"><h5>Four Policy Stages</h5><ul><li>Initiation → Formulation → Implementation → Evaluation</li></ul></div>
@@ -3460,7 +3495,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Control Mechanisms</h5><ul><li>Accountability, Politicization, Counter-Bureaucracies</li><li>New Public Management: "steer, not row"</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch16-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -3474,13 +3509,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch16-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>"Muddling Through":</b> Incrementalism's nickname — small steps, not grand designs.</div>
       <div class="mc-item"><b>"Steer, not Row":</b> New Public Management's core slogan — the state sets direction but outsources delivery.</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch16-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Define "Incrementalism" as a model of decision-making.</li><li>What is meant by the bureaucratic "iron cage"?</li></ol>
@@ -3520,17 +3555,17 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>Opening Concept</h2>
+    <h2 id="ch17-sec01">Opening Concept</h2>
     <p>The discrete nation-state is being eroded by the simultaneous <strong>upward delegation</strong> of authority to transnational bodies and <strong>downward redistribution</strong> to regional/local entities — a system of <strong>multilevel governance</strong>: authority dispersed across territorial levels, with a "vertical" dimension (subnational–national–transnational interdependence) and a "horizontal" dimension (blurred state/non-state boundaries via public-private partnerships).</p>
 
-    <h2>1. The Territorial Dimension: Why Geography is Destiny</h2>
+    <h2 id="ch17-sec02">1. The Territorial Dimension: Why Geography is Destiny</h2>
     <p>The conceptual link between politics and territory was codified by the <strong>Peace of Westphalia (1648)</strong>. By the 19th century, nationalism transformed territory from legal jurisdiction into a locus of identity — the state became a "homeland."</p>
     <div class="box def">
       <div class="box-label">🟦 Geopolitics</div>
       <p><strong>Alfred Mahan</strong> — maritime control (dominating the seas) is the primary determinant of global supremacy. <strong>Halford Mackinder</strong> — the "heartland" (land mass between Germany and central Siberia) is the pivot of world history.</p>
     </div>
 
-    <h2>2. The Subnational Axis: Federal vs. Unitary Systems</h2>
+    <h2 id="ch17-sec03">2. The Subnational Axis: Federal vs. Unitary Systems</h2>
     <div class="box concept">
       <div class="box-label">🟩 The Federal System — Shared Sovereignty</div>
       <p>Sovereignty is shared between central and peripheral institutions; neither is legally or politically subordinate. Four essential features: <strong>(1) Autonomous Levels</strong> (independent legislative/executive authority, fiscal independence); <strong>(2) Written Constitution</strong> (defines spheres of power, unilaterally unamendable); <strong>(3) Constitutional Arbiter</strong> (a supreme court resolving disputes, often a catalyst for gradual centralization); <strong>(4) Linking Institutions</strong> (a bicameral legislature integrating peripheral interests, e.g. the Canadian Senate or German Bundesrat).</p>
@@ -3549,7 +3584,7 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <h2>3. The Decentralization Debate: A Systemic Tension</h2>
+    <h2 id="ch17-sec04">3. The Decentralization Debate: A Systemic Tension</h2>
     <p>Governed by <strong>subsidiarity</strong> — the doctrine that decisions should be made at the lowest appropriate level of competence.</p>
     <div class="duel">
       <div class="yes">
@@ -3562,7 +3597,7 @@ th,td{padding:7px 9px}
       </div>
     </div>
 
-    <h2>4. Transnational Regionalism: The World of Regions</h2>
+    <h2 id="ch17-sec05">4. Transnational Regionalism: The World of Regions</h2>
     <p>Three types: <strong>Security Regionalism</strong> (collective defence, e.g. NATO), <strong>Political Regionalism</strong> (shared values/diplomatic reputation, e.g. Arab League, African Union), <strong>Economic Regionalism</strong> (dominant form — trade blocs).</p>
     <div class="box concept">
       <div class="box-label">🟩 Neofunctionalism and "Spillover"</div>
@@ -3582,7 +3617,7 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <h2>5. Case Study: The European Union as the Supranational Frontier</h2>
+    <h2 id="ch17-sec06">5. Case Study: The European Union as the Supranational Frontier</h2>
     <p>The EU is the world's only genuine experiment in supranational governance. It began under <strong>Intergovernmentalism</strong> — states retained absolute vetoes via the <strong>Luxembourg Compromise (1966)</strong>. The <strong>Single European Act (1986)</strong> and <strong>Maastricht Treaty (1993)</strong> introduced <strong>Qualified Majority Voting</strong>, moving the EU toward a "federalizing" entity where EU law has primacy over national law.</p>
     <div class="table-wrap">
       <table>
@@ -3597,7 +3632,7 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <h2>6. Crisis in the Commons: The Eurozone and the Democratic Deficit</h2>
+    <h2 id="ch17-sec07">6. Crisis in the Commons: The Eurozone and the Democratic Deficit</h2>
     <p>The <strong>Eurozone</strong> (established 1999) aimed to eliminate transaction risks and foster harmonization. The <strong>2007–09 financial crisis</strong> exposed a fatal flaw: a monetary union without a corresponding fiscal union.</p>
     <div class="box highyield">
       <div class="box-label">⭐ High-Yield Fact — The Limits of Regionalism</div>
@@ -3621,10 +3656,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch17-rev01">📋 Chapter Summary</div>
     <p>Multilevel governance disperses authority both upward (supranational bodies) and downward (regional/local entities), rooted in the territorial sovereignty codified at Westphalia (1648) and shaped by geopolitics (Mahan's sea power, Mackinder's heartland). Federal systems (shared sovereignty, written constitutions, constitutional arbiters, linking institutions) contrast with Unitary systems (single sovereign centre, often using asymmetrical devolution as in the UK), debated via the principle of subsidiarity. Transnational regionalism — security, political, and economic — is driven by Neofunctionalist "spillover," visible in blocs like APEC, NAFTA, ASEAN, Mercosur, and above all the EU, which shifted from Intergovernmentalism (Luxembourg Compromise) to a "federalizing" Qualified Majority Voting system (Single European Act, Maastricht). The Eurozone's 2007–09 crisis exposed the flaw of monetary union without fiscal union, prompting the 2012 Fiscal Pact but deepening the EU's "democratic deficit" amid tension between "Widening" and "Deepening."</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch17-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Geopolitics</h5><ul><li>Mahan: sea power</li><li>Mackinder: heartland</li></ul></div>
       <div class="rs-block"><h5>Federal (4 features)</h5><ul><li>Autonomous levels, Written constitution, Constitutional arbiter, Linking institutions</li></ul></div>
@@ -3634,7 +3669,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Eurozone Crisis</h5><ul><li>Monetary union, no fiscal union</li><li>2012 Fiscal Pact (25 states)</li><li>Democratic Deficit</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch17-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -3648,13 +3683,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch17-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>"Monetary union without fiscal union":</b> the single sentence that explains the entire Eurozone crisis.</div>
       <div class="mc-item"><b>Widening vs Deepening:</b> "Widening" = more members (horizontal); "Deepening" = more integration (vertical).</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch17-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Define "subsidiarity."</li><li>What is "pooled sovereignty"?</li></ol>
@@ -3694,7 +3729,7 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>1. The Coercive State: Policing the Domestic Sphere</h2>
+    <h2 id="ch18-sec01">1. The Coercive State: Policing the Domestic Sphere</h2>
     <p>The catalyst for police professionalization was often violent: the <strong>1819 Peterloo Massacre</strong> in Manchester (cavalry breaking up a peaceful demonstration) revealed the need for a disciplined, non-military body. In <strong>1829</strong>, <strong>Robert Peel</strong> established the first paid, uniformed police force in London.</p>
     <div class="table-wrap">
       <table>
@@ -3713,12 +3748,12 @@ th,td{padding:7px 9px}
       <p>The <strong>1999 Macpherson Report</strong>, following the <strong>1993 murder of Stephen Lawrence</strong>, found the organizational culture itself to be biased. In its most extreme form, we witness the <strong>Police State</strong> (Nazi Germany's Gestapo/SS; Soviet KGB) — police as a private army for the ruling elite.</p>
     </div>
 
-    <h2>2. The Military: Between National Defense and Domestic Rule</h2>
+    <h2 id="ch18-sec02">2. The Military: Between National Defense and Domestic Rule</h2>
     <p>Four factors distinguish the military: <strong>(1) Monopoly of Weaponry</strong>, <strong>(2) Discipline and Hierarchy</strong> (extreme Weberian bureaucracy), <strong>(3) Esprit de Corps</strong> (culture of honour and duty), <strong>(4) "Above" Politics</strong> (self-view as the sole repository of national interest).</p>
     <p><strong>Domestic Intervention:</strong> UK in <strong>Northern Ireland (1969)</strong>; India at <strong>Amritsar (1984)</strong> — assault on Sikh separatists at the Golden Temple; China at <strong>Tiananmen Square (1989)</strong> — a decisive military assault propping up a regime whose civilian legitimacy had evaporated.</p>
     <p><strong>Alternative to Civilian Rule:</strong> a military <strong>junta</strong> (Argentina, 1978–83) or single <strong>Personalized Dictatorship</strong> (Pinochet, Chile; Abacha, Nigeria). Because military regimes lack inherent legitimacy, they often "civilianize" leadership (Nasser and Sadat in Egypt).</p>
 
-    <h2>3. International Anarchy: The Great Theoretical Debate</h2>
+    <h2 id="ch18-sec03">3. International Anarchy: The Great Theoretical Debate</h2>
     <p>In the international realm, security is governed by <strong>anarchy</strong> — the absence of a higher authority — forcing states into a "self-help" system where survival is the highest end.</p>
     <div class="table-wrap">
       <table>
@@ -3738,7 +3773,7 @@ th,td{padding:7px 9px}
       <li><strong>Critical Voices</strong> — Constructivists (<strong>Alexander Wendt</strong>): "anarchy is what states make of it" — a social construct that can be an "anarchy of friends" or "enemies." Feminists critique the "masculinist" focus on competition, highlighting the <strong>Security Paradox</strong> (the "insecurity of security").</li>
     </ul>
 
-    <h2>4. The Changing Face of Conflict: "New" Wars and Transnational Threats</h2>
+    <h2 id="ch18-sec04">4. The Changing Face of Conflict: "New" Wars and Transnational Threats</h2>
     <p>Traditional inter-state warfare is vanishing, replaced by <strong>"New Wars"</strong> — civil conflicts fought within "failed states," with a blurred civilian/military divide, guerrilla tactics, and civilian targeting.</p>
     <div class="case-study">
       <div class="cs-label">Case Study</div>
@@ -3751,7 +3786,7 @@ th,td{padding:7px 9px}
       <p>A shift from <strong>"Vertical"</strong> proliferation (superpowers building more) to <strong>"Horizontal"</strong> proliferation (more states, e.g. North Korea, acquiring them). The Cold War relied on <strong>Mutually Assured Destruction (MAD)</strong>, requiring an <strong>Invulnerable Second-Strike Capability</strong> — surviving an initial attack and still destroying the aggressor. Current anxieties centre on <strong>"Rogue States"</strong> that might ignore rational deterrence.</p>
     </div>
 
-    <h2>5. The Paradigm Shift: From State Security to Human Security</h2>
+    <h2 id="ch18-sec05">5. The Paradigm Shift: From State Security to Human Security</h2>
     <p>The most significant 21st-century shift recasts the <strong>individual</strong>, not the state, as the primary "referent" of security — requiring both "freedom from fear" and "freedom from want."</p>
     <div class="box concept">
       <div class="box-label">🟩 The Seven Dimensions of Human Security</div>
@@ -3786,10 +3821,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch18-rev01">📋 Chapter Summary</div>
     <p>Domestic security begins with policing — from Peel's 1829 professional force through Liberal, Conservative, and Radical theoretical lenses, and styles ranging from Japan's Community Policing to Zero Tolerance (Broken Windows). The military, distinguished by weapons monopoly, hierarchy, esprit de corps, and self-perceived neutrality, oscillates between national defence and domestic intervention (Tiananmen, Amritsar) or outright military rule (juntas, personalized dictatorships). Internationally, anarchy structures the Realist (relative gains, security dilemma) vs. Liberal (absolute gains, democratic peace) debate, with Constructivists and Feminists offering critical alternatives. "New Wars" — illustrated by NATO's 2011 Libya intervention under R2P — and nuclear proliferation (vertical to horizontal, MAD, rogue states) define contemporary conflict. Finally, the 21st century's Human Security paradigm shifts the referent object from the state to the individual across seven dimensions, though critics call this "meaningless" or "neocolonial."</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch18-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Policing</h5><ul><li>1829 Peel; Peterloo 1819</li><li>Liberal/Conservative/Radical views</li><li>Community / Fire-Brigade / Zero Tolerance</li></ul></div>
       <div class="rs-block"><h5>Military (4 Factors)</h5><ul><li>Weapons monopoly, Hierarchy, Esprit de Corps, "Above" politics</li></ul></div>
@@ -3799,7 +3834,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Human Security</h5><ul><li>7 dimensions (EFHEPCP)</li><li>Critique: "meaningless" / neocolonial</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch18-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -3813,13 +3848,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch18-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>"Every Family Has Enough, Protection, Community, Politics" (EFHEPCP):</b> the seven dimensions of Human Security.</div>
       <div class="mc-item"><b>Relative vs Absolute Gains:</b> Realism cares who wins <i>more</i>; Liberalism cares if everyone gains <i>at all</i>.</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch18-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Define the "Security Dilemma."</li><li>What are the seven dimensions of Human Security?</li></ol>
@@ -3859,10 +3894,10 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>Central Thesis</h2>
+    <h2 id="ch19-sec01">Central Thesis</h2>
     <p>World order is a shifting tide in the distribution of power among states and international actors — descending from Cold War bipolar stability, through a brief "unipolar moment," to the complex, contested multipolarity of the 21st century, defined by tension between state sovereignty and deepening interdependence.</p>
 
-    <h2>1. The Bipolar Foundation: A Balance of Terror (1945–1989)</h2>
+    <h2 id="ch19-sec02">1. The Bipolar Foundation: A Balance of Terror (1945–1989)</h2>
     <p><strong>Bipolarity</strong> revolved around two antagonistic poles — the US-dominated West and Soviet-dominated East. <strong>Superpower</strong> status rested on a unique "mobility of power," sustained by three pillars:</p>
     <ol class="tight">
       <li><strong>Global Reach</strong> — operational capacity across every meridian</li>
@@ -3871,10 +3906,10 @@ th,td{padding:7px 9px}
     </ol>
     <p>The collapse came via the collision of <strong>Gorbachev's</strong> internal reforms (<em>glasnost</em> and <em>perestroika</em>) with <strong>Reagan's</strong> external pressure ("Second Cold War") — the fragile Soviet economy could not sustain the military spending needed to match the US, leading to the USSR's dissolution by <strong>1991</strong>.</p>
 
-    <h2>2. The Unipolar Moment and its Discontents</h2>
+    <h2 id="ch19-sec03">2. The Unipolar Moment and its Discontents</h2>
     <p>The vacuum birthed a temporary wave of liberal internationalist idealism — <strong>George H.W. Bush's</strong> "New World Order," the US as sole <strong>Hyperpower</strong>. But idealism was quickly bloodied by a "New World Disorder": the Cold War had suppressed ethnic and regional animosities, and once removed, centrifugal pressures unleashed genocidal bloodshed in the former Yugoslavia. This introduced the paradox of <strong>Humanitarian Intervention</strong> — NATO's 1999 Kosovo campaign was a moral triumph, but earlier paralysis in Rwanda and Bosnia exposed the fragility of this new moral consciousness.</p>
 
-    <h2>3. The Clash of Ideas: Fukuyama vs. Huntington</h2>
+    <h2 id="ch19-sec04">3. The Clash of Ideas: Fukuyama vs. Huntington</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>End of History (Universalism)</th><th>Clash of Civilizations (Cultural Rivalry)</th></tr></thead>
@@ -3890,18 +3925,18 @@ th,td{padding:7px 9px}
       <p>Don't accept Huntington uncritically. The chapter explicitly notes critics argue his thesis overlooks how political Islam often emerges not from "cultural incompatibility," but as a reaction to <strong>colonialism, urban poverty, and perceived economic injustice.</strong></p>
     </div>
 
-    <h2>4. The Turning Point: 9/11 and the Limits of Hard Power</h2>
+    <h2 id="ch19-sec05">4. The Turning Point: 9/11 and the Limits of Hard Power</h2>
     <p><strong>September 11, 2001</strong> shattered unipolar stability, forcing the US into a "War on Terror" codified by the <strong>Bush Doctrine</strong>, asserting the right to <strong>Pre-emptive Attack</strong> — most controversially applied in the <strong>2003 invasion of Iraq</strong>. While US military dominance remained "strength beyond challenge," protracted insurgencies revealed the limits of hard power — "shock and awe" tactics damaged American "soft power" across the Muslim world.</p>
     <div class="quote-block">"Smart power is the combination of the hard power of coercion and payment and the soft power of persuasion and attraction."<cite>Joseph Nye (2008)</cite></div>
 
-    <h2>5. Rising Multipolarity: China and "The Rest"</h2>
+    <h2 id="ch19-sec06">5. Rising Multipolarity: China and "The Rest"</h2>
     <p>The 21st century is defined by the relative decline of the USA and the <strong>"Peaceful Rise"</strong> of China. While the US still commands <strong>46%</strong> of global military spending, China's <strong>8–10%</strong> annual growth has made it the manufacturing heart of the world. China faces an internal <strong>"institutional paralysis"</strong> — reconciling a Stalinist single-party system with a market-oriented economy. Alongside the <strong>BRICs</strong> (Brazil, Russia, India, China), the world is tilting from West to East.</p>
     <div class="box def">
       <div class="box-label">🟦 Imperial Over-reach</div>
       <p>The tendency for a hegemon's military responsibilities to outstrip its domestic economic growth, leading to inevitable decline.</p>
     </div>
 
-    <h2>6. The Framework of Global Governance: Economic Pillars</h2>
+    <h2 id="ch19-sec07">6. The Framework of Global Governance: Economic Pillars</h2>
     <p><strong>Global Governance</strong> is not a world government; it is a polycentric, interactive process of decision-making, most advanced economically via the <strong>"Three Sisters"</strong> of the Bretton Woods system, ideologically driven by the <strong>Washington Consensus</strong> (deregulation, privatization, fiscal constraint).</p>
     <div class="table-wrap">
       <table>
@@ -3914,7 +3949,7 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <h2>7. The Centerpiece: The United Nations</h2>
+    <h2 id="ch19-sec08">7. The Centerpiece: The United Nations</h2>
     <div class="quote-block">The UN — a sprawling, cumbersome entity famously described as a "weird Picasso abstraction."<cite>Dag Hammarskjöld</cite></div>
     <p>With <strong>193 states</strong> and counting, the UN remains the only truly global organization, functioning as <strong>"Two UNs":</strong></p>
     <ol class="tight">
@@ -3938,10 +3973,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch19-rev01">📋 Chapter Summary</div>
     <p>World order evolved from Cold War Bipolarity (global reach, ideological predominance, nuclear preponderance, ending with the USSR's 1991 collapse) through a brief Unipolar Moment (Bush Sr.'s "New World Order," Hyperpower status, tested by Yugoslav genocide and the Rwanda/Kosovo intervention paradox) into today's contested Multipolarity. Fukuyama's "End of History" and Huntington's "Clash of Civilizations" offered rival post-Cold War theories, both tested by 9/11 and the Iraq War's demonstration of hard power's limits (Nye's "smart power"). China's "Peaceful Rise" and the BRICs now drive a West-to-East power shift. Global Governance — not world government — operates through the Bretton Woods "Three Sisters" (IMF, World Bank, WTO) under the contested Washington Consensus, and through the United Nations' "Two UNs" (a gridlocked Security Council and a deliberative General Assembly). Keohane and Nye's Complex Interdependence captures the resulting reality: military force is a diminishing policy tool in an interconnected age.</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch19-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Three Eras</h5><ul><li>Bipolarity (1945–89)</li><li>Unipolarity (1989–2001ish)</li><li>Multipolarity (21st century)</li></ul></div>
       <div class="rs-block"><h5>Fukuyama vs Huntington</h5><ul><li>End of History (convergence)</li><li>Clash of Civilizations (cultural rivalry)</li></ul></div>
@@ -3951,7 +3986,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>UN</h5><ul><li>193 states; "Two UNs"</li><li>Security Council (P-5 veto) vs General Assembly</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch19-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -3964,13 +3999,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch19-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>"Weird Picasso abstraction":</b> Hammarskjöld's description of the UN — a vivid image capturing its jumbled, imperfect, but functioning structure.</div>
       <div class="mc-item"><b>"Hard vs Smart Power":</b> Iraq showed the limits of hard power alone; Nye's "smart power" = hard + soft combined.</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch19-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Define "Complex Interdependence."</li><li>What is the "Washington Consensus"?</li></ol>
@@ -4009,14 +4044,14 @@ th,td{padding:7px 9px}
 
   <div class="content">
 
-    <h2>Prologue: The Paradox of Modern Power</h2>
+    <h2 id="ch20-sec01">Prologue: The Paradox of Modern Power</h2>
     <p>At the macro-historical scale, politics appears to be succeeding — the "remorseless advance of democratization" (1989–91 revolutions to the Arab Spring) and <strong>Steven Pinker's</strong> documented long-term decline in violence. Yet within the world's mature democracies, a tragic decay is unfolding: <strong>why is politics coming under attack at the very moment it has reached its widest global application?</strong></p>
     <div class="box concept">
       <div class="box-label">🟩 Central Thesis</div>
       <p>The "crisis" in politics is not merely a decline in activity, but a fundamental transformation of civic engagement. The breakdown of trust in traditional structures and the rise of consumerist attitudes toward governance necessitate re-evaluating how we judge political success and the tension between individual liberty and communal stability.</p>
     </div>
 
-    <h2>1. Chapter I: The Void — Quantifying Civic Disengagement</h2>
+    <h2 id="ch20-sec02">1. Chapter I: The Void — Quantifying Civic Disengagement</h2>
     <div class="box highyield">
       <div class="box-label">⭐ High-Yield Fact — The Quantitative Decline</div>
       <p><strong>UK turnout</strong> averaged above 75% from 1945–1997 (peaking at 84% in 1950), crashing to <strong>59% in 2001</strong>. <strong>Canada</strong> dropped from 75% to an average of <strong>61.5%</strong> (2000–2011); only <strong>one-third</strong> of first-time Canadian voters now participate — half the rate of their predecessors.</p>
@@ -4040,7 +4075,7 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <h2>2. Chapter II: The Revolt — The Phenomenon of Anti-Politics</h2>
+    <h2 id="ch20-sec03">2. Chapter II: The Revolt — The Phenomenon of Anti-Politics</h2>
     <p><strong>"Anti-politics"</strong> is the narrative of a political class that is "out-of-touch," "corrupt," or "self-serving" — fuelling active movements that challenge establishment legitimacy. On the Left, "new" anarchism rejects compromise for theatrical activism; on the Right, movements like the US <strong>Tea Party</strong> frame the establishment as the enemy of the people.</p>
     <div class="box def">
       <div class="box-label">🟦 Core Commitments of the Tea Party</div>
@@ -4052,7 +4087,7 @@ th,td{padding:7px 9px}
       <p>In <strong>November 2011</strong>, Italy faced the "unthinkable" prospect of a eurozone bailout for its third-largest economy — 10-year interest rates soared above 7%, and the fragmented party system was paralyzed. <strong>Mario Monti</strong>, an economist who had never held elective office, was appointed Prime Minister with a cabinet of <strong>technocrats</strong> — unelected experts imposing painful austerity. Critics viewed the appointment as a "regime change" orchestrated by the <strong>European Central Bank (ECB)</strong> and financial markets, sacrificing popular accountability for technical efficiency.</p>
     </div>
 
-    <h2>3. Chapter III: The Inquest — Five Culprits in the Dock</h2>
+    <h2 id="ch20-sec04">3. Chapter III: The Inquest — Five Culprits in the Dock</h2>
     <ol>
       <li><strong>Politics Itself</strong> — "doomed to disappoint"; because it resolves conflicting interests through compromise, no one achieves their ideal outcome — dissatisfaction is an inherent feature, not a system failure.</li>
       <li><strong>Politicians and Parties</strong> — beyond Lord Acton's warning that "power tends to corrupt": <strong>Lack of Vision</strong> ("catch-all" parties believing in nothing but re-election); <strong>Age of Spin</strong> (communication as deception); <strong>"All the Same"</strong> (the "Narcissism of Small Differences" masking managerial sameness); <strong>"In it for themselves"</strong> (professional lobbying suggests revenue-motivated politics).</li>
@@ -4065,7 +4100,7 @@ th,td{padding:7px 9px}
       <p>The five culprits: <strong>P</strong>olitics itself, <strong>P</strong>oliticians/parties, the <strong>M</strong>edia, the <strong>P</strong>ublic, <strong>M</strong>odern society → remember as <em>"Politics Puts Media, Public, and Modernity on trial."</em></p>
     </div>
 
-    <h2>4. Chapter IV: The Debate — The Virtues of Apathy vs. Action</h2>
+    <h2 id="ch20-sec05">4. Chapter IV: The Debate — The Virtues of Apathy vs. Action</h2>
     <div class="duel">
       <div class="yes">
         <h5>YES — The Case for Depth</h5>
@@ -4077,7 +4112,7 @@ th,td{padding:7px 9px}
       </div>
     </div>
 
-    <h2>5. Chapter V: The Measuring Stick — Four Standards of Performance</h2>
+    <h2 id="ch20-sec06">5. Chapter V: The Measuring Stick — Four Standards of Performance</h2>
     <ul>
       <li><strong>Stability Performance</strong> — Liberals seek stability through responsiveness (consent); Conservatives (Hobbes) argue stability requires authority and shared cultural values. East Asian Confucian and Islamic states may possess greater stability capacity than Western liberal systems, relying on social cohesion over potentially destabilizing responsiveness.</li>
       <li><strong>Material Performance</strong> — the debate is no longer "Capitalism vs. Socialism," but between the "Trickle Down" model (unregulated markets) and the "Institutional-redistributive" model (social-democratic fairness).</li>
@@ -4093,10 +4128,10 @@ th,td{padding:7px 9px}
   </div>
 
   <div class="end-matter">
-    <div class="em-title">📋 Chapter Summary</div>
+    <div class="em-title" id="ch20-rev01">📋 Chapter Summary</div>
     <p>Despite politics' global success (democratization, Pinker's decline of violence), mature democracies show a "Great Disconnect": collapsing turnout (UK 84%→59%; Canada 75%→61.5%) and Partisan Dealignment (UK membership 7%→&lt;1%), categorized via Milbrath and Goel's Apathetics/Spectators/Gladiators — though "Reflexive Citizenship" and internet activism suggest transformation, not pure decline. This has fuelled "anti-politics" (Tea Party) and technocracy (Mario Monti's unelected Italian cabinet, 2011). Five culprits are indicted: politics itself (inherently disappointing), politicians/parties (spin, sameness, self-interest), the media (culture of contempt), the public (free-riding consumerism), and modern society (neoliberalism, television, globalization). This fuels an enduring debate — Mill's developmental case for participation vs. Schumpeter's "Sleeping Dogs" case for apathy — resolved only by judging political performance across four standards: Stability, Material, Citizenship (T.H. Marshall's civil/political/social rights), and Democracy.</p>
 
-    <div class="em-title">⚡ One-Page Revision Sheet</div>
+    <div class="em-title" id="ch20-rev02">⚡ One-Page Revision Sheet</div>
     <div class="rev-sheet">
       <div class="rs-block"><h5>Decline Statistics</h5><ul><li>UK: 84% (1950) → 59% (2001)</li><li>Canada: 75% → 61.5%</li><li>UK party membership: 7% → &lt;1%</li></ul></div>
       <div class="rs-block"><h5>Milbrath &amp; Goel</h5><ul><li>Apathetics / Spectators / Gladiators</li></ul></div>
@@ -4106,7 +4141,7 @@ th,td{padding:7px 9px}
       <div class="rs-block"><h5>Four Performance Standards</h5><ul><li>Stability, Material, Citizenship (Marshall), Democracy</li></ul></div>
     </div>
 
-    <div class="em-title">🟦 Key Definitions</div>
+    <div class="em-title" id="ch20-rev03">🟦 Key Definitions</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Term</th><th>Definition</th></tr></thead>
@@ -4120,13 +4155,13 @@ th,td{padding:7px 9px}
       </table>
     </div>
 
-    <div class="em-title">🟪 Memory Aids Collected</div>
+    <div class="em-title" id="ch20-rev04">🟪 Memory Aids Collected</div>
     <div class="memcollect">
       <div class="mc-item"><b>"Politics Puts Media, Public, and Modernity on trial" (PPMPM):</b> the five culprits behind political disengagement.</div>
       <div class="mc-item"><b>"Sleeping Dogs" (again):</b> cross-reference Chapter 8 — Almond and Verba's theory reappears here as Schumpeter's justification for apathy.</div>
     </div>
 
-    <div class="em-title">❓ Possible Examination Questions</div>
+    <div class="em-title" id="ch20-rev05">❓ Possible Examination Questions</div>
     <div class="exam-q">
       <h5>Short Answer</h5>
       <ol><li>Define "Partisan Dealignment."</li><li>What are Milbrath and Goel's three categories of civic engagement?</li></ol>
@@ -4144,7 +4179,7 @@ th,td{padding:7px 9px}
 
 <!-- ============================================================ BACK MATTER ============================================================ -->
 <section class="toc-page" style="page-break-before:always;">
-  <h2>Closing Note</h2>
+  <h2 id="closing-note">Closing Note</h2>
   <p class="toc-intro">This guide preserves the full argumentative content of all twenty source chapters while reorganising it for active revision. Use the colour-coded callout system consistently: 🟦 Definitions, 🟩 Key Concepts, 🟨 Exam Tips, 🟥 Common Mistakes, 🟪 Memory Tricks, and ⭐ High-Yield Facts. Each chapter's end-matter — Summary, One-Page Revision Sheet, Key Definitions, Memory Aids, and Examination Questions — is designed to be revisited independently in the final days before an exam, without needing to re-read the full chapter.</p>
   <p class="toc-intro"><strong>Suggested revision sequence:</strong> Chapters 1–4 (Foundations) → Chapters 5–8 (Structures &amp; Society) → Chapters 9–17 (Institutions, Actors &amp; Process) → Chapters 18–20 (Global Politics &amp; Synthesis). Chapters 8 and 20 share material on social capital and dealignment — revise them back-to-back for reinforcement.</p>
 </section>
@@ -4163,5 +4198,6 @@ th,td{padding:7px 9px}
 </div>
 </aside>
 <script src="./offline.js" defer></script>
+<script src="./navigation.js" defer></script>
 </body>
 </html>

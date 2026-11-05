@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Validate the published Politics site without external dependencies."""
 import json
+import re
 import struct
 from html.parser import HTMLParser
 from pathlib import Path
@@ -9,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 URL = 'https://mohdujjain.github.io/11am-politics/'
 ASSETS = [
     'index.html','manifest.webmanifest','offline.js',
+    'navigation.js','navigation.css',
     'icons/icon-192.png','icons/icon-512.png',
     'favicon-16.png','favicon-32.png',
     'og-image.png','404.html','sitemap.xml',
@@ -49,6 +51,25 @@ def main():
     doc.feed((ROOT/'index.html').read_text(encoding='utf-8'))
     assert doc.chapters == [f'ch{n:02}' for n in range(1,21)], '20 chapters changed'
     assert len(doc.ids) == len(set(doc.ids)), 'Duplicate HTML IDs'
+    assert 'book-cover' in doc.ids and 'book-contents' in doc.ids
+    assert 'closing-note' in doc.ids, 'Closing note destination missing'
+    sec = [i for i in doc.ids if re.fullmatch(r'ch\d{2}-sec\d{2}',i)]
+    rev = [i for i in doc.ids if re.fullmatch(r'ch\d{2}-rev\d{2}',i)]
+    assert len(sec) == 140, f'Expected 140 in-chapter headings, found {len(sec)}'
+    assert len(rev) == 101, f'Expected 101 chapter revision shortcuts, found {len(rev)}'
+    for num in range(1,21):
+        assert f'ch{num:02}-sec01' in doc.ids
+        assert f'ch{num:02}-rev01' in doc.ids
+    nav=(ROOT/'navigation.js').read_text(encoding='utf-8')
+    nav_style=(ROOT/'navigation.css').read_text(encoding='utf-8')
+    assert 'politicsNavTree' in nav and 'politicsNavSearch' in nav
+    assert 'politicsNavResume' in nav and 'politicsNavFab' in nav
+    assert 'aria-expanded' in nav and 'aria-current' in nav
+    assert 'inert' in nav and 'Escape' in nav
+    assert '@media print' in nav_style and '#politicsNavPanel' in nav_style
+    assert any(link.get('rel')=='stylesheet' and link.get('href')=='./navigation.css' for link in doc.links)
+    assert 'src="./navigation.js"' in (ROOT/'index.html').read_text(encoding='utf-8')
+    assert 'politicsReadingFill' in doc.ids and 'politicsNavPanel' in doc.ids
     assert all(anchor in doc.ids for anchor in doc.anchors), 'Broken chapter link'
     assert any(link.get('rel')=='canonical' and link.get('href')==URL for link in doc.links)
     assert any(link.get('rel')=='manifest' and link.get('href')=='./manifest.webmanifest' for link in doc.links)
@@ -79,7 +100,7 @@ def main():
     card=(ROOT/'og-image.png').read_bytes()
     assert card.startswith(bytes.fromhex('89504e470d0a1a0a')), 'Invalid PNG'
     assert struct.unpack('>II',card[16:24])==(1200,630), 'Wrong social image dimensions'
-    print('PASS: twenty chapters, links, metadata, PWA, offline files, social card, sitemap')
+    print('PASS: chapters, 140 section links, 101 revision links, drawer, PWA, metadata, offline assets')
 
 if __name__=='__main__':
     main()

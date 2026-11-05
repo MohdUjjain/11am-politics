@@ -7,6 +7,7 @@ const BOOK_CACHE = CACHE_PREFIX + '__CACHE_ID__';
 const FONT_CACHE = '11am-politics-google-fonts-v1';
 const SHELL = [
   './index.html', './manifest.webmanifest', './offline.js',
+  './navigation.js', './navigation.css',
   './icons/icon-192.png', './icons/icon-512.png',
   './favicon-16.png', './favicon-32.png',
   './og-image.png', './404.html', './sitemap.xml'

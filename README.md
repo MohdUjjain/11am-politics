@@ -48,3 +48,11 @@ After Pages is enabled, visit the site online and wait for **Available offline**
 - Open the site online, confirm `Available offline`, install it, then test reopening in airplane mode. After a new edition goes live, reopen online and use `Reload updated guide` when prompted.
 - Social sharing uses the public 1200×630 `og-image.png`, which some messaging apps may cache independently.
 - `robots.txt` at `/11am-politics/robots.txt` would not control crawlers at the origin root; the canonical URL and sitemap are the useful project-site metadata here.
+
+## Collapsible reading navigation
+
+A floating **Contents** button opens a screen-only, accessible sidebar. Its six subject groups, 20 chapter rows, 140 in-chapter section links and 101 revision shortcuts are derived directly from the book. The final **Closing Note** has its own destination. Use the independent chevrons to expand chapters, the search field to find headings, and the progress bar to locate the current chapter. **Resume reading** saves only the most recent section ID in local browser storage; there is no account, tracking or server sync.
+
+Section links follow the stable `#ch01-sec01` convention, and revision links use `#ch01-rev01`. The original chapter URLs `#ch01`–`#ch20` still work. Changes to the notes must preserve these IDs, or update relevant anchors deliberately.
+
+The navigation lives in `navigation.js` and `navigation.css`, both included in the complete offline shell. The drawer and reading header are excluded from print; the original cover, table of contents and study guide remain printable.

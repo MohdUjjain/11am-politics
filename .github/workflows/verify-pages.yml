@@ -26,5 +26,10 @@ jobs:
         run: python scripts/build.py --check
       - name: Validate site links, social metadata, chapters and assets
         run: python tests/verify_publication.py
+      - name: Parse standalone navigation and offline JavaScript
+        run: |
+          node --check navigation.js
+          node --check offline.js
+          node --check service-worker.js
       - name: Simulate cached reopening and interrupted updates
         run: node tests/test_service_worker.mjs
