@@ -3,7 +3,7 @@
  * Browser storage can still be evicted by the browser or OS.
  */
 const CACHE_PREFIX = '11am-politics-reader-';
-const BOOK_CACHE = CACHE_PREFIX + 'e165967bb18c';
+const BOOK_CACHE = CACHE_PREFIX + 'e059a245a991';
 const FONT_CACHE = '11am-politics-google-fonts-v1';
 const SHELL = [
   './index.html', './manifest.webmanifest', './offline.js',
