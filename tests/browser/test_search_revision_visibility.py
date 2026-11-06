@@ -41,7 +41,7 @@ def run():
     visible=page.locator('.p-search-result').count()
     assert visible>hidden,(hidden,visible)
     change(False)
-    page.wait_for_function("(count) => document.querySelectorAll('.p-search-result').length===count",hidden)
+    page.wait_for_function("(count) => document.querySelectorAll('.p-search-result').length===count",arg=hidden)
     assert page.evaluate(f"localStorage.getItem('{PREF}')")=='false'
     assert page.locator('.politics-explicit-revision').count()==0
     search.fill('politics')
