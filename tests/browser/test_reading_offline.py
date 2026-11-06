@@ -66,6 +66,7 @@ def run():
         assert page.evaluate("key=>JSON.parse(localStorage.getItem(key)).anchorId",STORAGE_KEY)=="ch05-sec03"
         page.locator("#politicsContinueButton").click()
         page.wait_for_function("() => location.hash==='#ch05-sec03'")
+        page.wait_for_function("() => document.activeElement.id==='ch05-sec03'")
         resumed=page.evaluate("""() => ({
           focus:document.activeElement.id,
           top:document.querySelector('#ch05-sec03').getBoundingClientRect().top,
@@ -98,6 +99,7 @@ def run():
         )=="none"
         page.locator("#politicsContinueButton").click()
         page.wait_for_function("() => location.hash==='#ch07-rev03'")
+        page.wait_for_function("() => document.activeElement.id==='ch07-rev03'")
         assert page.locator("#ch07 .end-matter").evaluate(
             "el=>getComputedStyle(el).display"
         )!="none"

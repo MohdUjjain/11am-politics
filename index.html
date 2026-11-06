@@ -536,16 +536,6 @@ th,td{padding:7px 9px}
   <div class="spine">
     <i style="background:hsl(200 55% 42%)"></i><i style="background:hsl(218 55% 42%)"></i><i style="background:hsl(236 55% 42%)"></i><i style="background:hsl(254 55% 42%)"></i><i style="background:hsl(272 55% 42%)"></i><i style="background:hsl(290 55% 42%)"></i><i style="background:hsl(308 55% 42%)"></i><i style="background:hsl(326 55% 42%)"></i><i style="background:hsl(344 55% 42%)"></i><i style="background:hsl(2 55% 42%)"></i><i style="background:hsl(20 55% 42%)"></i><i style="background:hsl(38 55% 42%)"></i><i style="background:hsl(56 55% 42%)"></i><i style="background:hsl(74 55% 38%)"></i><i style="background:hsl(92 55% 32%)"></i><i style="background:hsl(110 55% 32%)"></i><i style="background:hsl(128 55% 32%)"></i><i style="background:hsl(146 55% 32%)"></i><i style="background:hsl(164 55% 32%)"></i><i style="background:hsl(182 55% 34%)"></i>
   </div>
-  <section id="politicsContinuePrompt" class="p-resume-card" aria-label="Continue your previous reading" hidden>
-    <div class="p-resume-kicker">PICK UP WHERE YOU LEFT OFF</div>
-    <h2>Continue reading?</h2>
-    <p id="politicsContinueDescription">Your last chapter and section were saved on this device.</p>
-    <p id="politicsResumeNote" class="p-resume-hidden-note" hidden>Saved in hidden study material. Continue reading will temporarily reveal that chapter’s study section without changing your saved preference.</p>
-    <div class="p-resume-buttons">
-      <button type="button" id="politicsContinueButton">Continue reading</button>
-      <button type="button" id="politicsContinueDismiss">Not now</button>
-    </div>
-  </section>
 </section>
 
 <!-- ============================================================ LEGEND ============================================================ -->
@@ -4286,6 +4276,30 @@ th,td{padding:7px 9px}
 </section>
 
 </main>
+<!-- One visible, screen-only notice surface. Edition updates take priority over
+     resume; neither notice replaces the saved reading location or book content. -->
+<div id="politicsNoticeDock" class="p-reader-notice-dock" role="region"
+     aria-label="Reading and edition notices" aria-live="polite" aria-atomic="true" hidden>
+  <section id="politicsContinuePrompt" class="p-resume-card" role="group" aria-labelledby="politicsContinueTitle" hidden>
+    <div class="p-resume-kicker">PICK UP WHERE YOU LEFT OFF</div>
+    <h2 id="politicsContinueTitle">Continue reading?</h2>
+    <p id="politicsContinueDescription">Your last chapter and section were saved on this device.</p>
+    <p id="politicsResumeNote" class="p-resume-hidden-note" hidden>Saved in hidden study material. Continue reading will temporarily reveal that chapter’s study section without changing your saved preference.</p>
+    <div class="p-resume-buttons">
+      <button type="button" id="politicsContinueButton">Continue reading</button>
+      <button type="button" id="politicsContinueDismiss">Not now</button>
+    </div>
+  </section>
+  <section id="politicsEditionNotice" class="p-reader-edition-notice" role="group" aria-labelledby="politicsEditionNoticeTitle" hidden>
+    <div class="p-resume-kicker">UPDATED READING EDITION</div>
+    <h2 id="politicsEditionNoticeTitle">New edition ready</h2>
+    <p>An updated copy of the complete guide is saved. Reload to read the latest edition; your saved place and preferences will remain available.</p>
+    <div class="p-resume-buttons">
+      <button type="button" id="politicsEditionNoticeReload">Reload updated guide</button>
+      <button type="button" id="politicsEditionNoticeDismiss">Later</button>
+    </div>
+  </section>
+</div>
 <aside class="offline-panel" aria-label="Offline reading and installation">
 <button id="offlineToggle" class="offline-toggle" type="button" aria-controls="offlineDetails" aria-expanded="false">⏳ Saving offline…</button>
 <div class="offline-details" id="offlineDetails" hidden>

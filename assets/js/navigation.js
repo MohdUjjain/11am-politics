@@ -35,6 +35,10 @@
   const resumeNote=get('politicsResumeNote');
   const continueButton=get('politicsContinueButton');
   const continueDismiss=get('politicsContinueDismiss');
+  const noticeDock=get('politicsNoticeDock');
+  const editionNotice=get('politicsEditionNotice');
+  const editionNoticeReload=get('politicsEditionNoticeReload');
+  const editionNoticeDismiss=get('politicsEditionNoticeDismiss');
   if(!panel||!trigger||!tree||!studyMaterialToggle||!tabIndex||!tabTools)return;
 
   const groups=[];
@@ -51,6 +55,8 @@
   let lastWriteFraction=-1;
   let suspendCapture=false;
   let resumePromptDismissed=false;
+  let editionNoticeAvailable=!!window.__politicsEditionReady;
+  let editionNoticeDismissed=false;
   let showStudyMaterial=studyMaterialVisibility.read(localStorage);
 
   function create(tag,className,text){
@@ -278,6 +284,7 @@
     window.dispatchEvent(new Event('politics:drawer-open'));
     closeButton.focus();
     document.addEventListener('keydown',onKeys);
+    syncReaderNotices(false);
   }
   function close(returnFocus){
     if(!isOpen)return;
@@ -297,6 +304,7 @@
         ?restoreFocus:trigger;
       target?.focus({preventScroll:true});
     }
+    syncReaderNotices(false);
   }
 
   function savedCheckpoint(){
@@ -331,16 +339,29 @@
     if(saved&&continueDescription)continueDescription.textContent=savedDescription(saved);
     if(resumeNote)resumeNote.hidden=!saved?.hiddenRevision;
   }
-  function showContinuePrompt(){
-    if(!continueCard||resumePromptDismissed||location.hash||
-      window.scrollY>90)return;
-    const saved=savedCheckpoint();
-    if(!saved)return;
-    refreshResume();
-    continueCard.hidden=false;
+  // The reader exposes only one prominent notice at a time. A newly installed
+  // edition takes priority over Resume; both remain user-dismissable and
+  // neither changes the saved reading place or revision-visibility preference.
+  function syncReaderNotices(focusNew){
+    if(!noticeDock)return;
+    const wasFocused=noticeDock.contains(document.activeElement);
+    const showEdition=editionNoticeAvailable&&!editionNoticeDismissed&&!isOpen;
+    const showResume=!showEdition&&!isOpen&&!resumePromptDismissed&&
+      !location.hash&&window.scrollY<=90&&!!savedCheckpoint();
+    if(showResume)refreshResume();
+    if(editionNotice)editionNotice.hidden=!showEdition;
+    if(continueCard)continueCard.hidden=!showResume;
+    noticeDock.hidden=!(showEdition||showResume);
+    if(focusNew&&!noticeDock.hidden&&!document.hidden&&
+       (wasFocused||document.activeElement===document.body||
+        document.activeElement===document.documentElement)){
+      (showEdition?editionNoticeReload:continueButton)?.focus({preventScroll:true});
+    }
   }
+  function showContinuePrompt(){syncReaderNotices(true);}
   function hideContinuePrompt(){
     if(continueCard)continueCard.hidden=true;
+    if(noticeDock && (!editionNotice||editionNotice.hidden))noticeDock.hidden=true;
   }
   function metrics(ch,anchorId){
     const topOf=el=>el.getBoundingClientRect().top+window.scrollY;
@@ -496,7 +517,8 @@
     markActive(id);
     updateChapterProgress(ch);
     persistReading(false);
-    if(continueCard&&!continueCard.hidden)hideContinuePrompt();
+    if(continueCard&&!continueCard.hidden&&(window.scrollY>90||location.hash))
+      syncReaderNotices(false);
   }
   function requestUpdate(){
     if(!scheduled){scheduled=true;requestAnimationFrame(updateReading);}
@@ -595,12 +617,37 @@
   resume.addEventListener('click',continueReading);
   if(continueButton)continueButton.addEventListener('click',continueReading);
   if(continueDismiss)continueDismiss.addEventListener('click',()=>{
+    const hadFocus=continueCard?.contains(document.activeElement);
     resumePromptDismissed=true;
-    hideContinuePrompt();
+    syncReaderNotices(false);
+    if(hadFocus)trigger.focus({preventScroll:true});
   });
-  // Keep the reader at the cover on a later visit until they choose Continue.
+  if(editionNoticeReload)editionNoticeReload.addEventListener('click',()=>location.reload());
+  if(editionNoticeDismiss)editionNoticeDismiss.addEventListener('click',()=>{
+    const hadFocus=editionNotice?.contains(document.activeElement);
+    editionNoticeDismissed=true;
+    syncReaderNotices(hadFocus);
+    if(hadFocus&&noticeDock?.hidden)trigger.focus({preventScroll:true});
+  });
+  window.addEventListener('politics:edition-notice',event=>{
+    editionNoticeAvailable=!!event.detail?.available;
+    editionNoticeDismissed=false;
+    syncReaderNotices(true);
+  });
+  window.addEventListener('keydown',event=>{
+    if(event.key!=='Escape'||isOpen||!noticeDock||
+       noticeDock.hidden||!noticeDock.contains(document.activeElement))return;
+    event.preventDefault();
+    if(editionNotice&&!editionNotice.hidden)editionNoticeDismissed=true;
+    else resumePromptDismissed=true;
+    syncReaderNotices(false);
+    trigger.focus({preventScroll:true});
+  });
+  // Keep the book at the cover unless the reader explicitly chooses Continue.
+  // New notices are brought to keyboard focus only when the page has no
+  // other focused interactive control; no modal focus trap is introduced.
   window.addEventListener('load',()=>requestAnimationFrame(showContinuePrompt));
-  window.addEventListener('pageshow',()=>requestAnimationFrame(showContinuePrompt));
+  window.addEventListener('pageshow',()=>requestAnimationFrame(()=>syncReaderNotices(false)));
   window.addEventListener('pagehide',()=>persistReading(true));
   document.addEventListener('visibilitychange',()=>{
     if(document.visibilityState==='hidden')persistReading(true);

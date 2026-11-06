@@ -445,13 +445,46 @@
   }
   #politicsNavPanel .p-nav-head button:focus-visible {outline-color:#F0CE76;}
 
-  /* Optional on-cover continuation: never shown on a first visit, never printed. */
-  #politicsContinuePrompt[hidden] {display:none!important;}
-  #politicsContinuePrompt {
-    margin-top:25px;max-width:600px;padding:20px 22px;
+  /* One screen-only notice surface, not an inline cover footnote or an
+     overlapping pair of toasts. Positioned below the fixed reading header;
+     the unrelated offline toolbar remains at bottom-right. */
+  #politicsNoticeDock[hidden],#politicsContinuePrompt[hidden],
+  #politicsEditionNotice[hidden] {display:none!important;}
+  .p-reader-notice-dock {
+    position:fixed;
+    top:calc(70px + env(safe-area-inset-top,0px));
+    left:50%;transform:translateX(-50%);
+    width:min(520px,calc(100vw - 28px));
+    max-height:calc(100dvh - 88px - env(safe-area-inset-bottom,0px));
+    overflow-y:auto;overscroll-behavior:contain;
+    z-index:1103;
+  }
+  #politicsContinuePrompt,#politicsEditionNotice {
+    margin:0;max-width:none;padding:20px 22px;
     border:1px solid #B6C9D5;border-left:5px solid var(--blue,#1F5F8B);
-    border-radius:10px;background:rgba(255,255,255,.96);
-    box-shadow:0 7px 22px rgba(32,36,44,.07);
+    border-radius:10px;background:var(--p-ui-surface);
+    box-shadow:0 12px 42px rgba(32,36,44,.24);
+  }
+  #politicsEditionNotice {border-left-color:var(--amber,#93650A);}
+  #politicsEditionNotice h2 {
+    margin:6px 0;color:var(--p-ui-text);
+    font:700 21px/1.2 'Fraunces',Georgia,serif;
+  }
+  #politicsEditionNotice p {
+    margin:0 0 15px;
+    font:500 13px/1.55 'Source Sans 3',sans-serif;
+    color:var(--p-ui-text-soft);
+  }
+  #politicsEditionNoticeReload {
+    background:var(--blue,#1F5F8B);color:#fff;
+    border:1px solid var(--blue,#1F5F8B);
+  }
+  #politicsEditionNoticeDismiss {
+    background:var(--p-ui-surface);color:var(--p-ui-text);
+    border:1px solid var(--p-ui-divider);
+  }
+  #politicsEditionNotice button:focus-visible {
+    outline:3px solid var(--p-ui-focus);outline-offset:3px;
   }
   .p-resume-kicker {
     font:700 10px/1.4 'IBM Plex Mono',monospace;
@@ -520,7 +553,12 @@
   .p-chapter-indicator-label {display:none;}
   .p-chapter-ring {width:38px;height:38px;}
   .p-chapter-ring-center {width:30px;height:30px;font-size:10px;}
-  #politicsContinuePrompt {padding:16px 17px;}
+  .p-reader-notice-dock {
+    top:calc(65px + env(safe-area-inset-top,0px));
+    width:calc(100vw - 20px);
+    max-height:calc(100dvh - 80px - env(safe-area-inset-bottom,0px));
+  }
+  #politicsContinuePrompt,#politicsEditionNotice {padding:16px 17px;}
   #politicsNavFab {left:calc(10px + env(safe-area-inset-left,0px));}
   .p-nav-tree {padding:8px 12px 20px;}
   .p-nav-toolspanel {padding:13px 12px 20px;}
@@ -535,7 +573,7 @@
 }
 @media print {
   #politicsReadingHeader,#politicsNavFab,#politicsNavBackdrop,#politicsNavPanel,
-  #politicsContinuePrompt {display:none!important;}
+  #politicsNoticeDock,#politicsContinuePrompt,#politicsEditionNotice {display:none!important;}
   /* Search fallback marks may remain after the search; never print them. */
   mark.p-search-term{background:none!important;color:inherit!important;
     text-decoration:none!important;}

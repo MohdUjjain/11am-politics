@@ -43,6 +43,12 @@
   if(editionReload)editionReload.hidden=false;
   message.textContent='A newer edition was saved. Reload to read it. Your reading position and settings are retained.';
   status('New edition saved. Reload to use its updated notes and interface.');
+  // Coordinate with the visible notice surface without coupling PWA state to
+  // the reader controller's initialization order. Toolbar controls remain.
+  window.__politicsEditionReady=true;
+  window.dispatchEvent(new CustomEvent('politics:edition-notice',{
+    detail:{available:true}
+  }));
   refreshEdition();
  }
  function reloadBook(){location.reload();}

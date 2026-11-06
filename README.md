@@ -76,6 +76,10 @@ python tests/browser/test_reading_offline.py
 python tests/browser/test_visual_regression.py
 ```
 
+The visible on-return **Continue Reading** prompt is a dismissible floating notice below the reader header, not a card hidden within the cover. A newly ready offline edition uses the same notice space and takes priority, offering **Reload updated guide** or **Later**. Neither action automatically changes the saved reading position; dismissal is session-only. The edition and Resume notices cannot overlap. The prompt never prints, closes while Contents is open, and retains keyboard-accessible controls.
+
+The dedicated browser regression `python tests/browser/test_reader_notice_priority.py` verifies this at 320, 390 and 1280px, including keyboard focus, competing updates, modal behavior and print exclusion.
+
 The visual test produces screenshots at 320, 390, 768 and 1440 CSS-pixel widths and print PDFs with backgrounds on/off. GitHub Actions uploads the evidence as `politics-reader-visual-regression` (14-day retention). The workflow runs the full suite for pushes and pull requests.
 
 ## Deployment
