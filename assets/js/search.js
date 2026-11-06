@@ -77,7 +77,7 @@
 
   let records=null,selected=null,debounce=null,searchRevision=0;
   let matchesForQuery=[],shown=0,previousMarks=[],activeIndex=-1;
-  let suppressFocusRender=false;
+  let suppressFocusRender=false,renderedQuery='';
   function restoreInputFocus(){
     suppressFocusRender=true;
     input.focus({preventScroll:true});
@@ -129,7 +129,8 @@
         let r=byElement.get(element);
         if(!r){
           r={element,chapter:chNum,chapterTitle:chTitle,
-            sectionTitle,anchor,text:'',searchText:''};
+            sectionTitle,anchor,text:'',searchText:'',
+            revision:!!element.closest('.end-matter')};
           byElement.set(element,r);
           records.push(r);
         }
@@ -241,12 +242,17 @@
     }
   }
   function excludedByRevisionSetting(record){
-    return document.body.classList.contains('politics-hide-study-material') &&
-      !!record.element.closest('.end-matter');
+    // The current checkbox and reader class jointly define the visible corpus.
+    // Filter before ranking; never let a stale click expose end matter.
+    const hidden=document.body.classList.contains('politics-hide-study-material') ||
+      get('politicsShowStudyMaterial')?.checked===false;
+    return hidden && record.revision;
   }
   function selectResult(record){
-    // A preexisting/stale result must never override an explicit Hide setting.
-    if(excludedByRevisionSetting(record)){render();return;}
+    // Old results must not navigate when typing or a visibility change is pending.
+    if(renderedQuery!==squish(input.value)||excludedByRevisionSetting(record)){
+      render();return;
+    }
     hide(); // cancels queued typing callbacks before any navigation
     const el=record.element;
     const query=input.value;
@@ -306,6 +312,7 @@
       :'No matching passages';
   }
   function render(){
+    renderedQuery=squish(input.value);
     if(document.body.classList.contains('politics-nav-open')){
       hide();return;
     }
@@ -336,10 +343,14 @@
     show();
   }
   get('politicsShowStudyMaterial')?.addEventListener('change',()=>{
+    cancelPending();
     if(input.value.trim())render();
   });
   input.addEventListener('input',()=>{
-    cancelPending();
+    // Clear stale buttons immediately, not after the debounce delay.
+    hide();
+    results.replaceChildren();
+    renderedQuery='';
     clearHighlights();
     const revision=searchRevision;
     debounce=setTimeout(()=>{
