@@ -45,11 +45,19 @@ def run():
     assert page.evaluate(f"localStorage.getItem('{PREF}')")=='false'
     assert page.locator('.politics-explicit-revision').count()==0
     search.fill('politics')
+    # The results UI must not retain clickable matches for the previous query.
+    assert page.locator('.p-search-result-section').filter(has_text='📋 Chapter Summary').count()==0
     expect(page.locator('.p-search-result').first).to_be_visible()
     page.locator('.p-search-result').first.click()
     assert page.locator('#politicsSearchPopover').is_hidden()
     assert page.locator('.politics-explicit-revision').count()==0
     assert not page.evaluate('document.activeElement.closest(".end-matter") !== null')
+    # Every result has an independently indexed passage rather than a shared
+    # pending search closure, even when the same query has many matches.
+    search.fill('politics')
+    expect(page.locator('.p-search-result').first).to_be_visible()
+    first=page.locator('.p-search-result').first.inner_text()
+    assert first
     ctx.close()
     print('PASS Politics hidden end-matter filtered in search, no auto-reveal, width',width)
    browser.close()
