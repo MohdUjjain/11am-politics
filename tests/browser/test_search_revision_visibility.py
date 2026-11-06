@@ -24,7 +24,7 @@ def run():
     page=ctx.new_page();page.goto(f'http://127.0.0.1:{server.server_port}/index.html',wait_until='domcontentloaded')
     page.wait_for_function("document.querySelectorAll('.p-nav-chapter').length===20")
     search=page.locator('#politicsFullSearch')
-    search.fill('Chapter Summary')
+    search.fill('📋 Chapter Summary')
     expect(page.locator('#politicsSearchPopover')).to_be_visible()
     hidden=page.locator('.p-search-result').count()
     hidden_sections=page.locator('.p-search-result-section').all_inner_texts()
