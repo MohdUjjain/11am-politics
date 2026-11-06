@@ -69,6 +69,8 @@ def main():
     ctx,page=open_edition(checkpoint,width)
     page.locator('#politicsContinueButton').click()
     page.wait_for_function("() => location.hash==='#ch05-sec03'")
+    # URL changes synchronously, but keyboard focus moves next animation frame.
+    page.wait_for_function("() => document.activeElement.id==='ch05-sec03'")
     result=page.evaluate("""() => {
       const h=document.getElementById('ch05-sec03'),
        list=[...document.querySelectorAll('#ch05 .content h2[id]')],i=list.indexOf(h),
