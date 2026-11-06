@@ -84,7 +84,9 @@ localStorage.setItem({json.dumps(FIX['visibilityKey'])},{json.dumps(FIX['visibil
         page.locator('#politicsContinuePrompt').wait_for(state='visible',timeout=8000)
         page.locator('#politicsContinueButton').click()
         page.wait_for_function("() => location.hash==='#ch05'")
-        assert page.evaluate("document.activeElement.id")=='ch05'
+        # The URL is updated synchronously. Focus is deliberately moved in a
+        # requestAnimationFrame callback, so await that visible user outcome.
+        page.wait_for_function("() => document.activeElement.id==='ch05'",timeout=5000)
         assert page.evaluate('window.scrollY')>100
         assert page.evaluate("key=>localStorage.getItem(key)",FIX['visibilityKey'])=='false'
         context.close()
