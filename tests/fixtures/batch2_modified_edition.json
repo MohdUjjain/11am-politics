@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "case": "Reordered section in an updated edition",
+  "checkpoint": {
+    "v": 2,
+    "chapterId": "ch05",
+    "anchorId": "ch05-sec03",
+    "anchorFraction": 0.31,
+    "chapterFraction": 0.46,
+    "savedAt": 1730000000000
+  },
+  "oldAnchor": "ch05-sec03",
+  "newAnchor": "ch05-sec88",
+  "fallback": "ch05",
+  "visibilityKey": "11am-politics:show-end-of-chapter-material-v2",
+  "visibility": "false",
+  "revision": {
+    "v": 2,
+    "chapterId": "ch07",
+    "anchorId": "ch07-rev03",
+    "anchorFraction": 0.18,
+    "chapterFraction": 0.89,
+    "savedAt": 1730000000000
+  }
+}
