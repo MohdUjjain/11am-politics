@@ -240,14 +240,16 @@
       parent.textContent=t;
     }
   }
+  function excludedByRevisionSetting(record){
+    return document.body.classList.contains('politics-hide-study-material') &&
+      !!record.element.closest('.end-matter');
+  }
   function selectResult(record){
+    // A preexisting/stale result must never override an explicit Hide setting.
+    if(excludedByRevisionSetting(record)){render();return;}
     hide(); // cancels queued typing callbacks before any navigation
     const el=record.element;
     const query=input.value;
-    const revision=el.closest('.end-matter');
-    if(revision&&document.body.classList.contains('politics-hide-study-material')){
-      revision.classList.add('politics-explicit-revision');
-    }
     if(record.anchor){
       const newHash='#'+record.anchor;
       if(location.hash!==newHash)location.hash=newHash;
@@ -315,7 +317,8 @@
     setActive(-1);
     if(!query){hide();meta.textContent='Search the complete notes';return;}
     for(const record of buildIndex()){
-      if(matches(record.searchText,query))matchesForQuery.push(record);
+      if(!excludedByRevisionSetting(record) && matches(record.searchText,query))
+        matchesForQuery.push(record);
     }
     // Prefer exact phrase hits while keeping the book order for ties.
     matchesForQuery.sort((a,b)=>{
@@ -332,6 +335,9 @@
       :'No matching passages';
     show();
   }
+  get('politicsShowStudyMaterial')?.addEventListener('change',()=>{
+    if(input.value.trim())render();
+  });
   input.addEventListener('input',()=>{
     cancelPending();
     clearHighlights();
