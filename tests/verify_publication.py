@@ -137,7 +137,10 @@ def main():
     assert 'showContinuePrompt' in nav and 'continueReading' in nav
     assert 'updateChapterProgress' in nav and 'suspendCapture' in nav
     assert '.p-chapter-ring' in nav_style and '#politicsContinuePrompt' in nav_style
-    assert '#politicsContinuePrompt[hidden] {display:none!important;}' in nav_style
+    assert '#politicsNoticeDock[hidden],#politicsContinuePrompt[hidden],' in nav_style
+    assert '#politicsEditionNotice[hidden] {display:none!important;}' in nav_style
+    assert 'id="politicsNoticeDock"' in (ROOT/'index.html').read_text(encoding='utf-8')
+    assert 'politics:edition-notice' in nav and 'politics:edition-notice' in offline_client
     assert all(anchor in doc.ids for anchor in doc.anchors), 'Broken chapter link'
     assert any(link.get('rel')=='canonical' and link.get('href')==URL for link in doc.links)
     assert any(link.get('rel')=='manifest' and link.get('href')=='./manifest.webmanifest' for link in doc.links)
