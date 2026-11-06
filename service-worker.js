@@ -3,11 +3,15 @@
  * Browser storage can still be evicted by the browser or OS.
  */
 const CACHE_PREFIX = '11am-politics-reader-';
-const BOOK_CACHE = CACHE_PREFIX + 'da3d88167f1a';
+const BOOK_CACHE = CACHE_PREFIX + '0dc0e50a91c8';
 const FONT_CACHE = '11am-politics-google-fonts-v1';
-const SHELL = [
+// Keep the actual reader atomic; metadata and icon fetches are opportunistic.
+const CORE_ASSETS = [
   './index.html', './manifest.webmanifest', './assets/js/offline.js',
-  './assets/js/reading-position.js', './assets/js/study-material-visibility.js', './assets/js/navigation.js', './assets/js/search.js', './assets/css/navigation.css',
+  './assets/js/reading-position.js', './assets/js/study-material-visibility.js',
+  './assets/js/navigation.js', './assets/js/search.js', './assets/css/navigation.css'
+];
+const OPTIONAL_ASSETS = [
   './assets/icons/icon-192.png', './assets/icons/icon-512.png',
   './assets/icons/favicon-16.png', './assets/icons/favicon-32.png',
   './assets/images/og-image.png', './404.html', './sitemap.xml'
@@ -25,8 +29,9 @@ function isGoogleFont(url) {
 self.addEventListener('install',event=>{
   event.waitUntil((async()=>{
     const cache=await caches.open(BOOK_CACHE);
-    // Never activate a new release until *every* required resource is saved.
-    await cache.addAll(SHELL);
+    // Only a complete core book may replace a previously working edition.
+    await cache.addAll(CORE_ASSETS);
+    await Promise.allSettled(OPTIONAL_ASSETS.map(path=>cache.addAll([path])));
     await self.skipWaiting();
   })());
 });

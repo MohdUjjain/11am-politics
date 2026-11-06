@@ -15,11 +15,10 @@
  const checkButton=get('politicsCheckUpdates');
  const editionReload=get('politicsEditionReload');
  const CACHE_PREFIX='11am-politics-reader-';
+ // Exactly the executable offline reader, never auxiliary imagery/metadata.
  const ESSENTIALS=['./index.html','./manifest.webmanifest','./assets/js/offline.js',
   './assets/js/reading-position.js','./assets/js/study-material-visibility.js','./assets/js/navigation.js',
-  './assets/js/search.js','./assets/css/navigation.css','./assets/icons/icon-192.png','./assets/icons/icon-512.png',
-  './assets/icons/favicon-16.png','./assets/icons/favicon-32.png','./assets/images/og-image.png','./404.html',
-  './sitemap.xml'];
+  './assets/js/search.js','./assets/css/navigation.css'];
  let installPrompt=null,registration=null,updated=false,ready=false;
  let checkInFlight=null,lastChecked=0;
  let previousController=!!navigator.serviceWorker?.controller;
