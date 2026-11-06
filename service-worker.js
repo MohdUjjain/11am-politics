@@ -3,7 +3,7 @@
  * Browser storage can still be evicted by the browser or OS.
  */
 const CACHE_PREFIX = '11am-politics-reader-';
-const BOOK_CACHE = CACHE_PREFIX + '9846f8591e87';
+const BOOK_CACHE = CACHE_PREFIX + '64e9246905b5';
 const FONT_CACHE = '11am-politics-google-fonts-v1';
 // Keep the actual reader atomic; metadata and icon fetches are opportunistic.
 const CORE_ASSETS = [
