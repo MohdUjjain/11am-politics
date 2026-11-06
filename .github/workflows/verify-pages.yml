@@ -51,6 +51,8 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Verify search UI and print with backgrounds disabled (Chromium)
         run: python tests/browser/test_search_print.py
+      - name: Verify search excludes hidden end-of-chapter study material
+        run: python tests/browser/test_search_revision_visibility.py
       - name: Verify mobile layout, accessibility and reduced motion (Chromium)
         run: python tests/browser/test_mobile_accessibility.py
       - name: Batch 2 table keyboard access and edition migration
