@@ -583,3 +583,19 @@
 @media print {
   .p-skip-link{display:none!important;}
 }
+
+/* Batch 2 — readable horizontal tables without disturbing paper output. */
+@media screen {
+  .politics-table-scrollable {scrollbar-gutter:stable;}
+  .politics-table-scrollable:focus-visible {
+    outline:3px solid var(--blue,#1F5F8B);outline-offset:3px;
+  }
+  .politics-table-scroll-hint {
+    margin:4px 0 15px;font:600 12px/1.45 'Source Sans 3',sans-serif;
+    color:#40566B;
+  }
+}
+@media print {
+  .politics-table-scroll-hint {display:none!important;}
+  .politics-table-scrollable {outline:0!important;scrollbar-gutter:auto;}
+}
