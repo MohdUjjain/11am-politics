@@ -55,6 +55,8 @@ jobs:
         run: python tests/browser/test_mobile_accessibility.py
       - name: Batch 2 table keyboard access and edition migration
         run: python tests/browser/test_batch2_accessibility_continuity.py
+      - name: Batch D — altered-edition insertion, reordering and legacy checkpoint continuity
+        run: python tests/browser/test_batch4_edition_migration.py
       - name: Verify saved reading through browser restarts and installed editions (Chromium)
         run: python tests/browser/test_reading_offline.py
       - name: Capture cross-viewport UI screenshots and print proofs (Chromium)
