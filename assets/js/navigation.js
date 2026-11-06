@@ -507,6 +507,64 @@
     requestAnimationFrame(()=>target.focus({preventScroll:true}));
   }
 
+  // The HTML tables remain genuine semantic tables. Only wrappers with
+  // measured horizontal overflow become keyboard-focusable scroll regions.
+  // No authored notes, print DOM or reading position are modified.
+  const tableWrappers=[...document.querySelectorAll('section.chapter .table-wrap')];
+  const managedTables=new Map();
+  let tableFramePending=false;
+  function updateScrollableTables(){
+    tableFramePending=false;
+    tableWrappers.forEach((wrap,index)=>{
+      const scrollable=wrap.getClientRects().length>0 && wrap.clientWidth>0 &&
+        wrap.scrollWidth>wrap.clientWidth+3;
+      let saved=managedTables.get(wrap);
+      if(scrollable&&!saved){
+        const table=wrap.querySelector('table');
+        const caption=table?.querySelector('caption')?.textContent.trim();
+        const chapter=wrap.closest('section.chapter');
+        const firstHeading=table?.querySelector('th')?.textContent.trim();
+        const name='Scrollable comparison table'+(caption?' — '+caption.slice(0,90):
+          firstHeading?' — '+firstHeading.slice(0,70):
+          chapter?' in '+chapter.id:'');
+        const hint=document.createElement('p');
+        hint.className='politics-table-scroll-hint';
+        hint.id='politics-table-scroll-hint-'+(index+1);
+        hint.textContent='Swipe horizontally or focus the table and use arrow keys to reveal more columns.';
+        wrap.insertAdjacentElement('afterend',hint);
+        saved={hint,
+          tab:wrap.getAttribute('tabindex'),
+          role:wrap.getAttribute('role'),
+          label:wrap.getAttribute('aria-label'),
+          described:wrap.getAttribute('aria-describedby')};
+        managedTables.set(wrap,saved);
+        wrap.tabIndex=0;
+        wrap.setAttribute('role','region');
+        wrap.setAttribute('aria-label',name);
+        wrap.setAttribute('aria-describedby',[saved.described,hint.id].filter(Boolean).join(' '));
+        wrap.classList.add('politics-table-scrollable');
+      }else if(!scrollable&&saved){
+        if(saved.hint.isConnected)saved.hint.remove();
+        [['tabindex',saved.tab],['role',saved.role],['aria-label',saved.label],
+          ['aria-describedby',saved.described]].forEach(([attribute,value])=>{
+          if(value===null)wrap.removeAttribute(attribute);
+          else wrap.setAttribute(attribute,value);
+        });
+        wrap.classList.remove('politics-table-scrollable');
+        managedTables.delete(wrap);
+      }
+    });
+  }
+  function requestScrollableTables(){
+    if(tableFramePending)return;
+    tableFramePending=true;
+    requestAnimationFrame(updateScrollableTables);
+  }
+  window.addEventListener('resize',requestScrollableTables);
+  window.addEventListener('afterprint',requestScrollableTables);
+  if(document.fonts?.ready)document.fonts.ready.then(requestScrollableTables).catch(()=>{});
+  requestScrollableTables();
+
   collect();build();applyStudyMaterialView(showStudyMaterial,false);switchTab('index',false);
   trigger.addEventListener('click',open);
   closeButton.addEventListener('click',()=>close(true));
@@ -525,6 +583,7 @@
     // Save the current reading checkpoint before removing summary content.
     persistReading(true);
     applyStudyMaterialView(studyMaterialToggle.checked,true);
+    requestScrollableTables();
   });
   tree.addEventListener('click',e=>{
     const link=e.target.closest('a[href^="#"]');
