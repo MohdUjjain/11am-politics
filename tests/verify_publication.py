@@ -160,13 +160,19 @@ def main():
     worker=(ROOT/'service-worker.js').read_text()
     client=(ROOT/'assets/js/offline.js').read_text()
     for path in ASSETS:
-        assert './'+path in worker, 'Not precached: '+path
-        assert './'+path in client, 'Not status checked: '+path
+        assert './'+path in worker, 'Not declared for offline caching: '+path
+    # Only functional reader resources count toward offline readiness; icons,
+    # social imagery and metadata are still fetched, but only best-effort.
+    for path in ASSETS[:8]:
+        assert './'+path in client, 'Core not status checked: '+path
+    for path in ASSETS[8:]:
+        assert "'./"+path+"'" not in client, 'Optional asset must not block readiness: '+path
     assert '__CACHE_ID__' not in worker
     assert "type:'EDITION_STATUS'" in worker
     assert "type==='GET_EDITION'" in worker
     assert 'name.startsWith(CACHE_PREFIX)' in worker, 'Missing scoped cleanup'
-    assert 'cache.addAll(SHELL)' in worker, 'Missing complete pre-cache'
+    assert 'cache.addAll(CORE_ASSETS)' in worker, 'Missing atomic core pre-cache'
+    assert 'OPTIONAL_ASSETS' in worker and 'Promise.allSettled' in worker, 'Optional assets not best-effort'
     assert 'noindex' in (ROOT/'404.html').read_text().lower()
     assert '/11am-politics/' in (ROOT/'404.html').read_text()
     assert '<loc>'+URL+'</loc>' in (ROOT/'sitemap.xml').read_text()
