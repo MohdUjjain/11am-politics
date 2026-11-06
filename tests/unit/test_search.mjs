@@ -81,8 +81,10 @@ assert.ok(css.includes('::highlight(politics-search-term)')&&
   css.includes('mark.p-search-term'),'Exact term highlighting must be styled');
 assert.ok(source.includes("el.scrollIntoView({block:'center'"),
   'Search click must navigate to the matching passage');
-assert.ok(source.includes("revision.classList.add('politics-explicit-revision')"),
-  'Search must open hidden review material when matched');
+assert.ok(source.includes('!excludedByRevisionSetting(record)'),
+  'Search must exclude hidden end-of-chapter material at retrieval time');
+assert.ok(source.includes('if(excludedByRevisionSetting(record)){render();return;}'),
+  'A stale search result may not reveal a hidden review section');
 assert.ok(css.includes('.p-search-popover')&&css.includes('.p-search-result-snippet'),
   'Sticky-header results UI styled');
 assert.ok(css.includes('.p-nav-tabs')&&css.includes('.p-nav-tabpanel[hidden]'),
