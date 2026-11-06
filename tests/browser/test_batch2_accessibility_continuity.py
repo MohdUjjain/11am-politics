@@ -30,6 +30,7 @@ def main():
           const wrap=document.querySelector('section.chapter .table-wrap');
           const table=wrap.querySelector('table');
           wrap.style.width='290px';table.style.minWidth='900px';
+          window.dispatchEvent(new Event('resize'));
           return {scroll:wrap.scrollWidth,client:wrap.clientWidth};
         }""")
         assert dimensions['scroll']>dimensions['client']+3,dimensions
@@ -52,7 +53,7 @@ def main():
         assert wrap.evaluate('e=>e.scrollLeft')>start
         page.evaluate("""() => {
           const e=document.querySelector('section.chapter .table-wrap');
-          e.style.width='100%';e.querySelector('table').style.minWidth='0';
+          e.style.width='2000px';e.querySelector('table').style.minWidth='0';
           e.style.overflow='visible'; e.querySelector('table').style.width='100%';
         }""")
         page.evaluate("window.dispatchEvent(new Event('resize'))")
