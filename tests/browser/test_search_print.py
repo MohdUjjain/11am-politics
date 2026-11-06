@@ -80,8 +80,13 @@ def check():
               const input = document.querySelector('#politicsFullSearch');
               input.value='political';
               input.dispatchEvent(new Event('input', {bubbles:true}));
-              document.querySelector('.p-search-result').click();
+              if(document.querySelector('.p-search-result') !== null)
+                throw new Error('Old search result still clickable while typing');
             }""")
+            # The new query may render after debounce, but a *real* selection
+            # must cancel it and keep the popover closed.
+            expect(page.locator(".p-search-result").first).to_be_visible(timeout=15000)
+            page.locator(".p-search-result").first.click()
             page.wait_for_timeout(200)
             assert page.locator("#politicsSearchPopover").is_hidden(), (
                 "A pending debounced search reopened the dismissed panel"
