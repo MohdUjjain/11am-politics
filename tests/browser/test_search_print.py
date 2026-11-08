@@ -191,7 +191,10 @@ def check():
                 assert "Study Notes" in texts[0], texts[0][:800]
                 assert "11AM · POLITICS" not in texts[0], texts[0][:800]
                 assert "PREMIUM STUDY NOTES" not in texts[0], texts[0][:800]
-                assert "POLITICAL SCIENCE" not in texts[0], texts[0][:800]
+                # "Political Science" also appears legitimately in the cover
+                # eyebrow, so require absence of the exact standalone footer.
+                assert not any(line.strip() == "POLITICAL SCIENCE"
+                               for line in texts[0].splitlines()), texts[0][:800]
                 assert "11AM · POLITICS" in texts[1], texts[1][:800]
                 assert "PREMIUM STUDY NOTES" in texts[1], texts[1][:800]
                 assert "Table of Contents" in "".join(texts[1:-1])
