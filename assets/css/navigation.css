@@ -341,14 +341,15 @@
     color:var(--p-ui-text);cursor:pointer;
     font:700 13px/1.35 'Source Sans 3',system-ui,sans-serif;
   }
-  #politicsShowStudyMaterial {
+  #politicsShowStudyMaterial, #politicsPrintStudyMaterial {
     flex:none;appearance:auto;accent-color:var(--blue,#1F5F8B);
     width:17px;height:17px;margin:0;cursor:pointer;
   }
-  #politicsStudyMaterialHint {
+  #politicsStudyMaterialHint, #politicsPrintStudyMaterialHint {
     margin:5px 0 0 26px;color:var(--p-ui-text-soft);
     font:400 11px/1.42 'Source Sans 3',system-ui,sans-serif;
   }
+  .p-nav-print-setting {margin-bottom:12px;}
   /* One reading-view switch hides the whole end-matter container:
      all 101 revision blocks across the 20 chapters, not just rev01. */
   body.politics-hide-study-material .chapter > .end-matter {
@@ -572,6 +573,8 @@
   #politicsNavFab,.p-search-popover {transition:none!important;}
 }
 @media print {
+  /* The print option is independent of the screen reading preference. */
+  body.politics-print-hide-study-material .chapter > .end-matter {display:none!important;}
   #politicsReadingHeader,#politicsNavFab,#politicsNavBackdrop,#politicsNavPanel,
   #politicsNoticeDock,#politicsContinuePrompt,#politicsEditionNotice {display:none!important;}
   /* Search fallback marks may remain after the search; never print them. */

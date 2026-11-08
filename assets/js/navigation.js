@@ -1,5 +1,5 @@
 /* 11AM Politics — self-building accessible contents drawer.
-   Reads the original course headings; never rewrites study text or print pages. */
+   Reads the original course headings; never rewrites study text. */
 (function(){
   'use strict';
   const position=window.PoliticsReadingPosition;
@@ -20,6 +20,7 @@
   const toolsPanel=get('politicsPanelTools');
   const printButton=get('politicsNavPrint');
   const studyMaterialToggle=get('politicsShowStudyMaterial');
+  const printStudyMaterialToggle=get('politicsPrintStudyMaterial');
   const status=get('politicsNavStatus');
   const resume=get('politicsNavResume');
   const readingLabel=get('politicsReadingLabel');
@@ -39,7 +40,7 @@
   const editionNotice=get('politicsEditionNotice');
   const editionNoticeReload=get('politicsEditionNoticeReload');
   const editionNoticeDismiss=get('politicsEditionNoticeDismiss');
-  if(!panel||!trigger||!tree||!studyMaterialToggle||!tabIndex||!tabTools)return;
+  if(!panel||!trigger||!tree||!studyMaterialToggle||!printStudyMaterialToggle||!tabIndex||!tabTools)return;
 
   const groups=[];
   const chapters=[];
@@ -58,6 +59,13 @@
   let editionNoticeAvailable=!!window.__politicsEditionReady;
   let editionNoticeDismissed=false;
   let showStudyMaterial=studyMaterialVisibility.read(localStorage);
+  printStudyMaterialToggle.checked=studyMaterialVisibility.readPrint(localStorage);
+  function syncPrintStudyMaterial(){
+    document.body.classList.toggle('politics-print-hide-study-material',
+      !printStudyMaterialToggle.checked);
+  }
+  // Handles both the in-app button and native Ctrl/Cmd+P.
+  window.addEventListener('beforeprint',syncPrintStudyMaterial);
 
   function create(tag,className,text){
     const e=document.createElement(tag);
@@ -583,7 +591,10 @@
     requestAnimationFrame(updateScrollableTables);
   }
   window.addEventListener('resize',requestScrollableTables);
-  window.addEventListener('afterprint',requestScrollableTables);
+  window.addEventListener('afterprint',()=>{
+    document.body.classList.remove('politics-print-hide-study-material');
+    requestScrollableTables();
+  });
   if(document.fonts?.ready)document.fonts.ready.then(requestScrollableTables).catch(()=>{});
   requestScrollableTables();
 
@@ -599,7 +610,11 @@
   tabTools.addEventListener('keydown',onTabKeys);
   printButton.addEventListener('click',()=>{
     close(true);
+    syncPrintStudyMaterial();
     requestAnimationFrame(()=>window.print());
+  });
+  printStudyMaterialToggle.addEventListener('change',()=>{
+    studyMaterialVisibility.writePrint(localStorage,printStudyMaterialToggle.checked);
   });
   studyMaterialToggle.addEventListener('change',()=>{
     // Save the current reading checkpoint before removing summary content.

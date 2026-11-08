@@ -111,6 +111,12 @@ def main():
     assert 'politicsContinuePrompt' in doc.ids and 'politicsContinueButton' in doc.ids
     assert 'politicsContinueDismiss' in doc.ids and 'politicsContinueDescription' in doc.ids
     assert 'politicsShowStudyMaterial' in doc.ids
+    assert 'politicsPrintStudyMaterial' in doc.ids
+    assert 'politics-print-hide-study-material' in nav_style
+    assert "studyMaterialVisibility.readPrint(localStorage)" in nav
+    assert "studyMaterialVisibility.writePrint(localStorage,printStudyMaterialToggle.checked)" in nav
+    assert 'background:var(--paper)' in (ROOT/'index.html').read_text(encoding='utf-8')
+    assert 'print-color-adjust:exact' in (ROOT/'index.html').read_text(encoding='utf-8')
     for new_id in ('politicsResumeNote','politicsEditionVersion','politicsEditionStatus',
                    'politicsCheckUpdates','politicsEditionReload'):
         assert new_id in doc.ids, 'Missing Batch C control: '+new_id

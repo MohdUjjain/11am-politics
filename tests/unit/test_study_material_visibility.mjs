@@ -45,8 +45,21 @@ assert.equal(next.read(oldShow),true);
 assert.equal(next.read({getItem:()=>{throw Error('blocked')}}),true);
 assert.equal(next.write({setItem:()=>{throw Error('blocked')}},false),false);
 
-// Source remains fully present: only a single CSS display rule hides each
-// entire end-matter container on screens; printing is unaffected.
+// The print checkbox has its own persisted choice: neither setting leaks.
+const printing=storage();
+assert.equal(next.readPrint(printing),true,'Print material included by default');
+assert.equal(next.writePrint(printing,false),true);
+assert.equal(printing.getItem(next.PRINT_KEY),'false');
+assert.equal(next.readPrint(printing),false,'Print exclusion survives reload');
+assert.equal(next.read(printing),true,'Print does not change reading');
+assert.equal(next.write(printing,false),true);
+assert.equal(next.readPrint(printing),false,'Reading does not change print');
+assert.equal(next.writePrint(printing,true),true);
+assert.equal(next.readPrint(printing),true);
+assert.equal(next.readPrint({getItem:()=>{throw Error('blocked')}}),true);
+assert.equal(next.writePrint({setItem:()=>{throw Error('blocked')}},false),false);
+
+// Source remains intact: independent screen/print classes control visibility.
 const html=readFileSync(new URL('../../index.html',import.meta.url),'utf8');
 const css=readFileSync(new URL('../../assets/css/navigation.css',import.meta.url),'utf8');
 const nav=readFileSync(new URL('../../assets/js/navigation.js',import.meta.url),'utf8');
@@ -62,7 +75,12 @@ assert.ok(css.includes('display:none!important;'));
 assert.ok(css.includes('.end-matter.politics-explicit-revision'),
   'Direct section links can reveal the requested end-matter');
 assert.ok(css.indexOf('body.politics-hide-study-material')<css.indexOf('@media print'),
-  'The summary toggle does not alter printed pages');
+  'The reading preference is screen-only');
+assert.match(html,/id="politicsPrintStudyMaterial" checked/);
+assert.ok(css.includes('body.politics-print-hide-study-material .chapter > .end-matter'));
+assert.ok(nav.includes('beforeprint'));
+assert.ok(nav.includes('studyMaterialVisibility.readPrint(localStorage)'));
+assert.ok(nav.includes('studyMaterialVisibility.writePrint(localStorage,printStudyMaterialToggle.checked)'));
 assert.ok(nav.includes('studyMaterialVisibility.isRevisionAnchor'));
 assert.ok(nav.includes("revisionLabel.hidden=hideRevision"),
   'The revision label must also vanish from the sidebar');
@@ -75,4 +93,4 @@ assert.ok(nav.includes('syncLinkedRevision()'),
 assert.ok(nav.includes('studyMaterialVisibility.write(localStorage,showStudyMaterial)'));
 assert.ok(html.indexOf('src="./assets/js/study-material-visibility.js"')<
   html.indexOf('src="./assets/js/navigation.js"'));
-console.log('PASS: hide all 20 end-matter sections, migration, shortcuts, direct links and print');
+console.log('PASS: independent reading/print revision settings, migration and shortcuts');

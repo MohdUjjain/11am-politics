@@ -122,6 +122,9 @@ def check():
               revision.append(chapter.querySelector('.end-matter .em-title').cloneNode(true));
               revision.append(chapter.querySelector('.end-matter p').cloneNode(true));
               clone.append(revision);
+              const printChoice = document.getElementById('politicsPrintStudyMaterial');
+              printChoice.hidden = true;
+              clone.append(printChoice);
               document.body.replaceChildren(clone);
               document.body.classList.add('politics-hide-study-material');
             }""")
@@ -157,7 +160,31 @@ def check():
                 assert "chapter summary" in text.casefold(), text[:800]
                 assert "politics" in text.casefold(), text[:800]
                 print(f"PASS: Chromium PDF background={background}, "
-                      f"{len(reader.pages)} pages, visible text and revision")
+                      f"{len(reader.pages)} pages, included revision")
+
+            # Native printing reads the independent print setting, not the
+            # on-screen hide setting. The same text stays in the source DOM.
+            print_page.evaluate("""() => {
+              document.getElementById('politicsPrintStudyMaterial').checked = false;
+              dispatchEvent(new Event('beforeprint'));
+            }""")
+            hidden = print_page.locator('.end-matter').evaluate(
+                "el=>getComputedStyle(el).display"
+            )
+            assert hidden == "none", hidden
+            for background in (False, True):
+                pdf = print_page.pdf(
+                    print_background=background, prefer_css_page_size=True
+                )
+                reader = PdfReader(io.BytesIO(pdf))
+                text = "\n".join((p.extract_text() or "") for p in reader.pages)
+                assert "chapter summary" not in text.casefold(), text[:800]
+                assert "politics" in text.casefold(), text[:800]
+                print(f"PASS: Chromium PDF background={background}, "
+                      f"{len(reader.pages)} pages, revision excluded")
+            assert print_page.evaluate(
+                "() => document.body.classList.contains('politics-hide-study-material')"
+            ), "Print must not reset the reading preference"
 
             browser.close()
             print("PASS: 70+ navigable search results, exact-text highlighting, "

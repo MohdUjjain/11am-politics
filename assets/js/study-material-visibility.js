@@ -1,6 +1,6 @@
 /* Reader preference for the complete end-of-chapter study section.
  * The former summary-only setting is migrated so readers keep their choice.
- * Printed notes always include all original material.
+ * An independent preference controls whether end-matter appears in print.
  */
 (function(root,factory){
   'use strict';
@@ -11,6 +11,7 @@
   'use strict';
   const KEY='11am-politics:show-end-of-chapter-material-v2';
   const LEGACY_KEY='11am-politics:show-chapter-summaries-v1';
+  const PRINT_KEY='11am-politics:include-print-study-material-v1';
   const isRevisionAnchor=id=>/^ch(?:0[1-9]|1[0-9]|20)-rev[0-9]{2,3}$/.test(id||'');
   function read(storage){
     try{
@@ -31,5 +32,15 @@
     try{storage.setItem(KEY,show?'true':'false');return true;}
     catch{return false;}
   }
-  return Object.freeze({KEY,LEGACY_KEY,isRevisionAnchor,read,write});
+  function readPrint(storage){
+    try{return storage.getItem(PRINT_KEY)!=='false';}
+    catch{return true;}
+  }
+  function writePrint(storage,include){
+    try{storage.setItem(PRINT_KEY,include?'true':'false');return true;}
+    catch{return false;}
+  }
+  return Object.freeze({
+    KEY,LEGACY_KEY,PRINT_KEY,isRevisionAnchor,read,write,readPrint,writePrint
+  });
 });

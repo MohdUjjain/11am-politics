@@ -35,7 +35,9 @@ At width 600px the header becomes compact and shows Ch. NN; at 520px the brand i
 
 Search uses an accessible combobox/listbox, keyboard arrows, Enter and Escape, incremental results and exact-term highlighting. The sidebar uses inert isolation and focus restoration, with an Index/Tools tablist and a shared Continue Reading footer. Reduced-motion preferences disable CSS smooth scrolling and navigation transitions. A skip link goes to the reading content.
 
-Screen-only hiding applies to the entire chapter end-matter container. Direct revision links and a saved revision checkpoint may temporarily reveal the relevant chapter without changing the saved choice. Print includes every hidden chapter revision block, even when backgrounds are not printed.
+Screen-only hiding applies to the entire chapter end-matter container. Direct revision links and a saved revision checkpoint may temporarily reveal the relevant chapter without changing the saved choice. The **separate print checkbox** in Tools → Export decides whether all 20 end-matter sections are included in print/PDF, regardless of the reading choice, and persists as `11am-politics:include-print-study-material-v1`. The `beforeprint` event also covers Ctrl/Cmd+P. After printing, the temporary print class is removed without altering reading mode.
+
+The A4 page retains its original `14mm 13mm` margins; an `@page` parchment background paints the physical page canvas including margin strips (which the body background cannot reach). `print-color-adjust:exact` keeps the paper canvas in Chrome PDF output even with Background graphics disabled. Browser-supplied Headers and footers are controlled by the print dialog, not this stylesheet.
 
 ## Naming and persistence compatibility
 
