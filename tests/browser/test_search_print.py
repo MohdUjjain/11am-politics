@@ -197,7 +197,7 @@ def check():
                 assert "PREMIUM STUDY NOTES" in text, text[:800]
                 assert "POLITICAL SCIENCE" in text, text[:800]
                 assert "01 · WHAT IS POLITICS?" in text, text[:800]
-                assert re.search(r"\b1\s*/\s*\d+\b", text), text[:800]
+                assert re.search(r"(?<!\d)1\s*/\s*\d+", text), text[:800]
                 assert abs(float(reader.pages[0].mediabox.width)-595.28)<2
                 assert abs(float(reader.pages[0].mediabox.height)-841.89)<2
                 print(f"PASS: Chromium PDF background={background}, "
