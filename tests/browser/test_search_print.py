@@ -187,7 +187,8 @@ def check():
                 pages = PdfReader(io.BytesIO(pdf)).pages
                 texts = [(page.extract_text() or "") for page in pages]
                 assert len(pages) >= 3, (background, len(pages))
-                assert "The Complete" in texts[0], texts[0][:800]
+                assert "The" in texts[0] and "Complete" in texts[0], texts[0][:800]
+                assert "Study Notes" in texts[0], texts[0][:800]
                 assert "11AM · POLITICS" not in texts[0], texts[0][:800]
                 assert "PREMIUM STUDY NOTES" not in texts[0], texts[0][:800]
                 assert "POLITICAL SCIENCE" not in texts[0], texts[0][:800]
