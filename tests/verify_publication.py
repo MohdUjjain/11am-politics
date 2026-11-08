@@ -84,8 +84,16 @@ def main():
     print_css=(ROOT/'index.html').read_text(encoding='utf-8').split('/* ---------------- PRINT ---------------- */',1)[1].split('@media screen{',1)[0]
     assert 'background:#fff!important;' not in print_css, 'Print must retain color-coded banners'
     assert 'print-color-adjust:exact!important' in print_css
-    assert 'margin:25mm 13mm 22mm 13mm' in print_css, '13mm side margins preserved'
+    assert 'margin:21mm 13mm 18mm 13mm' in print_css, '13mm side margins preserved'
     assert 'counter(page) " / " counter(pages)' in print_css
+    assert 'margin-bottom:4mm;border-bottom:.7pt' in print_css
+    assert 'margin-top:4mm;padding-top:4mm' in print_css
+    assert '@page politics-cover{' in print_css
+    assert '.cover{page:politics-cover;}' in print_css
+    assert '.toc-page,.legend-page{page:politics-front;}' in print_css
+    assert 'min-height:297mm' in print_css
+    assert 'font-size:11pt;line-height:1.6' in print_css
+    assert print_css.count('box-decoration-break:clone;') >= 4
     assert 'content:"11AM · POLITICS"' in print_css
     assert 'content:"POLITICAL SCIENCE"' in print_css
     assert re.findall(r'@page politics-ch(\d{2})',print_css)==[f'{n:02}' for n in range(1,21)]

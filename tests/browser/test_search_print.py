@@ -139,6 +139,68 @@ def check():
             assert all("linear-gradient" in c[1] for c in print_palette["chapters"])
             assert len(print_palette["toc"]) == 20
             assert len(print_palette["callouts"]) == 6
+            # Test a real cover -> legend -> multi-page TOC -> chapter sequence,
+            # not just an isolated chapter. The cover must be genuinely
+            # furniture-free; continuation TOC pages must retain their inset.
+            front_page = context.new_page()
+            front_page.goto(url, wait_until="domcontentloaded")
+            front_page.emulate_media(media="print")
+            insets = front_page.evaluate("""() => {
+              const cover=getComputedStyle(document.querySelector('.cover'));
+              const toc=getComputedStyle(document.querySelector('.toc-page'));
+              const chapter=getComputedStyle(document.querySelector('#ch01'));
+              const body=getComputedStyle(document.body);
+              return {
+                coverPage:cover.getPropertyValue('page'),
+                tocPage:toc.getPropertyValue('page'),
+                chapterPage:chapter.getPropertyValue('page'),
+                tocBreak:toc.boxDecorationBreak,
+                chapterBreak:chapter.boxDecorationBreak,
+                tocTop:parseFloat(toc.paddingTop),
+                bodyFont:parseFloat(body.fontSize)
+              };
+            }""")
+            assert insets["coverPage"] == "politics-cover", insets
+            assert insets["tocPage"] == "politics-front", insets
+            assert insets["chapterPage"] == "politics-ch01", insets
+            assert insets["tocBreak"] == "clone", insets
+            assert insets["chapterBreak"] == "clone", insets
+            assert insets["tocTop"] > 25, insets
+            assert insets["bodyFont"] > 14.5, insets
+            front_page.evaluate("""() => {
+              const main=document.querySelector('#politicsMainContent');
+              const chapter=document.querySelector('#ch01');
+              const shortChapter=chapter.cloneNode(false);
+              shortChapter.append(chapter.querySelector('.chapter-tab').cloneNode(true));
+              main.replaceChildren(
+                main.querySelector('.cover').cloneNode(true),
+                main.querySelector('.legend-page').cloneNode(true),
+                main.querySelector('#book-contents').cloneNode(true),
+                shortChapter
+              );
+              document.body.replaceChildren(main);
+            }""")
+            for background in (False, True):
+                pdf = front_page.pdf(
+                    print_background=background, prefer_css_page_size=True
+                )
+                pages = PdfReader(io.BytesIO(pdf)).pages
+                texts = [(page.extract_text() or "") for page in pages]
+                assert len(pages) >= 3, (background, len(pages))
+                assert "The Complete" in texts[0], texts[0][:800]
+                assert "11AM · POLITICS" not in texts[0], texts[0][:800]
+                assert "PREMIUM STUDY NOTES" not in texts[0], texts[0][:800]
+                assert "POLITICAL SCIENCE" not in texts[0], texts[0][:800]
+                assert "11AM · POLITICS" in texts[1], texts[1][:800]
+                assert "PREMIUM STUDY NOTES" in texts[1], texts[1][:800]
+                assert "Table of Contents" in "".join(texts[1:-1])
+                assert "Multilevel Politics" in "".join(texts[1:-1])
+                assert "01 · WHAT IS POLITICS?" in texts[-1], texts[-1][:800]
+                assert "What is Politics?" in texts[-1], texts[-1][:800]
+                print(f"PASS: cover without print furniture, TOC flow, "
+                      f"chapter headers and legible type; background={background}")
+            front_page.close()
+
             print_page.evaluate("""() => {
               const chapter = document.querySelector('section.chapter');
               const sampleTable = document.querySelector('section.chapter table');
