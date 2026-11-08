@@ -81,7 +81,15 @@ def main():
     assert 'readingFill.style.backgroundColor' not in nav
     assert '::highlight(politics-search-term)' in nav_style
     assert 'thead th{' in (ROOT/'index.html').read_text(encoding='utf-8')
-    assert 'background:#fff!important;' in (ROOT/'index.html').read_text(encoding='utf-8')
+    print_css=(ROOT/'index.html').read_text(encoding='utf-8').split('/* ---------------- PRINT ---------------- */',1)[1].split('@media screen{',1)[0]
+    assert 'background:#fff!important;' not in print_css, 'Print must retain color-coded banners'
+    assert 'print-color-adjust:exact!important' in print_css
+    assert 'margin:25mm 13mm 22mm 13mm' in print_css, '13mm side margins preserved'
+    assert 'counter(page) " / " counter(pages)' in print_css
+    assert 'content:"11AM · POLITICS"' in print_css
+    assert 'content:"POLITICAL SCIENCE"' in print_css
+    assert re.findall(r'@page politics-ch(\d{2})',print_css)==[f'{n:02}' for n in range(1,21)]
+    assert re.findall(r'#ch(\d{2})\{page:politics-ch\d{2};\}',print_css)==[f'{n:02}' for n in range(1,21)]
     assert 'politicsFullSearch' in doc.ids and 'politicsSearchPopover' in doc.ids
     assert 'politicsSearchResults' in doc.ids
     assert 'politicsSearchMore' in doc.ids and 'politicsCompactChapter' in doc.ids

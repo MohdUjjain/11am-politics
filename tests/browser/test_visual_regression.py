@@ -171,17 +171,17 @@ def run():
               const c=el=>getComputedStyle(document.querySelector(el));
               return {
                 banner:c('.chapter-tab').backgroundColor,
+                gradient:c('.chapter-tab').backgroundImage,
                 title:c('.chapter-tab h1').color,
                 revision:c('.em-title').color,
                 shown:c('.end-matter').display
               };
             }""")
-            assert contrast == {
-                "banner": "rgb(255, 255, 255)",
-                "title": "rgb(32, 36, 44)",
-                "revision": "rgb(32, 36, 44)",
-                "shown": "block",
-            }, contrast
+            assert contrast["banner"] != "rgb(255, 255, 255)", contrast
+            assert "linear-gradient" in contrast["gradient"], contrast
+            assert contrast["title"] == "rgb(255, 255, 255)", contrast
+            assert contrast["revision"] == "rgb(255, 255, 255)", contrast
+            assert contrast["shown"] == "block", contrast
             print_image = capture(page, "print-chapter-07")
             manifest.append({"state": "print-preview", "image": print_image})
             for background in (False, True):
@@ -189,6 +189,10 @@ def run():
                 doc = PdfReader(io.BytesIO(pdf))
                 extracted = "\n".join(x.extract_text() or "" for x in doc.pages).casefold()
                 assert "chapter summary" in extracted and "politics" in extracted
+                assert "premium study notes" in extracted and "political science" in extracted
+                assert "07 · society & identity" in extracted, extracted[:800]
+                assert abs(float(doc.pages[0].mediabox.width)-595.28)<2
+                assert abs(float(doc.pages[0].mediabox.height)-841.89)<2
                 filename = OUT / f"print-background-{'on' if background else 'off'}.pdf"
                 filename.write_bytes(pdf)
                 assert filename.stat().st_size > 3000

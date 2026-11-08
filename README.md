@@ -2,7 +2,7 @@
 
 [Open the study guide](https://mohdujjain.github.io/11am-politics/) · [GitHub Pages](https://github.com/MohdUjjain/11am-politics/settings/pages)
 
-An installable, offline-capable **20-chapter political science study guide**, published as a static GitHub Pages project. It has a full-text search, chapter/section index, reading-progress indicators, saved reading position, end-of-chapter study-material toggle, and print/PDF support with an independent revision-material option and full-page parchment canvas.
+An installable, offline-capable **20-chapter political science study guide**, published as a static GitHub Pages project. It has a full-text search, chapter/section index, reading-progress indicators, saved reading position, end-of-chapter study-material toggle, and print/PDF support with an independent revision-material option, chapter-aware running headers and footers, and a full-color parchment canvas.
 
 ## Repository layout
 

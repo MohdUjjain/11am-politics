@@ -311,58 +311,138 @@ li{margin-bottom:5px;}
 
 /* ---------------- PRINT ---------------- */
 @media print{
-  /* Paint the page box, including the margin strips outside body. */
-  @page{ size:A4; margin:14mm 13mm; background:var(--paper); }
-  html,body{
+  /* The actual paper geometry is A4. The 13mm side gutters are unchanged.
+     Vertical margins reserve space for our own running headers/footers.
+     The background belongs on the @page box, not just on body: this also
+     colors the physical margin strips on platforms that honor @page. */
+  @page{
+    size:A4;
+    margin:25mm 13mm 22mm 13mm;
     background:var(--paper);
-    -webkit-print-color-adjust:exact;
-    print-color-adjust:exact;
+    @top-left{
+      content:"11AM · POLITICS";
+      font:700 8pt 'Source Sans 3',Arial,sans-serif;
+      letter-spacing:.09em;color:var(--ink-soft);
+      background:var(--paper);vertical-align:bottom;
+      padding-bottom:5mm;border-bottom:.7pt solid var(--rule);
+    }
+    @top-center{
+      content:"";background:var(--paper);
+      border-bottom:.7pt solid var(--rule);
+    }
+    @top-right{
+      content:"COMPLETE STUDY GUIDE";
+      font:700 7.8pt 'Source Sans 3',Arial,sans-serif;
+      letter-spacing:.025em;color:var(--blue);
+      background:var(--paper);text-align:right;vertical-align:bottom;
+      padding-bottom:5mm;border-bottom:.7pt solid var(--rule);
+    }
+    @bottom-left{
+      content:"PREMIUM STUDY NOTES";
+      font:600 7.5pt 'Source Sans 3',Arial,sans-serif;
+      letter-spacing:.045em;color:var(--ink-faint);
+      background:var(--paper);vertical-align:top;
+      padding-top:5mm;border-top:.7pt solid var(--rule);
+    }
+    @bottom-center{
+      content:counter(page) " / " counter(pages);
+      font:500 8.5pt 'IBM Plex Mono',monospace;
+      color:var(--ink-soft);background:var(--paper);
+      vertical-align:top;padding-top:5mm;border-top:.7pt solid var(--rule);
+    }
+    @bottom-right{
+      content:"POLITICAL SCIENCE";
+      font:600 7.5pt 'Source Sans 3',Arial,sans-serif;
+      letter-spacing:.045em;color:var(--ink-faint);
+      background:var(--paper);text-align:right;vertical-align:top;
+      padding-top:5mm;border-top:.7pt solid var(--rule);
+    }
+    /* Some mobile PDF pipelines only paint declared margin-box regions.
+       Fill the corner and side margin regions with the same parchment. */
+    @top-left-corner{content:"";background:var(--paper);}
+    @top-right-corner{content:"";background:var(--paper);}
+    @left-top{content:"";background:var(--paper);}
+    @left-middle{content:"";background:var(--paper);}
+    @left-bottom{content:"";background:var(--paper);}
+    @right-top{content:"";background:var(--paper);}
+    @right-middle{content:"";background:var(--paper);}
+    @right-bottom{content:"";background:var(--paper);}
+    @bottom-left-corner{content:"";background:var(--paper);}
+    @bottom-right-corner{content:"";background:var(--paper);}
   }
+  /* A chapter keeps its running identity on every continuation page. The
+     abbreviated labels fit the small margin box; original H1s are unchanged.
+     Chapter color comes from exactly the same hue as its reading banner. */
+  @page politics-ch01{ @top-right{content:"01 · WHAT IS POLITICS?";color:hsl(200 42% 30%);} }
+  @page politics-ch02{ @top-right{content:"02 · IDEAS & IDEOLOGIES";color:hsl(218 42% 30%);} }
+  @page politics-ch03{ @top-right{content:"03 · POLITICS & THE STATE";color:hsl(236 42% 30%);} }
+  @page politics-ch04{ @top-right{content:"04 · DEMOCRACY & LEGITIMACY";color:hsl(254 42% 30%);} }
+  @page politics-ch05{ @top-right{content:"05 · NATIONS & NATIONALISM";color:hsl(272 42% 30%);} }
+  @page politics-ch06{ @top-right{content:"06 · POLITICAL ECONOMY";color:hsl(290 42% 30%);} }
+  @page politics-ch07{ @top-right{content:"07 · SOCIETY & IDENTITY";color:hsl(308 42% 30%);} }
+  @page politics-ch08{ @top-right{content:"08 · POLITICAL CULTURE & MEDIA";color:hsl(326 42% 30%);} }
+  @page politics-ch09{ @top-right{content:"09 · ELECTIONS & VOTING";color:hsl(344 42% 30%);} }
+  @page politics-ch10{ @top-right{content:"10 · PARTIES & PARTY SYSTEMS";color:hsl(2 42% 30%);} }
+  @page politics-ch11{ @top-right{content:"11 · GROUPS & MOVEMENTS";color:hsl(20 42% 30%);} }
+  @page politics-ch12{ @top-right{content:"12 · SYSTEMS & REGIMES";color:hsl(38 42% 30%);} }
+  @page politics-ch13{ @top-right{content:"13 · EXECUTIVES & LEADERSHIP";color:hsl(56 42% 30%);} }
+  @page politics-ch14{ @top-right{content:"14 · ASSEMBLIES";color:hsl(74 42% 30%);} }
+  @page politics-ch15{ @top-right{content:"15 · CONSTITUTIONS & LAW";color:hsl(92 42% 30%);} }
+  @page politics-ch16{ @top-right{content:"16 · PUBLIC POLICY";color:hsl(110 42% 30%);} }
+  @page politics-ch17{ @top-right{content:"17 · MULTILEVEL POLITICS";color:hsl(128 42% 30%);} }
+  @page politics-ch18{ @top-right{content:"18 · SECURITY";color:hsl(146 42% 30%);} }
+  @page politics-ch19{ @top-right{content:"19 · WORLD ORDER";color:hsl(164 42% 30%);} }
+  @page politics-ch20{ @top-right{content:"20 · CRISIS IN POLITICS?";color:hsl(182 42% 30%);} }
+  .cover,.toc-page,.legend-page{page:politics-front;}
+  #ch01{page:politics-ch01;}
+  #ch02{page:politics-ch02;}
+  #ch03{page:politics-ch03;}
+  #ch04{page:politics-ch04;}
+  #ch05{page:politics-ch05;}
+  #ch06{page:politics-ch06;}
+  #ch07{page:politics-ch07;}
+  #ch08{page:politics-ch08;}
+  #ch09{page:politics-ch09;}
+  #ch10{page:politics-ch10;}
+  #ch11{page:politics-ch11;}
+  #ch12{page:politics-ch12;}
+  #ch13{page:politics-ch13;}
+  #ch14{page:politics-ch14;}
+  #ch15{page:politics-ch15;}
+  #ch16{page:politics-ch16;}
+  #ch17{page:politics-ch17;}
+  #ch18{page:politics-ch18;}
+  #ch19{page:politics-ch19;}
+  #ch20{page:politics-ch20;}
+
+  /* Printing is a second rendering of the SAME design system—not a
+     monochrome alternative. This retains cover art, chapter gradients,
+     colored table headers, TOC numbers and six semantic callout pigments
+     even in Chromium's Background graphics OFF mode. */
+  *,*::before,*::after{
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+  html,body{background:var(--paper);}
   body{font-size:10.3pt;}
-  .shell{max-width:none; background:var(--paper); box-shadow:none;}
-  .cover{min-height:auto; page-break-after:always;}
+  .shell{max-width:none;background:var(--paper);box-shadow:none;}
+  .cover{min-height:auto;page-break-after:always;}
   .toc-page{page-break-after:always;}
   .chapter{page-break-before:always;}
-  .content{padding-left:8mm; padding-right:8mm;}
+  .content{padding-left:8mm;padding-right:8mm;}
   .chapter-tab{padding:24px 8mm;}
-  .in-this-chapter, .end-matter{margin-left:8mm; margin-right:8mm;}
-  a{color:inherit; text-decoration:none;}
-  .box, table, .case-study, .flow, .duel{break-inside:avoid;}
-  h2{break-after:avoid;}
+  .in-this-chapter,.end-matter{margin-left:8mm;margin-right:8mm;}
+  a{text-decoration:none;}
+  .box,table,.case-study,.flow,.duel{break-inside:avoid;}
   h2,h3,h4{break-after:avoid;}
 
-  /* Reliable high-contrast printing even when "Background graphics" is OFF.
-     The screen edition keeps the chapter colors and decorative gradients. */
-  .chapter-tab{
-    background:#fff!important;
-    background-image:none!important;
-    color:#20242C!important;
-    border-top:5pt solid #20242C;
-    border-bottom:1.5pt solid #20242C;
+  /* Ch. 13 and 14 are intentionally darkened on screen for accessible
+     white headings; print must use the same high-contrast gradients. */
+  #ch13 .chapter-tab,#ch14 .chapter-tab{
+    background-image:linear-gradient(135deg,
+      hsl(var(--h) 46% 29%),hsl(var(--h) 40% 21%));
   }
-  .chapter-tab h1,
-  .chapter-tab .kicker,
-  .chapter-tab .ch-subtitle,
-  .chapter-tab .ch-quote{color:#20242C!important;opacity:1!important;}
-  .chapter-tab .ch-quote{border-left-color:#20242C!important;}
-  .chapter-tab .ch-num-big{color:#20242C!important;opacity:.15!important;}
-  thead th{
-    background:#fff!important;
-    background-image:none!important;
-    color:#20242C!important;
-    border-bottom:2pt solid #20242C!important;
-  }
-  .end-matter > .em-title{
-    background:#fff!important;
-    background-image:none!important;
-    color:#20242C!important;
-    border:1pt solid #20242C;
-  }
-  .toc-num{
-    background:#fff!important;
-    color:#20242C!important;
-    border:1pt solid #20242C;
-  }
+  #ch13 .chapter-tab .kicker,#ch14 .chapter-tab .kicker{opacity:1;}
 }
 @media screen{
   .chapter{border-bottom:1px solid var(--rule);}
@@ -524,7 +604,7 @@ th,td{padding:7px 9px}
       <p id="politicsPrintStudyMaterialHint">Uncheck to omit all chapter summaries, revision sheets, definitions, memory aids and examination questions from print/PDF. This choice is separate from the reading preference.</p>
     </div>
     <button id="politicsNavPrint" type="button" class="p-nav-print">Print / Save as PDF</button>
-    <p class="p-nav-tool-note">A4 prints on parchment, including the outer margins. For a clean PDF, use Default margins and turn off the browser’s optional Headers and footers.</p>
+    <p class="p-nav-tool-note">The PDF includes book-designed running headers, chapter identity and page numbers. In the print dialog use A4, Margins: Default and turn off browser Headers and footers. Enable Background graphics for the most faithful chapter and study-note colors.</p>
   </div>
   <div class="p-nav-footer">
     <button type="button" id="politicsNavResume" hidden>Resume reading</button>

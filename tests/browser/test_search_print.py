@@ -107,6 +107,38 @@ def check():
             # Test actual print media while study material is hidden on screen.
             print_page = context.new_page()
             print_page.goto(url, wait_until="domcontentloaded")
+
+            # Color is a semantic part of the guide: check all 20 chapter
+            # banners, every TOC badge and all six callout categories.
+            # Print must not silently replace ANY screen palette swatch.
+            palette_script = """() => {
+              const style = element => {
+                const s = getComputedStyle(element);
+                return [s.backgroundColor, s.backgroundImage, s.color];
+              };
+              return {
+                chapters: Array.from(document.querySelectorAll('.chapter'),
+                  c => style(c.querySelector('.chapter-tab'))),
+                headings: Array.from(document.querySelectorAll('.chapter'),
+                  c => style(c.querySelector('.chapter-tab h1'))),
+                toc: Array.from(document.querySelectorAll('.toc-num'),style),
+                tables: Array.from(document.querySelectorAll('.chapter thead th'),
+                  style).slice(0,30),
+                revisions: Array.from(document.querySelectorAll('.chapter .em-title'),
+                  style).slice(0,30),
+                callouts: ['def','concept','tip','mistake','memory','highyield']
+                  .map(t=>style(document.querySelector('.box.'+t)))
+              };
+            }"""
+            screen_palette = print_page.evaluate(palette_script)
+            print_page.emulate_media(media="print")
+            print_palette = print_page.evaluate(palette_script)
+            assert print_palette == screen_palette, "Print changed the established color system"
+            assert len(print_palette["chapters"]) == 20
+            assert len({c[0] for c in print_palette["chapters"]}) == 20
+            assert all("linear-gradient" in c[1] for c in print_palette["chapters"])
+            assert len(print_palette["toc"]) == 20
+            assert len(print_palette["callouts"]) == 6
             print_page.evaluate("""() => {
               const chapter = document.querySelector('section.chapter');
               const sampleTable = document.querySelector('section.chapter table');
@@ -135,20 +167,22 @@ def check():
                 if (!element) return null;
                 const style = getComputedStyle(element);
                 return {color:style.color, background:style.backgroundColor,
-                        display:style.display};
+                        image:style.backgroundImage, display:style.display};
               }
               return {tab:sample('.chapter-tab'), title:sample('.chapter-tab h1'),
                       table:sample('thead th'), revision:sample('.em-title'),
                       end:sample('.end-matter')};
             }""")
-            expected = "rgb(32, 36, 44)"
-            assert styles["tab"]["background"] == "rgb(255, 255, 255)", styles
-            assert styles["title"]["color"] == expected, styles
-            assert styles["revision"]["color"] == expected, styles
+            white = "rgb(255, 255, 255)"
+            assert styles["tab"]["background"] != white, styles
+            assert "linear-gradient" in styles["tab"]["image"], styles
+            assert styles["title"]["color"] == white, styles
+            assert styles["revision"]["color"] == white, styles
+            assert styles["revision"]["background"] == styles["tab"]["background"], styles
             assert styles["end"]["display"] != "none", styles
             if styles["table"]:
-                assert styles["table"]["color"] == expected, styles
-                assert styles["table"]["background"] == "rgb(255, 255, 255)", styles
+                assert styles["table"]["color"] == white, styles
+                assert styles["table"]["background"] == styles["tab"]["background"], styles
 
             for background in (False, True):
                 pdf = print_page.pdf(
@@ -159,6 +193,13 @@ def check():
                 text = "\n".join((p.extract_text() or "") for p in reader.pages)
                 assert "chapter summary" in text.casefold(), text[:800]
                 assert "politics" in text.casefold(), text[:800]
+                assert "11AM" in text, text[:800]
+                assert "PREMIUM STUDY NOTES" in text, text[:800]
+                assert "POLITICAL SCIENCE" in text, text[:800]
+                assert "01 · WHAT IS POLITICS?" in text, text[:800]
+                assert re.search(r"\b1\s*/\s*\d+\b", text), text[:800]
+                assert abs(float(reader.pages[0].mediabox.width)-595.28)<2
+                assert abs(float(reader.pages[0].mediabox.height)-841.89)<2
                 print(f"PASS: Chromium PDF background={background}, "
                       f"{len(reader.pages)} pages, included revision")
 
@@ -180,6 +221,8 @@ def check():
                 text = "\n".join((p.extract_text() or "") for p in reader.pages)
                 assert "chapter summary" not in text.casefold(), text[:800]
                 assert "politics" in text.casefold(), text[:800]
+                assert "01 · WHAT IS POLITICS?" in text, text[:800]
+                assert "PREMIUM STUDY NOTES" in text, text[:800]
                 print(f"PASS: Chromium PDF background={background}, "
                       f"{len(reader.pages)} pages, revision excluded")
             assert print_page.evaluate(
