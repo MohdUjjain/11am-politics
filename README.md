@@ -92,6 +92,10 @@ The cache ID is automatically derived from hashes of all listed sources in `scri
 
 For implementation details and constraints, see [Architecture](docs/architecture.md) and [Reader design system](docs/reader-design-system.md).
 
+## Editorial language research (November 2026)
+
+[Read the 20-chapter language and pedagogy audit](docs/editorial-language-audit-2026-11-14.md). This research compares the 60 Politics Blog/Narration/Briefing companion documents, published Politics text, Literature's passage-linked teaching, and World History's first-use definitions. It records the chapter-by-chapter opportunities, the original-source fidelity contract, and a staged pilot plan for a future language redesign. **This is a design specification only; the published academic text and reader behavior have not been rewritten.**
+
 ## Integrity guarantees
 
 - The 20 chapters, their 140 section anchors and 101 revision anchors are preserved.
